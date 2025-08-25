@@ -1,9 +1,9 @@
-import SearchInput from '@/components/SearchInput'
+import SearchBar from '@/components/SearchBar'
 
 export default function Home() {
   return (
     <div>
-      <SearchInput />
+      <SearchBar />
     </div>
   )
 }
