@@ -8,6 +8,7 @@ const ICON_MAP = {
   Kakao: () => import('@/assets/chevron-down.svg') as Promise<SvgModule>,
   ChevDown: () => import('@/assets/kakao.svg') as Promise<SvgModule>,
   More: () => import('@/assets/more-icon.svg') as Promise<SvgModule>,
+  Youtube: () => import('@/assets/youtube.svg') as Promise<SvgModule>,
 } satisfies Record<string, Loader>
 
 export type IconName = keyof typeof ICON_MAP
