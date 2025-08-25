@@ -11,7 +11,7 @@ export default function Home() {
         카카오 로그인
       </Button>
       <DropDown
-        trigger={<Icon icon="Kakao" />}
+        trigger={<Icon icon="More" />}
         items={[
           { text: '수정하기', onClick: () => console.log('수정하기') },
           { text: '삭제하기', onClick: () => console.log('삭제하기') },
