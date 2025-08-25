@@ -28,6 +28,7 @@ export default function SearchBar() {
   }
   return (
     <div className="p-20">
+      <h1 className="txt-16_B md:txt-32_B text-center my-10">지난 매치를 검색하고 싶으신가요?</h1>
       <form onSubmit={handleSearch} className="flex gap-10 md:gap-20">
         <input
           type="text"
