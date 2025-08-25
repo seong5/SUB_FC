@@ -1,26 +1,154 @@
 @import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /** gray **/
+  --color-gray-25: #f8f8f8;
+  --color-gray-50: #edeef2;
+  --color-gray-100: #e0e0e5;
+  --color-gray-200: #c6c8cf;
+  --color-gray-300: #b3b4bc;
+  --color-gray-400: #9fa0a7;
+  --color-gray-500: #84858c;
+  --color-gray-600: #707177;
+  --color-gray-700: #5d5d61;
+  --color-gray-800: #49494c;
+  --color-gray-900: #323236;
+  --color-gray-950: #1f1f22;
+  /** brand **/
+  --color-primary-100: #e5f3ff;
+  --color-primary-500: #3d9ef2;
+  /** red **/
+  --color-red-500: #ff2727;
+
+  --color-yellow: #ffcb02;
+
+  /** spacing **/
+  --spacing: 0.0625rem;
+
+  /* breakpoint */
+  --breakpoint-md: 744px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@utility txt-11_M {
+  font-size: 10px;
+  font-weight: 500;
+}
+@utility txt-11_B {
+  font-size: 10px;
+  font-weight: 700;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility txt-12_M {
+  font-size: 12px;
+  font-weight: 500;
+}
+@utility txt-12_B {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@utility txt-13_M {
+  font-size: 13px;
+  font-weight: 500;
+}
+@utility txt-13_B {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@utility txt-14_M {
+  font-size: 14px;
+  font-weight: 500;
+}
+@utility txt-14_B {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@utility txt-16_M {
+  font-size: 16px;
+  font-weight: 500;
+}
+@utility txt-16_B {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+@utility txt-18_M {
+  font-size: 18px;
+  font-weight: 500;
+}
+@utility txt-18_B {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+@utility txt-20_M {
+  font-size: 20px;
+  font-weight: 500;
+}
+@utility txt-20_B {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+@utility txt-24_M {
+  font-size: 24px;
+  font-weight: 500;
+}
+@utility txt-24_B {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+@utility txt-32_M {
+  font-size: 32px;
+  font-weight: 500;
+}
+@utility txt-32_B {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+@utility txt-14_body_M {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 180%;
+}
+
+@utility txt-16_body_M {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 180%;
+}
+
+@utility txt-18_body_B {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+@utility txt-20_body_B {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 160%;
+}
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Pretendard', 'sans-serif';
+}
+@layer utilities {
+  .card-shadow {
+    box-shadow: 0 4px 24px 0 #9cb4ca33;
+  }
 }
