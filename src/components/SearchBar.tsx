@@ -10,12 +10,22 @@ export default function SearchBar() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    const filtered = matchLocations.filter((loc) =>
-      loc.name.toLowerCase().includes(query.toLowerCase())
-    )
+    const q = query.trim().toLowerCase()
+
+    // 빈 검색어면 전체
+    if (!q) {
+      setResults(matchLocations)
+      return
+    }
+    // name 과 address 로 검색가능
+    const filtered = matchLocations.filter((loc) => {
+      const name = loc.name.toLowerCase()
+      const addr = loc.address.toLowerCase()
+      return name.includes(q) || addr.includes(q)
+    })
+
     setResults(filtered)
   }
-
   return (
     <div className="p-20">
       <form onSubmit={handleSearch} className="flex gap-10 md:gap-20">
