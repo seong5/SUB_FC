@@ -1,3 +1,4 @@
+import Gnb from '@/components/Gnb'
 import './globals.css'
 import Footer from '@/components/Footer'
 
@@ -9,6 +10,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
+        <Gnb />
         {children}
         <Footer />
       </body>
