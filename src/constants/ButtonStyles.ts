@@ -23,6 +23,8 @@ const SECONDARY_BASE_CLASSEES = [
   ...SECONDARY_DISABLED_CLASSES,
 ]
 
+const KAKAO_BASE = ['bg-yellow', 'text-kakao-black']
+
 /* 버튼 배경색, 텍스트색상, 테두리 색상
   primary: 대표색 : 하늘색 배경, 텍스트 흰색
   secondary : 흰색 배경, 회색 테두리, 텍스트 검정색
@@ -36,11 +38,7 @@ export const BUTTON_VARIANTS: Record<buttonVariants, string> = {
     ...DISABLED_CLASSES
   ),
   secondary: cn('active:bg-gray-100', ...SECONDARY_BASE_CLASSEES),
-  kakao: cn(
-    'flex flex-row gap-2 items-center justify-center',
-    'active:bg-[rgb(250,227,0)]',
-    ...SECONDARY_BASE_CLASSEES
-  ),
+  kakao: cn('flex flex-row gap-2 items-center justify-center', ...KAKAO_BASE),
 } as const
 
 /* 버튼 테두리 rounded 값

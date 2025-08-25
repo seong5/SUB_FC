@@ -20,7 +20,9 @@
   /** red **/
   --color-red-500: #ff2727;
 
-  --color-yellow: #ffcb02;
+  /* kakao */
+  --color-yellow: #fee500;
+  --color-kakao-black: #000000;
 
   /** spacing **/
   --spacing: 0.0625rem;
