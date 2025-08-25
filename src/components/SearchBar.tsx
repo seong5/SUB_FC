@@ -33,13 +33,13 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="축구장 이름을 검색해주세요."
+          placeholder="축구장 혹은 주소를 입력해주세요."
           className="flex-1 bg-white txt-12_M md:txt-16_M md:w-full md:h-70 rounded-[20px] px-15 py-10 card-shadow"
         />
         <Button
           variant="primary"
           size="md"
-          className="w-full rounded-[20px] w-100 md:w-full md:h-70"
+          className="w-full rounded-[20px] txt-12_M md:txt-20_M w-100 md:w-full md:h-70"
         >
           검색
         </Button>
