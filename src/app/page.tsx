@@ -70,8 +70,8 @@ export default function Home() {
             </li>
           ))
         ) : (
-          <li className="rounded-md border p-6 bg-white text-gray-500 text-center">
-            검색 결과가 없어요.
+          <li className="rounded-md p-6 text-gray-500 text-center">
+            검색 결과를 찾을 수 없습니다.
           </li>
         )}
       </ul>
