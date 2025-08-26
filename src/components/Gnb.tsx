@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function Gnb() {
   return (
-    <div className="flex flex-row justify-between gap-20 bg-gray-200 backdrop-blur-md txt-black h-80 px-20 md:px-30">
+    <div className="flex flex-row justify-between sticky top-0 z-50 gap-20 bg-white/60 backdrop-blur-md txt-black h-80 px-20 md:px-30">
       <div className="flex gap-15 md:gap-25 items-center txt-12_M md:txt-14_M ">
         <Link href="/" className="md:mr-10">
           <Image
