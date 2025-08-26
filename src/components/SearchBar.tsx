@@ -11,7 +11,7 @@ type Props = {
 export default function SearchBar({ value, onChange, onSubmit }: Props) {
   const id = useId()
   return (
-    <div className="p-20">
+    <div>
       <h1 className="txt-16_B md:txt-32_B text-center my-10">지난 매치를 검색하고 싶으신가요?</h1>
       <form
         onSubmit={(e) => {
