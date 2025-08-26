@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { matchLocations } from '@/mocks/matchLocation'
 import Pagination from '@/components/Pagination'
 import SearchBar from '@/components/SearchBar'
+import DropDown from '@/components/DropDown'
+import Icon from '@/components/Icon'
 
 export default function Home() {
   const [page, setPage] = useState(1)
@@ -29,11 +31,19 @@ export default function Home() {
   return (
     <main className="bg-primary-100 p-4">
       <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmit} />
-
+      <DropDown
+        trigger={<Icon icon="ChevDown" />}
+        position="bottom"
+        items={[
+          { text: '최신순', onClick: () => console.log('최신순') },
+          { text: '오래된순', onClick: () => console.log('오래된순') },
+        ]}
+      />
       <ul className="space-y-3 mt-4">
         {current.length > 0 ? (
           current.map((loc) => (
             <li key={loc.id} className="rounded-md border p-3 bg-white">
+              <p>{loc.date}</p>
               <p className="font-semibold text-gray-900">{loc.name}</p>
               <p className="text-sm text-gray-500">{loc.address}</p>
             </li>
@@ -44,7 +54,6 @@ export default function Home() {
           </li>
         )}
       </ul>
-
       <div className="flex items-center justify-center mt-6">
         <Pagination
           currentPage={safePage}
