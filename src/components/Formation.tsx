@@ -6,6 +6,7 @@ import Uniform from '@/components/Uniform'
 import { playersRoster } from '@/mocks/playersRoster'
 import { FORMATIONS, FormationKey } from '@/constants/formation'
 import QuarterFilter from './QuarterFilter'
+import ScoreAndAssist from './ScoreAndAssist'
 
 export default function FormationPage() {
   const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<string>('1 쿼터')
@@ -29,6 +30,7 @@ export default function FormationPage() {
     <main className="grid grid-cols-[400px_640px] px-30 py-20">
       <aside className="px-20">
         <QuarterFilter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
+        <ScoreAndAssist />
       </aside>
       <div className="relative aspect-square w-[90vw] max-w-[640px]">
         <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90" priority />

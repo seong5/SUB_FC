@@ -10,7 +10,7 @@ const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터']
 export default function QuarterFilter({ selectedType, onChange }: TypeFilterProps) {
   return (
     <section>
-      <div className="font-[700] text-gray-800 txt-32_M mb-2">Quaters</div>
+      <div className="text-gray-800 txt-32_M mb-2">Quaters</div>
       <div className="flex gap-10 mt-20">
         {TYPES.map((type) => (
           <div
