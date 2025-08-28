@@ -6,7 +6,7 @@ import { playersRoster } from '@/mocks/playersRoster'
 import { FORMATIONS, FormationKey } from '@/constants/formation'
 
 export default function FormationPage() {
-  const currentFormation: FormationKey = '4-3-3'
+  const currentFormation: FormationKey = '4-4-2'
   const spots = FORMATIONS[currentFormation]
   // roster를 role에 매칭시킬 수 있는 로직
   const players = spots.map((s, idx) => {
