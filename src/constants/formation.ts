@@ -18,12 +18,12 @@ export const FORMATION_433 = [
   { role: 'LCB', x: 38, y: 76 },
   { role: 'RCB', x: 62, y: 76 },
   { role: 'RB', x: 80, y: 72 },
-  { role: 'LCM', x: 35, y: 58 },
-  { role: 'CM', x: 50, y: 52 },
-  { role: 'RCM', x: 65, y: 58 },
-  { role: 'LW', x: 28, y: 32 },
+  { role: 'LCM', x: 30, y: 50 },
+  { role: 'CM', x: 50, y: 50 },
+  { role: 'RCM', x: 70, y: 50 },
+  { role: 'LW', x: 30, y: 25 },
   { role: 'ST', x: 50, y: 22 },
-  { role: 'RW', x: 72, y: 32 },
+  { role: 'RW', x: 72, y: 25 },
 ]
 
 export const FORMATION_4231 = [
