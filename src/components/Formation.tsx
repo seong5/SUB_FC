@@ -25,7 +25,7 @@ export default function FormationPage() {
       <div className="relative aspect-square w-[90vw] max-w-[640px]">
         <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90" priority />
         {players.map((p) => (
-          <Uniform key={p.id} number={p.number} name={p.name} x={p.x} y={p.y} size={70} />
+          <Uniform key={p.id} number={p.number} name={p.name} x={p.x} y={p.y} />
         ))}
       </div>
     </main>
