@@ -5,10 +5,10 @@ import Image from 'next/image'
 import Uniform from '@/components/Uniform'
 import { playersRoster } from '@/mocks/playersRoster'
 import { FORMATIONS, FormationKey } from '@/constants/formation'
-import Filter from './Filter'
+import QuarterFilter from './QuarterFilter'
 
 export default function FormationPage() {
-  const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<string>('1 Q')
+  const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<string>('1 쿼터')
   const currentFormation: FormationKey = '4-4-2'
   const spots = FORMATIONS[currentFormation]
 
@@ -28,7 +28,7 @@ export default function FormationPage() {
   return (
     <main className="grid grid-cols-[400px_640px] px-30 py-20">
       <aside className="px-20">
-        <Filter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
+        <QuarterFilter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
       </aside>
       <div className="relative aspect-square w-[90vw] max-w-[640px]">
         <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90" priority />

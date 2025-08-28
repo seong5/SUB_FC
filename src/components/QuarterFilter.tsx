@@ -5,13 +5,13 @@ interface TypeFilterProps {
   onChange: (type: string) => void
 }
 
-const TYPES = ['1 Q', '2 Q', '3 Q', '4 Q']
+const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터']
 
-export default function Filter({ selectedType, onChange }: TypeFilterProps) {
+export default function QuarterFilter({ selectedType, onChange }: TypeFilterProps) {
   return (
     <section>
       <div className="font-[700] text-gray-800 txt-32_M mb-2">Quaters</div>
-      <div className="flex gap-10">
+      <div className="flex gap-10 mt-20">
         {TYPES.map((type) => (
           <div
             key={type}
