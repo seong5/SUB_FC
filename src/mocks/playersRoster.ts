@@ -13,7 +13,7 @@ export const playersRoster: PlayersRoster[] = [
   { id: 6, name: '최승호', backNumber: 6 },
   { id: 7, name: '제갈진석', backNumber: 7 },
   { id: 8, name: '유동엽', backNumber: 8 },
-  { id: 9, name: '신성오', backNumber: 19 },
+  { id: 9, name: '신성오', backNumber: 9 },
   { id: 10, name: '현신우', backNumber: 10 },
   { id: 11, name: '윤동관', backNumber: 11 },
   { id: 12, name: '고형우', backNumber: 12 },
