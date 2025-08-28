@@ -15,7 +15,7 @@ export default function QuarterFilter({ selectedType, onChange }: TypeFilterProp
         {TYPES.map((type) => (
           <div
             key={type}
-            className={`inline-flex items-center justify-center w-80 md:w-100 h-30 md:h-42 px-4 border rounded-full cursor-pointer transition
+            className={`inline-flex items-center justify-center w-80 md:w-100 h-40 md:h-42 px-4 border rounded-full cursor-pointer transition
               ${
                 selectedType === type
                   ? 'bg-primary-500 text-white border'

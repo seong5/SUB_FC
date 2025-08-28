@@ -27,12 +27,12 @@ export default function FormationPage() {
   }, [spots])
 
   return (
-    <main className="grid grid-cols-[400px_640px] px-30 py-20">
+    <main className="grid grid-cols-1 md:grid-cols-[400px_640px] md:px-30 md:py-20">
       <aside className="px-20">
         <QuarterFilter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
         <ScoreAndAssist />
       </aside>
-      <div className="relative aspect-square w-[90vw] max-w-[640px]">
+      <div className="relative aspect-square w-[100vw] max-w-[640px]">
         <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90" priority />
         {players.map((p) => (
           <Uniform key={p.id} number={p.number} name={p.name} x={p.x} y={p.y} />

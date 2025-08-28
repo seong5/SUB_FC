@@ -5,7 +5,7 @@ export default function ScoreAndAssist() {
     <section>
       <h1 className="txt-28_M md:txt-32_M text-gray-800 mt-30">Score</h1>
       <h2 className="text-center text-[18px] md:text-[24px] font-bold my-20">SubFC : 짱구FC</h2>
-      <h1 className="text-center txt-28_M md:txt-32_B">3 : 0</h1>
+      <h1 className="text-center text-[28px] md:txt-32_B">3 : 0</h1>
       <div className="py-30 px-20 flex flex-row text-center items-center justify-between txt-12_M">
         <div>
           <Image
