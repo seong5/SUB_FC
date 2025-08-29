@@ -1,11 +1,13 @@
 'use client'
 
+import { QuarterLabel } from '@/mocks/QuarterScores'
+
 interface TypeFilterProps {
-  selectedType: string
-  onChange: (type: string) => void
+  selectedType: QuarterLabel | ''
+  onChange: (type: QuarterLabel | '') => void
 }
 
-const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터']
+const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터'] as const
 
 export default function QuarterFilter({ selectedType, onChange }: TypeFilterProps) {
   return (

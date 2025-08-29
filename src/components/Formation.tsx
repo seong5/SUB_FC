@@ -7,9 +7,10 @@ import { playersRoster } from '@/mocks/playersRoster'
 import { FORMATIONS, FormationKey } from '@/constants/formation'
 import QuarterFilter from './QuarterFilter'
 import ScoreAndAssist from './ScoreAndAssist'
+import { QuarterLabel } from '@/mocks/QuarterScores'
 
 export default function FormationPage() {
-  const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<string>('1 쿼터')
+  const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<QuarterLabel | ''>('1 쿼터')
   const currentFormation: FormationKey = '4-4-2'
   const spots = FORMATIONS[currentFormation]
 
@@ -30,7 +31,7 @@ export default function FormationPage() {
     <main className="grid grid-cols-1 md:grid-cols-[400px_640px] md:px-30 md:py-20">
       <aside className="px-20">
         <QuarterFilter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
-        <ScoreAndAssist />
+        <ScoreAndAssist selectedLabel={selectedQuarterLabel} />
       </aside>
       <div className="relative aspect-square w-[100vw] max-w-[640px]">
         <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90" priority />
