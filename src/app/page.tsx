@@ -5,6 +5,7 @@ import Pagination from '@/components/Pagination'
 import SearchBar from '@/components/SearchBar'
 import DropDown from '@/components/DropDown'
 import Icon from '@/components/Icon'
+import MatchInfoCard from '@/components/MatchInfoCard'
 
 type SortOrder = 'latest' | 'oldest'
 
@@ -24,7 +25,6 @@ export default function Home() {
       )
     : matchLocations
 
-  // 👉 정렬 적용 (useMemo 없이 그냥 바로)
   const sorted = [...filtered].sort((a, b) => {
     const da = new Date(a.date).getTime()
     const db = new Date(b.date).getTime()
@@ -63,10 +63,8 @@ export default function Home() {
       <ul className="space-y-3 mt-4">
         {current.length > 0 ? (
           current.map((loc) => (
-            <li key={loc.id} className="rounded-md border p-3 bg-white">
-              <p>{loc.date}</p>
-              <p className="font-semibold text-gray-900">{loc.name}</p>
-              <p className="text-sm text-gray-500">{loc.address}</p>
+            <li key={loc.id}>
+              <MatchInfoCard matchId={loc.id} />
             </li>
           ))
         ) : (
