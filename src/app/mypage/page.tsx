@@ -1,3 +1,9 @@
+import MatchInfoCard from '@/components/MatchInfoCard'
+
 export default function MyPage() {
-  return <div>마이페이지</div>
+  return (
+    <div>
+      <MatchInfoCard />
+    </div>
+  )
 }

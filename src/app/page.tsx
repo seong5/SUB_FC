@@ -24,7 +24,6 @@ export default function Home() {
       )
     : matchLocations
 
-  // 👉 정렬 적용 (useMemo 없이 그냥 바로)
   const sorted = [...filtered].sort((a, b) => {
     const da = new Date(a.date).getTime()
     const db = new Date(b.date).getTime()
