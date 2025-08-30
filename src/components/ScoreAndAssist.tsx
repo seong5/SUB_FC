@@ -15,7 +15,9 @@ export default function ScoreAndAssist({ selectedLabel }: Props) {
   return (
     <section>
       <h1 className="txt-28_M md:txt-32_M text-gray-800 mt-30">Score</h1>
-
+      <h1 className="txt-30_M md:text-[28px] font-semibold text-center text-gray-800 mt-30">
+        전체 스코어 <div>{sampleMatch.finalScore}</div>
+      </h1>
       <h2 className="text-center text-[18px] md:text-[24px] font-bold my-20">
         SubFC : {sampleMatch.opponent}
       </h2>
