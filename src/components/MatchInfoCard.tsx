@@ -2,6 +2,7 @@ import { matchLocations } from '@/mocks/matchLocation'
 import { formatKoreanDate } from '@/utils/dateUtils'
 import { sampleMatch } from '@/mocks/QuarterScores'
 import { getResultFromFinalScore } from '@/utils/scoreCalculator'
+import Image from 'next/image'
 
 type MatchInfoCardProps = {
   matchId: number
@@ -13,9 +14,9 @@ export default function MatchInfoCard({ matchId }: MatchInfoCardProps) {
   const result = getResultFromFinalScore(sampleMatch.finalScore)
 
   return (
-    <section className="flex flex-row gap-20 max-w-1000 card-shadow bg-white rounded-[16px] px-20 py-20 m-20">
-      <div className="bg-primary-100 w-100 md:w-200 rounded-[20px]">
-        <div>이미지</div>
+    <section className="flex flex-row gap-30 md:gap-100 max-w-1000 card-shadow bg-white rounded-[16px] px-15 md:px-20 py-15 md:py-20 m-20">
+      <div className="bg-white w-100 md:w-200 h-100 md:h-200 rounded-[20px]">
+        <Image src={'/subfc.png'} alt="SUBFC" width={200} height={100} />
       </div>
       <div className="txt-14_B md:txt-24_B text-gray-950">
         <h1>{formatKoreanDate(match.date)}</h1>
