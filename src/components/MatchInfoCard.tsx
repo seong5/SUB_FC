@@ -1,6 +1,7 @@
 import { matchLocations } from '@/mocks/matchLocation'
 import { formatKoreanDate } from '@/utils/dateUtils'
 import { sampleMatch } from '@/mocks/QuarterScores'
+import { getResultFromFinalScore } from '@/utils/scoreCalculator'
 
 type MatchInfoCardProps = {
   matchId: number
@@ -9,6 +10,7 @@ type MatchInfoCardProps = {
 export default function MatchInfoCard({ matchId }: MatchInfoCardProps) {
   const match = matchLocations.find((m) => m.id === matchId)
   if (!match) return <div className="text-gray-300">경기 정보를 찾을 수 없습니다.</div>
+  const result = getResultFromFinalScore(sampleMatch.finalScore)
 
   return (
     <section className="flex flex-row gap-20 max-w-1000 card-shadow bg-white rounded-[16px] px-20 py-20 m-20">
@@ -20,7 +22,7 @@ export default function MatchInfoCard({ matchId }: MatchInfoCardProps) {
         <h1>{match.name} </h1>
         <h1>{sampleMatch.finalScore}</h1>
         <h1>{sampleMatch.opponent}</h1>
-        <h1>승</h1>
+        <h1>{result}</h1>
       </div>
     </section>
   )
