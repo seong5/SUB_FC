@@ -41,7 +41,7 @@ export const playersRoster: PlayersRoster[] = [
 
 export const playersWithStats: PlayerStats[] = playersRoster.map((player) => ({
   ...player,
-  goals: Math.floor(Math.random() * 10), // 임시 득점
-  assists: Math.floor(Math.random() * 5), // 임시 도움
-  attendancePercent: Math.floor(Math.random() * 100), // 임시 참석률
+  goals: 0,
+  assists: 0,
+  attendancePercent: 0,
 }))
