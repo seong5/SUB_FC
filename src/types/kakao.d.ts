@@ -1,42 +1,60 @@
+export {}
+
+// 전역스코프에 타입 확장
 declare global {
   interface Window {
-    kakao: typeof kakao
+    kakao: Kakao
   }
 
-  namespace kakao {
-    namespace maps {
-      class LatLng {
-        constructor(lat: number, lng: number)
-      }
-      interface MapOptions {
-        center: LatLng
-        level: number
-      }
-      class Map {
-        constructor(container: HTMLElement, options: MapOptions)
-        setZoomable(zoomable: boolean): void
-        setDraggable(draggable: boolean): void
-        setKeyboardShortcuts(active: boolean): void
-        setCenter(latlng: LatLng): void
-        getCenter(): LatLng
-      }
-      class Marker {
-        constructor(opts: { position: LatLng; map?: Map; title?: string })
-        setMap(map: Map | null): void
-        setPosition(pos: LatLng): void
-      }
-      function load(cb: () => void): void
-
-      namespace services {
-        class Geocoder {
+  interface Kakao {
+    maps: {
+      load(callback: () => void): void
+      Map: new (
+        container: HTMLElement,
+        options: {
+          center: LatLng
+          level: number
+          draggable?: boolean
+          scrollwheel?: boolean
+          disableDoubleClick?: boolean
+          disableDoubleClickZoom?: boolean
+        }
+      ) => KakaoMap
+      LatLng: new (lat: number | string, lng: number | string) => LatLng
+      Marker: new (options: { map: KakaoMap; position: LatLng }) => KakaoMarker
+      services: {
+        Geocoder: new () => {
           addressSearch(
-            query: string,
-            cb: (result: { x: string; y: string }[], status: string) => void
+            address: string,
+            callback: (
+              result: Array<{
+                x: string
+                y: string
+              }>,
+              status: string
+            ) => void
           ): void
         }
-        const Status: { OK: string }
+        Status: {
+          OK: string
+        }
       }
     }
   }
+
+  interface LatLng {
+    getLat(): number
+    getLng(): number
+  }
+
+  interface KakaoMap {
+    setCenter(latlng: LatLng): void
+    setLevel(level: number): void
+    getCenter(): LatLng
+  }
+
+  interface KakaoMarker {
+    setMap(map: KakaoMap | null): void
+    setPosition(latlng: LatLng): void
+  }
 }
-export {}

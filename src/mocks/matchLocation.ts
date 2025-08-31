@@ -27,7 +27,7 @@ export const matchLocations: MatchLocation[] = [
   {
     id: 4,
     name: '탄천종합운동장',
-    address: '경기도 성남시 분당구 탄천동',
+    address: '경기도 성남시 분당구 탄천동 73-2',
     date: '2025-07-10',
   },
   {
@@ -45,7 +45,7 @@ export const matchLocations: MatchLocation[] = [
   {
     id: 7,
     name: '마들스타디움',
-    address: '서울특별시 노원구 덕릉로 450 주차장. 주차장관리소',
+    address: '서울특별시 노원구 덕릉로 450',
     date: '2025-08-11',
   },
   {

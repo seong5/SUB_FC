@@ -1,19 +1,21 @@
+import { notFound } from 'next/navigation'
 import Formation from '@/components/Formation'
-import KakaoMap from '@/components/KakaoMap'
+import LoadKakaoMap from '@/components/LoadKakaoMap'
 import { matchLocations } from '@/mocks/matchLocation'
 
-export default async function MatchesPage({ params }: { params: Promise<{ matchId: string }> }) {
-  const { matchId } = await params
-  const match = matchLocations.find((m) => m.id === Number(matchId))
+type PageProps = { params: Promise<{ matchId: string }> }
 
-  if (!match) {
-    return <main className="p-6">경기 정보를 찾을 수 없습니다.</main>
-  }
+export default async function MatchesPage({ params }: PageProps) {
+  const { matchId } = await params
+  const id = Number(matchId)
+
+  const match = matchLocations.find((m) => m.id === id)
+  if (!match) return notFound()
 
   return (
     <div className="p-6 space-y-6">
       <Formation />
-      <KakaoMap address={match.address} className="w-full h-[320px] rounded-xl" disableDrag />
+      <LoadKakaoMap address={match.address} />
     </div>
   )
 }

@@ -1,83 +1,83 @@
 'use client'
-import { useEffect, useRef } from 'react'
 
-type Props = {
+import { useEffect, useRef, useState } from 'react'
+
+interface RenderKakaoMapProps {
   address: string
-  level?: number
-  className?: string
-  disableDrag?: boolean
-  onResolved?: (pos: { lat: number; lng: number }) => void
-  onError?: (message: string) => void
 }
 
-export default function KakaoMap({
-  address,
-  level = 3,
-  className = 'w-full h-[400px] rounded-lg',
-  disableDrag = false,
-  onResolved,
-  onError,
-}: Props) {
-  const ref = useRef<HTMLDivElement>(null)
+export default function RenderKakaoMap({ address }: RenderKakaoMapProps) {
+  const mapRef = useRef<HTMLDivElement>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  // 리사이즈 핸들러를 useEffect 바깥에 정의 가능하도록 초기화
+  const resizeHandlerRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
-    if (!address) return
-    if (!window.kakao?.maps || !ref.current) return
+    if (!window.kakao || !mapRef.current) {
+      setError('지도 정보를 불러올 수 없습니다.')
+      return
+    }
 
-    let map: kakao.maps.Map | null = null
-    let marker: kakao.maps.Marker | null = null
-    let cancel = false
-    let debounceTimer: number | undefined
+    const geocoder = new window.kakao.maps.services.Geocoder()
 
-    window.kakao.maps.load(() => {
-      if (!ref.current || cancel) return
-
-      // 1) 지도 생성
-      map = new window.kakao.maps.Map(ref.current, {
-        center: new window.kakao.maps.LatLng(37.5665, 126.978), // 임시 중심(서울)
-        level,
-      })
-      map.setZoomable(false)
-      map.setKeyboardShortcuts(false)
-      if (disableDrag) map.setDraggable(false)
-
-      // 2) 주소 → 좌표 (디바운스: 주소가 자주 바뀔 때 호출 난사 방지)
-      const geocode = () => {
-        const geocoder = new window.kakao.maps.services.Geocoder()
-        geocoder.addressSearch(address, (result, status) => {
-          if (cancel || !map) return
-
-          if (status !== window.kakao.maps.services.Status.OK || !result?.[0]) {
-            onError?.('주소를 좌표로 변환할 수 없습니다.')
-            return
-          }
-
-          const lat = parseFloat(result[0].y)
-          const lng = parseFloat(result[0].x)
-          const pos = new window.kakao.maps.LatLng(lat, lng)
-
-          map.setCenter(pos)
-
-          // 기존 마커 제거 후 재생성
-          if (marker) marker.setMap(null)
-          marker = new window.kakao.maps.Marker({ position: pos, map, title: address })
-
-          onResolved?.({ lat, lng })
-        })
+    geocoder.addressSearch(address, (result, status) => {
+      if (status !== window.kakao.maps.services.Status.OK) {
+        console.error('주소 검색 실패:', status)
+        setError('올바른 주소를 입력해주세요.')
+        return
       }
 
-      // 주소 변경 시 150ms 지연
-      debounceTimer = window.setTimeout(geocode, 150)
+      try {
+        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x)
+
+        const map = new window.kakao.maps.Map(mapRef.current!, {
+          center: coords,
+          level: 3,
+          draggable: false,
+          scrollwheel: false,
+          disableDoubleClick: true,
+          disableDoubleClickZoom: true,
+        })
+
+        const marker = new window.kakao.maps.Marker({
+          map,
+          position: map.getCenter(),
+        })
+
+        const handleResize = () => {
+          map.setCenter(coords)
+          marker.setPosition(coords)
+        }
+
+        // 핸들러를 ref에 저장해서 클린업 함수에 접근 가능하게 함
+        resizeHandlerRef.current = handleResize
+
+        window.addEventListener('resize', handleResize)
+      } catch (e) {
+        console.error('지도 로딩 중 에러:', e)
+        setError('지도를 표시하는 중 문제가 발생했습니다.')
+      }
     })
 
-    // 3) 클린업 (언마운트/주소 변경 시 마커/타이머 정리)
     return () => {
-      cancel = true
-      if (debounceTimer) clearTimeout(debounceTimer)
-      if (marker) marker.setMap(null)
-      // map은 GC에 맡기면 됨
+      if (resizeHandlerRef.current) {
+        window.removeEventListener('resize', resizeHandlerRef.current)
+      }
     }
-  }, [address, level, disableDrag, onResolved, onError])
+  }, [address])
 
-  return <div ref={ref} className={className} />
+  return (
+    <div className="flex flex-col border-t border-gray-200 py-40 md:p-40">
+      <p className="txt-16_B md:txt-24_B my-5 leading-21 text-gray-950">축구장 주소</p>
+      <p className="txt-14_M my-5 leading-24 font-semibold opacity-75">{address}</p>
+      <div>
+        {error ? (
+          <p className="text-sm text-red-500">{error}</p>
+        ) : (
+          <div ref={mapRef} className="h-180 w-full rounded-[16px] md:h-500 md:rounded-[24px]" />
+        )}
+      </div>
+    </div>
+  )
 }
