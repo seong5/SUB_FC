@@ -1,3 +1,9 @@
+import PlayerCard from '@/components/PlayerCard'
+
 export default function PlayersPage() {
-  return <div>선수페이지</div>
+  return (
+    <section>
+      <PlayerCard />
+    </section>
+  )
 }
