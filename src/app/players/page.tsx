@@ -12,6 +12,7 @@ export default function PlayersPage() {
           goals={player.goals}
           assists={player.assists}
           attendancePercent={player.attendancePercent}
+          position={player.position}
         />
       ))}
     </main>

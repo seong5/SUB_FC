@@ -1,11 +1,14 @@
 'use client'
 
+import { Position, POSITION_COLORS } from '@/constants/positionColor'
+
 type PlayerCardProps = {
   name: string
   number: number
   goals: number
   assists: number
   attendancePercent: number
+  position: Position
 }
 
 export default function PlayerCard({
@@ -14,10 +17,13 @@ export default function PlayerCard({
   goals,
   assists,
   attendancePercent,
+  position,
 }: PlayerCardProps) {
   return (
     <section className="w-160 md:w-250 my-10">
-      <div className="flex h-110 md:h-160 items-center justify-center bg-red-100 rounded-t-[24px]">
+      <div
+        className={`flex h-110 md:h-160 items-center justify-center rounded-t-[24px] ${POSITION_COLORS[position]}`}
+      >
         <span
           className="text-[60px] md:text-[100px] font-extrabold text-gray-800 leading-none tracking-tight"
           aria-label={`등번호 ${number}`}
