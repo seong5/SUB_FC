@@ -1,7 +1,13 @@
-export type PlayersRoster = {
+export interface PlayersRoster {
   id: number
   name: string
   backNumber: number
+}
+
+export interface PlayerStats extends PlayersRoster {
+  goals: number
+  assists: number
+  attendancePercent: number
 }
 
 export const playersRoster: PlayersRoster[] = [
@@ -31,3 +37,10 @@ export const playersRoster: PlayersRoster[] = [
   { id: 24, name: '우찬영', backNumber: 13 },
   { id: 25, name: '이주현', backNumber: 15 },
 ]
+
+export const playersWithStats: PlayerStats[] = playersRoster.map((player) => ({
+  ...player,
+  goals: Math.floor(Math.random() * 10), // 임시 득점
+  assists: Math.floor(Math.random() * 5), // 임시 도움
+  attendancePercent: Math.floor(Math.random() * 100), // 임시 참석률
+}))
