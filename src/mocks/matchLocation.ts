@@ -21,13 +21,13 @@ export const matchLocations: MatchLocation[] = [
   {
     id: 3,
     name: '효창운동장',
-    address: '서울특별시 용산구 효창동 255',
+    address: '서울특별시 용산구 효창원로 177-15',
     date: '2025-06-30',
   },
   {
     id: 4,
     name: '탄천종합운동장',
-    address: '경기도 성남시 분당구 탄천동 73-2',
+    address: '경기도 성남시 분당구 탄천로 215',
     date: '2025-07-10',
   },
   {
@@ -45,7 +45,7 @@ export const matchLocations: MatchLocation[] = [
   {
     id: 7,
     name: '마들스타디움',
-    address: '서울특별시 노원구 덕릉로 450',
+    address: '서울특별시 노원구 상계동 770-2',
     date: '2025-08-11',
   },
   {
