@@ -3,7 +3,7 @@
 import { playersWithStats } from '@/mocks/playersRoster'
 import PlayerCard from '@/components/PlayerCard'
 import { Position } from '@/constants/positionColor'
-import FirstPrize from '@/components/PositionFilter'
+import FirstPrize from '@/components/FirstPrize'
 
 const POSITION_LABEL: Record<Position, string> = {
   GK: 'GK',
