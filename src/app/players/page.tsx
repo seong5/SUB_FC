@@ -5,26 +5,26 @@ import PlayerCard from '@/components/PlayerCard'
 import { Position } from '@/constants/positionColor'
 
 const POSITION_LABEL: Record<Position, string> = {
-  GK: '골키퍼',
-  DF: '수비수',
-  MF: '미드필더',
-  FW: '공격수',
+  GK: 'GK',
+  DF: 'DF',
+  MF: 'MF',
+  FW: 'FW',
 }
 
 export default function PlayersPage() {
   const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정
 
   return (
-    <main className="space-y-12 p-6">
+    <main className="space-y-12 px-20 md:px-40">
       {positions.map((pos) => {
         const players = playersWithStats.filter((p) => p.position === pos)
         if (players.length === 0) return null
 
         return (
           <section key={pos}>
-            <h2 className="mb-4 text-lg font-bold text-gray-800">{POSITION_LABEL[pos]}</h2>
+            <h2 className="mb-4 text-[60px] font-bold text-gray-800">{POSITION_LABEL[pos]}</h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-10 md:gap-20">
               {players.map((p) => (
                 <PlayerCard
                   key={p.id}
