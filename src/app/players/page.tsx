@@ -15,7 +15,7 @@ export default function PlayersPage() {
   const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정
 
   return (
-    <main className="space-y-12 px-20 md:px-40">
+    <main className="space-y-12 my-40 px-20 md:px-40">
       {positions.map((pos) => {
         const players = playersWithStats.filter((p) => p.position === pos)
         if (players.length === 0) return null
