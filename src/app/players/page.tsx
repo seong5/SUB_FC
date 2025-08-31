@@ -3,6 +3,7 @@
 import { playersWithStats } from '@/mocks/playersRoster'
 import PlayerCard from '@/components/PlayerCard'
 import { Position } from '@/constants/positionColor'
+import FirstPrize from '@/components/PositionFilter'
 
 const POSITION_LABEL: Record<Position, string> = {
   GK: 'GK',
@@ -16,10 +17,7 @@ export default function PlayersPage() {
 
   return (
     <>
-      <h1 className="text-[30px] md:text-[60px] font-bold text-center">SUB FC</h1>
-      <h2>득점 순위</h2>
-      <h2>도움 순위</h2>
-      <h2>참석률 순위</h2>
+      <FirstPrize />
       <main className="space-y-12 my-40 px-20 md:px-40">
         {positions.map((pos) => {
           const players = playersWithStats.filter((p) => p.position === pos)
