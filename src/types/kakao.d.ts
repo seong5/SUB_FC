@@ -8,16 +8,35 @@ declare global {
       class LatLng {
         constructor(lat: number, lng: number)
       }
-      class Map {
-        constructor(container: HTMLElement | null, options: MapOptions)
-      }
       interface MapOptions {
         center: LatLng
         level: number
       }
-      function load(callback: () => void): void
+      class Map {
+        constructor(container: HTMLElement, options: MapOptions)
+        setZoomable(zoomable: boolean): void
+        setDraggable(draggable: boolean): void
+        setKeyboardShortcuts(active: boolean): void
+        setCenter(latlng: LatLng): void
+        getCenter(): LatLng
+      }
+      class Marker {
+        constructor(opts: { position: LatLng; map?: Map; title?: string })
+        setMap(map: Map | null): void
+        setPosition(pos: LatLng): void
+      }
+      function load(cb: () => void): void
+
+      namespace services {
+        class Geocoder {
+          addressSearch(
+            query: string,
+            cb: (result: { x: string; y: string }[], status: string) => void
+          ): void
+        }
+        const Status: { OK: string }
+      }
     }
   }
 }
-
 export {}
