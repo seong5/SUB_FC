@@ -20,7 +20,7 @@ export default function PlayerCard({
   position,
 }: PlayerCardProps) {
   return (
-    <section className="aspect-square w-full my-10 card-shadow">
+    <section className="aspect-square w-full card-shadow">
       <div
         className={`flex h-110 md:h-160 items-center justify-center rounded-t-[24px] ${POSITION_COLORS[position]}`}
       >

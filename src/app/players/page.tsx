@@ -22,7 +22,9 @@ export default function PlayersPage() {
 
         return (
           <section key={pos}>
-            <h2 className="mb-4 text-[60px] font-bold text-gray-800">{POSITION_LABEL[pos]}</h2>
+            <h2 className="mb-4 text-[30px] md:text-[60px] font-bold text-gray-800">
+              {POSITION_LABEL[pos]}
+            </h2>
 
             <div className="grid grid-cols-3 md:grid-cols-5 gap-10 md:gap-20">
               {players.map((p) => (
