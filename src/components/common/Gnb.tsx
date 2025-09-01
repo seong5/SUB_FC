@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import subfc from '../../public/subfc.png'
+import subfc from '../../../public/subfc.png'
 import Image from 'next/image'
 
 export default function Gnb() {

@@ -1,6 +1,6 @@
-import Gnb from '@/components/Gnb'
+import Gnb from '@/components/common/Gnb'
 import './globals.css'
-import Footer from '@/components/Footer'
+import Footer from '@/components/common/Footer'
 
 export default function RootLayout({
   children,
