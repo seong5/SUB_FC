@@ -15,7 +15,6 @@ export default function Gnb() {
             className="rounded-full w-50 h-50 md:w-70 md:h-70"
           />
         </Link>
-        <Link href="/matches">경기기록</Link>
         <Link href="/teams">팀관리</Link>
         <Link href="/players">선수기록</Link>
       </div>
