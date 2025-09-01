@@ -1,4 +1,4 @@
-import Button from '@/components/Button'
+import Button from '@/components/common/Button'
 import type { WarningModalProps } from '@/constants/modal'
 
 export function WarningContent({

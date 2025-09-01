@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn'
 
-import Icon from './Icon'
+import Icon from '@/components/common/Icon'
 
 interface PaginationProps {
   currentPage: number // 현재 보고있는 페이지

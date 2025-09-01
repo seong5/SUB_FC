@@ -2,8 +2,8 @@
 
 import { useState, ChangeEvent } from 'react'
 import type { PostMatchProps } from '@/constants/modal'
-import Button from '@/components/Button'
-import Input from '@/components/Input'
+import Button from '@/components/common/Button'
+import Input from '@/components/common/Input'
 
 type Touched = {
   date: boolean
