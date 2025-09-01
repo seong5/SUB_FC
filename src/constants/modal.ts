@@ -14,6 +14,13 @@ export const ContentMap: ContentMapType = {
 
 export type ModalVariant = 'onlyText' | 'warning' | 'postMatch'
 
+export type PostMatchData = {
+  date: string
+  opponent: string
+  place: string
+  score: string
+}
+
 export interface OnlyTextModalProps {
   variant: 'onlyText'
   message: string
