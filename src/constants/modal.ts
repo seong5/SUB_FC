@@ -1,4 +1,5 @@
 import { OnlyTextContent } from '@/components//OnlyTextContent'
+import { PostMatchContent } from '@/components/PostMatchContent'
 import { WarningContent } from '@/components/WarningContent'
 
 type ContentMapType = {
@@ -8,9 +9,10 @@ type ContentMapType = {
 export const ContentMap: ContentMapType = {
   onlyText: OnlyTextContent,
   warning: WarningContent,
+  postMatch: PostMatchContent,
 } as const
 
-export type ModalVariant = 'onlyText' | 'warning'
+export type ModalVariant = 'onlyText' | 'warning' | 'postMatch'
 
 export interface OnlyTextModalProps {
   variant: 'onlyText'
@@ -27,4 +29,10 @@ export interface WarningModalProps {
   confirmText?: string
 }
 
-export type ModalProps = OnlyTextModalProps | WarningModalProps
+export interface PostMatchProps {
+  variant: 'postMatch'
+  onClose: () => void
+  onSubmit: (data: { date: string; opponent: string; place: string }) => void
+}
+
+export type ModalProps = OnlyTextModalProps | WarningModalProps | PostMatchProps
