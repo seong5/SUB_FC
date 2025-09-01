@@ -16,7 +16,7 @@ export default function Gnb() {
           />
         </Link>
         <Link href="/teams">팀관리</Link>
-        <Link href="/players">선수기록</Link>
+        <Link href="/players">선수관리</Link>
       </div>
       <div className="flex gap-15 md:gap-25 items-center txt-12_M md:txt-14_M">
         <Link href="/login">로그인</Link>
