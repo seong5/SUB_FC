@@ -130,7 +130,20 @@ export default function Input({ className = '', label, errorMessage, ...props }:
       )}
       <div className="relative flex flex-col gap-6">
         {insideInput()}
-        {showError && <div className="txt-12_M mx-8 leading-14 text-red-500">{errorMessage}</div>}
+        <div className="mx-8">
+          <p
+            // 스크린리더에선 에러가 생길 때만 읽히도록 처리
+            aria-live={showError ? 'assertive' : 'off'}
+            role={showError ? 'alert' : undefined}
+            className={cn(
+              'txt-12_M leading-14 transition-opacity duration-150',
+              'min-h-14',
+              showError ? 'text-red-500 opacity-100' : 'opacity-0'
+            )}
+          >
+            {errorMessage ?? ''} {/* 내용이 없어도 높이는 유지 */}
+          </p>
+        </div>
       </div>
     </div>
   )
