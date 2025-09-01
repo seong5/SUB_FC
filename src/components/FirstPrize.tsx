@@ -1,6 +1,19 @@
+'use client'
+
 import Image from 'next/image'
+import { playersWithStats } from '@/mocks/playersRoster'
+import type { PlayerStats } from '@/mocks/playersRoster'
+
+function getTopPlayer(field: keyof PlayerStats) {
+  const maxValue = Math.max(...playersWithStats.map((p) => Number(p[field])))
+  return playersWithStats.find((p) => Number(p[field]) === maxValue)
+}
 
 export default function FirstPrize() {
+  const topGoal = getTopPlayer('goals')
+  const topAssist = getTopPlayer('assists')
+  const topAttendance = getTopPlayer('attendancePercent')
+
   return (
     <>
       <h1 className="text-center text-[30px] md:text-[60px] font-bold mb-10">
@@ -17,7 +30,8 @@ export default function FirstPrize() {
             className="w-60 h-60 md:w-80 md:h-80"
           />
           <h3 className="txt-16_B md:txt-24_B">득점</h3>
-          <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">신성오</h1>
+          <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">{topGoal?.name}</h1>
+          <p className="txt-14_M md:txt-18_M text-gray-600">{topGoal?.goals} 골</p>
         </div>
         <div className="flex flex-col gap-5">
           <Image
@@ -28,7 +42,8 @@ export default function FirstPrize() {
             className="w-60 h-60 md:w-80 md:h-80"
           />
           <h3 className="txt-16_B md:txt-24_B">도움</h3>
-          <h1 className="txt-20_B md:txt-32_B text-green-500 mt-10">차우현</h1>
+          <h1 className="txt-20_B md:txt-32_B text-green-500 mt-10">{topAssist?.name}</h1>
+          <p className="txt-14_M md:txt-18_M text-gray-600">{topAssist?.assists} 도움</p>
         </div>
         <div className="flex flex-col gap-5">
           <Image
@@ -39,7 +54,8 @@ export default function FirstPrize() {
             className="w-60 h-60 md:w-80 md:h-80"
           />
           <h3 className="txt-16_B md:txt-24_B">참석률</h3>
-          <h1 className="txt-20_B md:txt-32_B text-yellow-500 mt-10">문현준</h1>
+          <h1 className="txt-20_B md:txt-32_B text-yellow-500 mt-10">{topAttendance?.name}</h1>
+          <p className="txt-14_M md:txt-18_M text-gray-600">{topAttendance?.attendancePercent}%</p>
         </div>
       </section>
     </>
