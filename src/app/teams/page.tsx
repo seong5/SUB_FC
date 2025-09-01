@@ -1,3 +1,9 @@
+import WinRate from '@/components/WinRate'
+
 export default function TeamPage() {
-  return <div>팀페이지</div>
+  return (
+    <main>
+      <WinRate />
+    </main>
+  )
 }
