@@ -32,7 +32,7 @@ export interface WarningModalProps {
 export interface PostMatchProps {
   variant: 'postMatch'
   onClose: () => void
-  onSubmit: (data: { date: string; opponent: string; place: string }) => void
+  onSubmit: (data: { date: string; opponent: string; place: string; score: string }) => void
 }
 
 export type ModalProps = OnlyTextModalProps | WarningModalProps | PostMatchProps
