@@ -3,7 +3,7 @@ import WinRate from '@/components/WinRate'
 
 export default function TeamPage() {
   return (
-    <main>
+    <main className="px-20">
       <WinRate />
       <Calender />
     </main>
