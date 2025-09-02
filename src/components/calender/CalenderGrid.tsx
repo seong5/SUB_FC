@@ -24,7 +24,7 @@ export default function CalendarGrid({
 
   const weekdayHeader = useMemo(
     () => (
-      <div className="grid grid-cols-7 text-center text-xs md:text-sm text-gray-500">
+      <div className="grid grid-cols-7 py-10 text-center text-xs md:text-sm text-gray-500">
         {weekdays.map((w, i) => (
           <div
             key={w}
@@ -54,7 +54,7 @@ export default function CalendarGrid({
               onClick={() => onSelect(d)}
               className={[
                 'aspect-square rounded-xl text-sm md:text-base',
-                'flex items-center justify-center select-none',
+                'flex justify-center select-none',
                 'transition-colors',
                 inThisMonth ? 'text-gray-900' : 'text-gray-400',
                 isSelected

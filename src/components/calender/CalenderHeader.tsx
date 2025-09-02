@@ -7,7 +7,7 @@ type HeaderProps = {
   onNext: () => void
 }
 
-export default function CalendarHeader({ title, subtitle, onPrev, onNext }: HeaderProps) {
+export default function CalendarHeader({ title, onPrev, onNext }: HeaderProps) {
   return (
     <header className="flex items-center justify-between px-4 py-3">
       <button
@@ -20,7 +20,6 @@ export default function CalendarHeader({ title, subtitle, onPrev, onNext }: Head
 
       <div className="text-center">
         <div className="text-[18px] md:text-[20px] font-bold">{title}</div>
-        {subtitle && <div className="text-xs md:text-sm text-gray-500">{subtitle}</div>}
       </div>
 
       <button
