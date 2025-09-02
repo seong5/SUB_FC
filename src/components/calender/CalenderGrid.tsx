@@ -72,7 +72,7 @@ export default function CalendarGrid({
               key={d.toISOString()}
               onClick={() => onSelect(d)}
               className={[
-                'aspect-square rounded-xl text-sm md:text-base flex flex-col items-center justify-center select-none',
+                'aspect-square rounded-xl text-sm md:text-base flex flex-col items-center select-none',
                 'transition-colors',
                 inThisMonth ? 'text-gray-900' : 'text-gray-400',
                 isSelected
