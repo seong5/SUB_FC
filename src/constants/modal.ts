@@ -1,6 +1,6 @@
-import { OnlyTextContent } from '@/components/common/OnlyTextContent'
-import { PostMatchContent } from '@/components/common/PostMatchContent'
-import { WarningContent } from '@/components/common/WarningContent'
+import { OnlyTextContent } from '@/components/common/modal-contents/OnlyTextContent'
+import { PostMatchContent } from '@/components/common/modal-contents/PostMatchContent'
+import { WarningContent } from '@/components/common/modal-contents/WarningContent'
 
 type ContentMapType = {
   [V in ModalVariant]: React.FC<Extract<ModalProps, { variant: V }>>
