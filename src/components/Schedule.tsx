@@ -3,16 +3,19 @@
 import Button from './common/Button'
 import { useState } from 'react'
 import Modal from './common/Modal'
+import { useScheduleStore } from '@/stores/useScheduleStore'
 
 export default function Schedule() {
   const [isOpen, setIsOpen] = useState(false)
+  const add = useScheduleStore((s) => s.add)
 
-  const handleSubmit = (_data: {
+  const handleSubmit = (data: {
     date: string
     type: '매치' | '회식' | '기타'
     title?: string
     place?: string
   }) => {
+    add(data)
     setIsOpen(false)
   }
 
