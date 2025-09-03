@@ -19,17 +19,37 @@ export default function DayEventsPopover({
 }) {
   const [pos, setPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
   const ref = useRef<HTMLDivElement>(null)
+  useClickOutside(ref, () => onClose())
 
   useEffect(() => {
     const gap = 8
+    const scrollX = window.scrollX
+    const scrollY = window.scrollY
     const vw = window.innerWidth
-    const popW = 280
-    let left = rect.left + rect.width + gap
-    if (left + popW > vw) left = Math.max(8, rect.left - gap - popW)
-    setPos({ top: rect.top + window.scrollY, left })
-  }, [rect])
+    const vh = window.innerHeight
 
-  useClickOutside(ref, () => onClose())
+    const popW = ref.current?.offsetWidth ?? 280
+    const popH = ref.current?.offsetHeight ?? 220
+
+    // 기본 위치: 셀 아래
+    let top = rect.bottom + gap + scrollY
+    // 가로: 셀의 중앙과 팝오버 중앙 정렬
+    let left = rect.left + rect.width / 2 - popW / 2 + scrollX
+
+    // 아래로 넘치면 위로 뒤집기
+    const bottomEdge = top + popH - scrollY
+    if (bottomEdge > vh - 8) {
+      top = rect.top + scrollY - gap - popH
+    }
+
+    // 좌우 화면 클램프(여백 8px)
+    const minLeft = 8 + scrollX
+    const maxLeft = vw - popW - 8 + scrollX
+    if (left < minLeft) left = minLeft
+    if (left > maxLeft) left = maxLeft
+
+    setPos({ top, left })
+  }, [rect])
 
   const badge = (t: EventsType) =>
     t === '매치'
