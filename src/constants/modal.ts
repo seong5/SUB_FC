@@ -1,6 +1,8 @@
 import { OnlyTextContent } from '@/components/common/modal-contents/OnlyTextContent'
 import { PostMatchContent } from '@/components/common/modal-contents/PostMatchContent'
+import ScheduleContent from '@/components/common/modal-contents/ScheduleContent'
 import { WarningContent } from '@/components/common/modal-contents/WarningContent'
+import { EventsType } from '@/mocks/calenderEvents'
 
 type ContentMapType = {
   [V in ModalVariant]: React.FC<Extract<ModalProps, { variant: V }>>
@@ -10,9 +12,10 @@ export const ContentMap: ContentMapType = {
   onlyText: OnlyTextContent,
   warning: WarningContent,
   postMatch: PostMatchContent,
+  scheduleEvent: ScheduleContent,
 } as const
 
-export type ModalVariant = 'onlyText' | 'warning' | 'postMatch'
+export type ModalVariant = 'onlyText' | 'warning' | 'postMatch' | 'scheduleEvent'
 
 export type PostMatchData = {
   date: string
@@ -42,4 +45,14 @@ export interface PostMatchProps {
   onSubmit: (data: { date: string; opponent: string; place: string; score: string }) => void
 }
 
-export type ModalProps = OnlyTextModalProps | WarningModalProps | PostMatchProps
+export interface ScheduleContentProps {
+  variant: 'scheduleEvent'
+  onClose: () => void
+  onSubmit: (data: { date: string; type: EventsType; title?: string; place?: string }) => void
+}
+
+export type ModalProps =
+  | OnlyTextModalProps
+  | WarningModalProps
+  | PostMatchProps
+  | ScheduleContentProps

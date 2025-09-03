@@ -7,6 +7,15 @@ import Modal from './common/Modal'
 export default function Schedule() {
   const [isOpen, setIsOpen] = useState(false)
 
+  const handleSubmit = (_data: {
+    date: string
+    type: '매치' | '회식' | '기타'
+    title?: string
+    place?: string
+  }) => {
+    setIsOpen(false)
+  }
+
   return (
     <section>
       <p className="border-t border-gray-100 pt-20 txt-20_B">SUB 일정</p>
@@ -19,7 +28,7 @@ export default function Schedule() {
         <p className="card-shadow rounded-full text-center min-w-50 bg-gray-300">기타</p>
       </div>
       {isOpen && (
-        <Modal variant="onlyText" onClose={() => setIsOpen(false)} message="일정등록모달입니다." />
+        <Modal variant="scheduleEvent" onClose={() => setIsOpen(false)} onSubmit={handleSubmit} />
       )}
     </section>
   )

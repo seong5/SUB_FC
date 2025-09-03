@@ -2,17 +2,15 @@
 import { useState, ChangeEvent } from 'react'
 import Button from '../Button'
 import Input from '../Input'
+import { ScheduleContentProps } from '@/constants/modal'
 
 type EventsType = '매치' | '회식' | '기타'
-type Props = {
-  onClose: () => void
-  onSubmit: (data: { date: string; type: EventsType; title?: string; place?: string }) => void
-}
+
 type Touched = {
   date: boolean
 }
 
-export default function ScheduleContent({ onClose, onSubmit }: Props) {
+export default function ScheduleContent({ onClose, onSubmit }: ScheduleContentProps) {
   const [date, setDate] = useState('')
   const [type, setType] = useState<EventsType>('매치')
   const [title, setTitle] = useState('')
@@ -50,24 +48,22 @@ export default function ScheduleContent({ onClose, onSubmit }: Props) {
           onBlur={() => setTouched({ date: true })}
           errorMessage={!date && touched.date ? '날짜를 선택해 주세요.' : undefined}
         />
-
-        {/* type 선택 */}
         <div>
           <p className="mb-2 text-sm font-medium">유형</p>
-          <div className="flex gap-2">
+          <div className="flex gap-5">
             {(['매치', '회식', '기타'] as EventsType[]).map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setType(t)}
-                className={`px-3 py-1.5 rounded-full text-sm ${
+                className={`px-8 py-3 rounded-full text-sm ${
                   type === t
                     ? t === '매치'
                       ? 'bg-orange-300'
                       : t === '회식'
                         ? 'bg-purple-300'
                         : 'bg-gray-300'
-                    : 'bg-gray-200 text-gray-600'
+                    : 'bg-gray-100 text-gray-950'
                 }`}
               >
                 {t}
@@ -75,17 +71,15 @@ export default function ScheduleContent({ onClose, onSubmit }: Props) {
             ))}
           </div>
         </div>
-
         <Input
           id="event-title"
-          label="제목/메모"
+          label="제목"
           variant="input"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="예시: 정기 친선전"
+          placeholder="일정을 적어주세요."
         />
-
         <Input
           id="event-place"
           label="장소"
@@ -93,10 +87,9 @@ export default function ScheduleContent({ onClose, onSubmit }: Props) {
           type="text"
           value={place}
           onChange={(e) => setPlace(e.target.value)}
-          placeholder="예시: ○○구장"
+          placeholder="장소를 적어주세요."
         />
       </div>
-
       <div className="my-20 flex gap-5 justify-evenly">
         <Button className="flex-1 py-2" size="lg" variant="secondary" onClick={onClose}>
           취소
