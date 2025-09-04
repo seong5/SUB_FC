@@ -11,6 +11,8 @@ const ICON_MAP = {
   Youtube: () => import('@/assets/youtube.svg') as Promise<SvgModule>,
   ChevLeft: () => import('@/assets/chevron-left.svg') as Promise<SvgModule>,
   ChevRight: () => import('@/assets/chevron-right.svg') as Promise<SvgModule>,
+  OpenEye: () => import('@/assets/open-eye.svg') as Promise<SvgModule>,
+  CloseEye: () => import('@/assets/close-eye.svg') as Promise<SvgModule>,
 } satisfies Record<string, Loader>
 
 export type IconName = keyof typeof ICON_MAP
