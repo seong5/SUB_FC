@@ -3,6 +3,7 @@ import subfc from '../../../public/subfc.png'
 import Input from '@/components/common/Input'
 import Button from '@/components/common/Button'
 import Icon from '@/components/common/Icon'
+import Link from 'next/link'
 
 export default function Login() {
   return (
@@ -34,6 +35,12 @@ export default function Login() {
       >
         카카오 로그인
       </Button>
+      <div className="flex flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
+        <Link href={'/signup'}>
+          <div className="underline">회원가입</div>
+        </Link>
+        <h1>이 필요하신가요?</h1>
+      </div>
     </main>
   )
 }
