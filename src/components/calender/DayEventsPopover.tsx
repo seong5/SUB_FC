@@ -22,35 +22,34 @@ export default function DayEventsPopover({
   useClickOutside(ref, () => onClose())
 
   useEffect(() => {
-    const gap = 8
-    const scrollX = window.scrollX
-    const scrollY = window.scrollY
+    // 세로/가로 보정값
+    const yGap = -30 // 셀과 살짝 겹치게(0~4로 미세조정, 음수면 살짝 겹침)
+    const xOffset = -8 // 왼쪽으로 8px 당김(원하면 0~±16 정도로 조절)
+
     const vw = window.innerWidth
     const vh = window.innerHeight
 
     const popW = ref.current?.offsetWidth ?? 280
-    const popH = ref.current?.offsetHeight ?? 220
+    const popH = ref.current?.offsetHeight ?? 100
 
-    // 기본 위치: 셀 아래
-    let top = rect.bottom + gap + scrollY
-    // 가로: 셀의 중앙과 팝오버 중앙 정렬
-    let left = rect.left + rect.width / 2 - popW / 2 + scrollX
+    // 기본: 아래 배치
+    let top = rect.bottom + yGap
+    let left = rect.left + rect.width / 2 - popW / 2 + xOffset
 
     // 아래로 넘치면 위로 뒤집기
-    const bottomEdge = top + popH - scrollY
+    const bottomEdge = top + popH
     if (bottomEdge > vh - 8) {
-      top = rect.top + scrollY - gap - popH
+      top = rect.top - popH - yGap // 뒤집을 때도 동일 보정(겹치기 유지)
     }
 
-    // 좌우 화면 클램프(여백 8px)
-    const minLeft = 8 + scrollX
-    const maxLeft = vw - popW - 8 + scrollX
+    // 좌우 클램프
+    const minLeft = 8
+    const maxLeft = vw - popW - 8
     if (left < minLeft) left = minLeft
     if (left > maxLeft) left = maxLeft
 
     setPos({ top, left })
   }, [rect])
-
   const badge = (t: EventsType) =>
     t === '매치'
       ? 'px-8 py-5 bg-orange-200 text-orange-900'
