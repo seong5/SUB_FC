@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+// zod 스키마 검증
 const SignupSchema = z
   .object({
     email: z.string().min(1, '이메일을 입력해주세요.').email('이메일이 올바르지 않습니다.'),

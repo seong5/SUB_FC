@@ -266,9 +266,9 @@ function PasswordInput({
   return (
     <>
       <input
+        {...props}
         type={isPassword ? 'password' : 'text'}
         className={cn(className, 'pr-40')}
-        {...props}
       />
       <button
         className="absolute top-15 right-20 text-gray-400"
