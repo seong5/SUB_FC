@@ -10,7 +10,7 @@ import {
   buttonSize,
   buttonVariants,
   DEFAULT_BUTTON_ROUNDED,
-} from '@/constants/ButtonStyles'
+} from '@/constants/buttonStyles'
 import { cn } from '@/utils/cn'
 
 export interface ButtonProps {

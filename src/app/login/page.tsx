@@ -2,6 +2,7 @@ import Image from 'next/image'
 import subfc from '../../../public/subfc.png'
 import Input from '@/components/common/Input'
 import Button from '@/components/common/Button'
+import Icon from '@/components/common/Icon'
 
 export default function Login() {
   return (
@@ -16,10 +17,23 @@ export default function Login() {
       <div className="md:w-640 w-328">
         <Input id="text1" variant="input" label="이메일" placeholder="이메일을 입력해주세요." />
         <Input id="text1" variant="input" label="비밀번호" placeholder="비밀번호를 입력해주세요." />
-        <Button variant="primary" size="xl" disabled className="mt-15">
+        <Button variant="primary" size="xl" disabled className="my-15">
           로그인
         </Button>
       </div>
+      <div className="flex items-center w-full">
+        <hr className="h-1 flex-grow text-gray-100"></hr>
+        <span className="text-center text-gray-950 txt-16_M px-16">or</span>
+        <hr className="h-1 flex-grow text-gray-100"></hr>
+      </div>
+      <Button
+        icon={<Icon icon="Kakao" className="w-24 h-24 mr-4" />}
+        variant="kakao"
+        size="xl"
+        className="mt-15 md:w-640 w-328 text-[#000000] opacity-85"
+      >
+        카카오 로그인
+      </Button>
     </main>
   )
 }
