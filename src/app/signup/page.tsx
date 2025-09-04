@@ -28,7 +28,7 @@ export default function Signup() {
           id="password2"
           variant="input"
           type="password"
-          label="비밀번호"
+          label="비밀번호 확인"
           placeholder="비밀번호를 확인해주세요."
         />
         <Button variant="primary" size="xl" disabled className="mt-10">

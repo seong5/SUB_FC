@@ -12,6 +12,8 @@ import {
 
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { cn } from '@/utils/cn'
+import CloseEye from '@/assets/close-eye.svg'
+import OpenEye from '@/assets/open-eye.svg'
 
 /** HTML input 에서 사용할 수 있는 타입들 */
 type InputType =
@@ -262,15 +264,21 @@ function PasswordInput({
   const [isPassword, setIsPassword] = useState(true)
 
   return (
-    <div className="relative">
-      <input type={isPassword ? 'password' : 'text'} className={className} {...props} />
+    <>
+      <input
+        type={isPassword ? 'password' : 'text'}
+        className={cn(className, 'pr-40')}
+        {...props}
+      />
       <button
-        className="absolute top-15 right-20"
+        className="absolute top-15 right-20 text-gray-400"
         type="button"
         onClick={() => setIsPassword((prev) => !prev)}
         aria-label={isPassword ? '비밀번호 보기' : '비밀번호 숨기기'}
-      />
-    </div>
+      >
+        {isPassword ? <CloseEye className="w-24 h-24" /> : <OpenEye className="w-24 h-24" />}
+      </button>
+    </>
   )
 }
 
