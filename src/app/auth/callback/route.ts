@@ -1,34 +1,24 @@
-import { NextResponse } from 'next/server'
-// The client you created from the Server-Side Auth instructions
-import { createClient } from '@/utils/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { createServerClientForRoute } from '@/libs/supabase/server-route'
 
-export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
-  let next = searchParams.get('next') ?? '/'
-  if (!next.startsWith('/')) {
-    // if "next" is not a relative URL, use the default
-    next = '/'
-  }
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url)
+  const code = url.searchParams.get('code')
+  let next = url.searchParams.get('next') ?? '/'
+  if (!next.startsWith('/')) next = '/'
 
-  if (code) {
-    const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
-      }
-    }
-  }
+  const proto = request.headers.get('x-forwarded-proto') ?? url.protocol.replace(':', '')
+  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host')!
+  const origin = `${proto}://${host}`
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+  // 리다이렉트 응답을 먼저 만들고 쿠키를 여기에 심음
+  const response = NextResponse.redirect(new URL(next, origin))
+
+  if (!code) return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+
+  const supabase = createServerClientForRoute(request, response)
+  const { error } = await supabase.auth.exchangeCodeForSession(code)
+  if (error) return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+
+  return response
 }
