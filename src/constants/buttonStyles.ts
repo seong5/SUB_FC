@@ -23,7 +23,7 @@ const SECONDARY_BASE_CLASSEES = [
   ...SECONDARY_DISABLED_CLASSES,
 ]
 
-const KAKAO_BASE = ['bg-yellow', 'text-kakao-black']
+const KAKAO_BASE = ['bg-yellow', 'text-kakao-black', 'rounded-[12px]']
 
 /* 버튼 배경색, 텍스트색상, 테두리 색상
   primary: 대표색 : 하늘색 배경, 텍스트 흰색
