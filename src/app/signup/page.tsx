@@ -52,7 +52,7 @@ export default function Signup() {
         height={200}
         className="w-150 h-150 md:w-200 md:h-200"
       />
-      <form onSubmit={handleSubmit(onSubmit)} className="md:w-640 w-328 flex flex-col gap-15">
+      <form onSubmit={handleSubmit(onSubmit)} className="md:w-640 w-328 flex flex-col gap-10">
         <Input
           id="email"
           variant="input"
