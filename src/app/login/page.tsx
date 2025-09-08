@@ -130,12 +130,6 @@ export default function Login() {
         </Link>
         <span>이 필요하신가요?</span>
       </div>
-
-      <div className="mt-10">
-        <Link href="/reset-password" className="txt-14_M underline text-gray-500">
-          비밀번호를 잊으셨나요?
-        </Link>
-      </div>
     </main>
   )
 }
