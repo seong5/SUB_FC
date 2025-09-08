@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { createClient } from '@/libs/supabase/client'
 
 // zod 스키마 검증
 const SignupSchema = z
@@ -40,7 +41,25 @@ export default function Signup() {
   })
 
   const onSubmit = async (data: SignupForm) => {
-    console.log('회원가입 데이터', data)
+    const supabase = createClient()
+
+    const { error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: {
+          full_name: data.nickname, // Supabase 대시보드 Display Name으로 저장됨
+        },
+      },
+    })
+
+    if (error) {
+      alert(`회원가입 실패: ${error.message}`)
+      return
+    }
+
+    // 원한다면 자동 로그인 → 홈으로 이동
+    window.location.href = '/login'
   }
 
   return (
@@ -102,7 +121,7 @@ export default function Signup() {
           회원가입
         </Button>
       </form>
-      <div className="flex flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
+      <div className="flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
         <Link href={'/login'}>
           <div className="underline">로그인</div>
         </Link>
