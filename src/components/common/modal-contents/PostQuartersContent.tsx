@@ -54,18 +54,15 @@ export default function PostQuarterContent({
 
   return (
     <div className="px-15 py-10 w-350 md:w-400">
-      <h2 className="text-lg font-bold mb-4 text-center">경기 등록 · 쿼터별 기록</h2>
-
+      <h2 className="text-lg font-bold mb-4 text-center">쿼터별 기록</h2>
       {quarters.map((q, qi) => (
-        <div key={qi} className="border rounded p-3 mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="font-semibold">Q{qi + 1}</div>
-            <Button size="sm" variant="secondary" onClick={() => addGoal(qi)}>
-              득점 추가
+        <div key={qi} className="border border-gray-100 min-h-150 px-8 rounded-[16px] my-10">
+          <div className="flex items-center justify-between gap-10 p-8 mb-2">
+            <div className="font-semibold">{qi + 1} 쿼터</div>
+            <Button size="xs" variant="secondary" onClick={() => addGoal(qi)}>
+              득점 도움
             </Button>
           </div>
-
-          {q.goals.length === 0 && <p className="text-sm text-gray-500 mb-2">득점 이벤트 없음</p>}
 
           {q.goals.map((g, gi) => (
             <div key={gi} className="grid grid-cols-2 gap-2 items-center mb-2">
@@ -111,33 +108,36 @@ export default function PostQuarterContent({
               </div>
 
               <div className="col-span-2 flex justify-end">
-                <Button size="sm" variant="secondary" onClick={() => rmGoal(qi, gi)}>
+                <Button size="xs" variant="secondary" onClick={() => rmGoal(qi, gi)}>
                   삭제
                 </Button>
               </div>
             </div>
           ))}
-
-          <Input
-            id={`scoreAfter-${qi}`}
-            label="쿼터 종료 스코어"
-            variant="input"
-            placeholder="예: 2 - 1"
-            value={q.scoreAfter}
-            onChange={(e) => update(qi, { scoreAfter: e.target.value })}
-          />
-          <Input
-            id={`conceded-${qi}`}
-            label="실점"
-            type="number"
-            variant="input"
-            value={q.conceded}
-            onChange={(e) => update(qi, { conceded: Math.max(0, Number(e.target.value)) })}
-          />
+          <div className="flex flex-row justify-center gap-20 m-10">
+            <Input
+              id={`scoreAfter-${qi}`}
+              label="쿼터 스코어"
+              variant="input"
+              placeholder="예: 2 - 1"
+              value={q.scoreAfter}
+              onChange={(e) => update(qi, { scoreAfter: e.target.value })}
+              className="w-150 h-40"
+            />
+            <Input
+              id={`conceded-${qi}`}
+              label="실점"
+              type="number"
+              variant="input"
+              value={q.conceded}
+              onChange={(e) => update(qi, { conceded: Math.max(0, Number(e.target.value)) })}
+              className="w-150 h-40"
+            />
+          </div>
         </div>
       ))}
 
-      <div className="my-20 flex gap-5 justify-evenly">
+      <div className="my-10 flex gap-5 justify-evenly">
         <Button className="flex-1 py-2" size="lg" variant="secondary" onClick={onBack}>
           이전
         </Button>

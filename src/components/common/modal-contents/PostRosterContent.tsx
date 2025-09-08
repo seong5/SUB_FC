@@ -62,7 +62,7 @@ export default function PostRosterContent({
         <div>
           <label className="block mb-1 text-sm font-medium">포메이션</label>
           <select
-            className="w-full card-shadow border border-gray-300 rounded-[16px] p-2"
+            className="w-full card-shadow border border-gray-100 rounded-[16px] p-10"
             value={formation}
             onChange={(e) => setFormation(e.target.value as Formation)}
           >
@@ -80,7 +80,7 @@ export default function PostRosterContent({
             <label className="block mb-1 text-sm font-medium">{pos}</label>
             <select
               multiple
-              className="w-full card-shadow border border-gray-300 rounded-[16px] p-10 min-h-[60px]"
+              className="w-full card-shadow border border-gray-100 rounded-[16px] p-10 min-h-[60px]"
               value={roster[pos]}
               onChange={(e) => {
                 const ids = Array.from(e.target.selectedOptions).map((o) => o.value)
@@ -93,7 +93,6 @@ export default function PostRosterContent({
                 </option>
               ))}
             </select>
-            <p className="text-xs text-gray-500 mt-1">여러 명은 Ctrl/⌘ 클릭으로 선택</p>
           </div>
         ))}
       </div>
