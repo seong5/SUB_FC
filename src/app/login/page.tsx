@@ -121,7 +121,7 @@ export default function Login() {
         size="xl"
         className="mt-15 md:w-640 w-328 text-[#000000] opacity-85"
       >
-        카카오로 로그인
+        카카오로 시작하기
       </Button>
 
       <div className="flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
