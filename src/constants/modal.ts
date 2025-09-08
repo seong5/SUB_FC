@@ -88,7 +88,7 @@ export interface PostRosterContentProps {
 }
 
 export interface PostQuartersContentProps {
-  variant: 'postMatchQuarters'
+  variant: 'postQuarters'
   onBack: () => void
   onClose: () => void
   onSubmit: (data: QuarterData[]) => void
@@ -102,3 +102,5 @@ export type ModalProps =
   | WarningModalProps
   | PostMatchProps
   | ScheduleContentProps
+  | PostRosterContentProps
+  | PostQuartersContentProps
