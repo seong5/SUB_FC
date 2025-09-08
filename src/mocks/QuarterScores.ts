@@ -45,7 +45,7 @@ export const sampleMatch: MatchSummary = {
     {
       label: '4 쿼터',
       goals: ['신성오', '신성오'],
-      assists: ['현신우'],
+      assists: ['현신우', '유동엽'],
       conceded: 0,
       scoreAfter: '5 - 3',
     },
