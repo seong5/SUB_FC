@@ -55,14 +55,14 @@ export default function PostRosterContent({
 
   return (
     <div className="px-15 py-10 w-350 md:w-400">
-      <h2 className="text-lg font-bold mb-4 text-center">경기 등록 · 참석자/포메이션</h2>
+      <h2 className="text-lg font-bold mb-4 text-center">참석자 / 포메이션</h2>
 
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-10">
         {/* 포메이션 */}
         <div>
           <label className="block mb-1 text-sm font-medium">포메이션</label>
           <select
-            className="w-full border rounded p-2"
+            className="w-full card-shadow border border-gray-300 rounded-[16px] p-2"
             value={formation}
             onChange={(e) => setFormation(e.target.value as Formation)}
           >
@@ -72,7 +72,6 @@ export default function PostRosterContent({
               </option>
             ))}
           </select>
-          <p className="text-xs text-gray-500 mt-1">GK는 최소 1명을 선택해 주세요.</p>
         </div>
 
         {/* 포지션별 멀티선택 */}
@@ -81,7 +80,7 @@ export default function PostRosterContent({
             <label className="block mb-1 text-sm font-medium">{pos}</label>
             <select
               multiple
-              className="w-full border rounded p-2 min-h-[96px]"
+              className="w-full card-shadow border border-gray-300 rounded-[16px] p-10 min-h-[60px]"
               value={roster[pos]}
               onChange={(e) => {
                 const ids = Array.from(e.target.selectedOptions).map((o) => o.value)

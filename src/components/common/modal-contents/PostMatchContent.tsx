@@ -98,7 +98,7 @@ export function PostMatchContent({ onClose, onSubmit }: PostMatchProps) {
           disabled={!isValid}
           onClick={submit}
         >
-          등록
+          다음
         </Button>
       </div>
     </div>
