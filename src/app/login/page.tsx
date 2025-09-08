@@ -1,11 +1,28 @@
+'use client'
+
 import Image from 'next/image'
 import subfc from '../../../public/subfc.png'
 import Input from '@/components/common/Input'
 import Button from '@/components/common/Button'
 import Icon from '@/components/common/Icon'
 import Link from 'next/link'
+import { createClient } from '@/libs/supabase/client'
 
 export default function Login() {
+  const handleKakaoLogin = async () => {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'kakao',
+      options: {
+        redirectTo: `${location.origin}`,
+        queryParams: {
+          scope: 'profile_nickname profile_image account_email', // 이메일 제외
+          prompt: 'login', // 항상 새 동의창 강제
+        },
+      },
+    })
+  }
+
   return (
     <main className="flex flex-col justify-center items-center px-20 py-40">
       <Image
@@ -37,11 +54,12 @@ export default function Login() {
         </Button>
       </form>
       <div className="flex items-center w-full">
-        <hr className="h-1 flex-grow text-gray-100"></hr>
+        <hr className="h-1 flex-grow text-gray-100" />
         <span className="text-center text-gray-950 txt-16_M px-16">or</span>
-        <hr className="h-1 flex-grow text-gray-100"></hr>
+        <hr className="h-1 flex-grow text-gray-100" />
       </div>
       <Button
+        onClick={handleKakaoLogin}
         icon={<Icon icon="Kakao" className="w-24 h-24 mr-4" />}
         variant="kakao"
         size="xl"
