@@ -11,7 +11,9 @@ const QueryProvider = ({ children }: { children: React.ReactNode }) => {
           queries: {
             staleTime: Infinity, // 항상 최신 취급
             gcTime: 7 * 24 * 60 * 60 * 1000, // 캐시 보관 7일
+            refetchOnMount: false,
             refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
           },
         },
       })
