@@ -1,6 +1,7 @@
 import Gnb from '@/components/common/Gnb'
 import './globals.css'
 import Footer from '@/components/common/Footer'
+import QueryProvider from './provider/QueryProvider'
 
 export default function RootLayout({
   children,
@@ -10,9 +11,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Gnb />
-        {children}
-        <Footer />
+        <QueryProvider>
+          <Gnb />
+          {children}
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   )
