@@ -13,7 +13,7 @@ import Button from '@/components/common/Button'
 import type {
   PostMatchData, // Step1 데이터 { date, opponent, place, score }
   RosterData, // Step2 데이터 { formation, GK, DF, MF, FW }
-  QuarterData, // Step3 데이터 { goals[], conceded, scoreAfter }
+  QuarterData, // Step3/4 데이터 { goals[], conceded, scoreAfter }
   ModalVariant,
 } from '@/constants/modal'
 
@@ -86,11 +86,16 @@ export default function Home() {
     setVariant('postQuarters')
   }
 
-  // Step3 완료(최종) → 리스트 반영 + 모달 닫기
+  // Step3 완료 → Step4로
   const handleStep3Submit = (quarters: QuarterData[]) => {
     setStep3(quarters)
+    setVariant('postScores')
+  }
 
-    // 화면용 신규 아이템(간단 매핑) - 실제론 /matches/[id]로 라우팅 or Supabase insert 예정
+  // Step4 완료(최종) → 리스트 반영 + 모달 닫기
+  const handleStep4Submit = (final: QuarterData[]) => {
+    setStep3(final)
+
     const nextId = (items.reduce((m, it) => Math.max(m, it.id), 0) || 0) + 1
     const newItem = {
       id: nextId,
@@ -100,14 +105,14 @@ export default function Home() {
     }
     setItems((prev) => [newItem, ...prev])
 
-    // 모달 종료 및 임시 데이터 초기화
+    // 최종 종료
     setVariant(null)
     setStep1(null)
     setStep2(null)
     setStep3(null)
   }
 
-  // Step2 → Step3에 넘길 득점/도움 후보(로스터 선택된 선수만)
+  // Step2 → Step3/4에 넘길 득점/도움 후보(로스터 선택된 선수만)
   const eligiblePlayers = useMemo(() => {
     if (!step2) return []
     const ids = new Set([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW])
@@ -162,10 +167,13 @@ export default function Home() {
           onPageChange={setPage}
         />
       </div>
+
+      {/* Step1 */}
       {variant === 'postMatch' && (
         <Modal variant="postMatch" onClose={() => setVariant(null)} onSubmit={handleStep1Submit} />
       )}
 
+      {/* Step2 */}
       {variant === 'postRoster' && (
         <Modal
           variant="postRoster"
@@ -177,12 +185,25 @@ export default function Home() {
         />
       )}
 
+      {/* Step3 */}
       {variant === 'postQuarters' && (
         <Modal
           variant="postQuarters"
           onBack={() => setVariant('postRoster')}
           onClose={() => setVariant(null)}
           onSubmit={handleStep3Submit}
+          eligiblePlayers={eligiblePlayers}
+          initial={step3 ?? undefined}
+        />
+      )}
+
+      {/* Step4 */}
+      {variant === 'postScores' && (
+        <Modal
+          variant="postScores"
+          onBack={() => setVariant('postQuarters')}
+          onClose={() => setVariant(null)}
+          onSubmit={handleStep4Submit}
           eligiblePlayers={eligiblePlayers}
           initial={step3 ?? undefined}
         />
