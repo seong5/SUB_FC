@@ -1,6 +1,8 @@
 'use client'
 
-import { playersWithStats } from '@/mocks/playersRoster'
+import { useQuery } from '@tanstack/react-query'
+import { getPlayers } from '@/libs/playersApi'
+import type { Player } from '@/libs/playersApi'
 import PlayerCard from '@/components/PlayerCard'
 import { Position } from '@/constants/positionColor'
 import FirstPrize from '@/components/FirstPrize'
@@ -13,14 +15,23 @@ const POSITION_LABEL: Record<Position, string> = {
 }
 
 export default function PlayersPage() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['players'],
+    queryFn: getPlayers,
+    staleTime: 10 * 60 * 1000, // 10분 캐싱
+  })
+
   const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정
+
+  if (isLoading) return <main className="p-20">불러오는 중…</main>
+  if (isError) return <main className="p-20 text-red-500">데이터 불러오기 실패</main>
 
   return (
     <>
       <FirstPrize />
       <main className="space-y-12 my-40 px-20 md:px-40">
         {positions.map((pos) => {
-          const players = playersWithStats.filter((p) => p.position === pos)
+          const players = (data ?? []).filter((p: Player) => p.position === pos)
           if (players.length === 0) return null
 
           return (
@@ -34,10 +45,10 @@ export default function PlayersPage() {
                   <PlayerCard
                     key={p.id}
                     name={p.name}
-                    number={p.backNumber}
+                    number={p.back_number} // ← DB 컬럼명 매핑
                     goals={p.goals}
                     assists={p.assists}
-                    attendancePercent={p.attendancePercent}
+                    attendancePercent={p.attendance_percent} // ← DB 컬럼명 매핑
                     position={p.position}
                   />
                 ))}
