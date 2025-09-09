@@ -5,6 +5,7 @@ import { WarningContent } from '@/components/common/modal-contents/WarningConten
 import { EventsType } from '@/mocks/calenderEvents'
 import PostRosterContent from '@/components/common/modal-contents/PostRosterContent'
 import PostQuartersContent from '@/components/common/modal-contents/PostQuartersContent'
+import PostScoresContent from '@/components/common/modal-contents/PostScoresContent'
 
 type ContentMapType = {
   [V in ModalVariant]: React.FC<Extract<ModalProps, { variant: V }>>
@@ -17,6 +18,7 @@ export const ContentMap: ContentMapType = {
   scheduleEvent: ScheduleContent,
   postRoster: PostRosterContent,
   postQuarters: PostQuartersContent,
+  postScores: PostScoresContent,
 } as const
 
 export type ModalVariant =
@@ -26,6 +28,7 @@ export type ModalVariant =
   | 'scheduleEvent'
   | 'postRoster'
   | 'postQuarters'
+  | 'postScores'
 
 export type Position = 'GK' | 'DF' | 'MF' | 'FW'
 export type Formation = '4-4-2' | '4-2-3-1'
@@ -97,6 +100,15 @@ export interface PostQuartersContentProps {
   initial?: QuarterData[]
 }
 
+export interface PostScoresContentProps {
+  variant: 'postScores'
+  onBack: () => void
+  onClose: () => void
+  onSubmit: (data: QuarterData[]) => void
+  initial?: QuarterData[]
+  eligiblePlayers: { id: string; name: string }[]
+}
+
 export type ModalProps =
   | OnlyTextModalProps
   | WarningModalProps
@@ -104,3 +116,4 @@ export type ModalProps =
   | ScheduleContentProps
   | PostRosterContentProps
   | PostQuartersContentProps
+  | PostScoresContentProps
