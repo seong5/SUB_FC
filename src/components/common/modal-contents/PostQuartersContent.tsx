@@ -29,17 +29,17 @@ export default function PostQuartersContent({
     <div className="px-15 py-10 w-350 md:w-400">
       <h2 className="text-lg font-bold mb-4 text-center">쿼터별 스코어 & 실점</h2>
       {quarters.map((q, qi) => (
-        <div key={qi} className="h-150 border border-gray-100 rounded-[16px] p-8 my-8">
-          <div className="font-semibold mb-6">{qi + 1}쿼터</div>
+        <div key={qi} className="h-130 border border-gray-100 rounded-[16px] p-6 my-6">
+          <div className="font-semibold mb-4 text-center">{qi + 1} 쿼터</div>
           <div className="flex flex-row justify-center gap-20">
             <Input
               id={`scoreAfter-${qi}`}
               label="쿼터 스코어"
               variant="input"
-              placeholder="예: 2 - 1"
+              placeholder="예: 2-1"
               value={q.scoreAfter}
               onChange={(e) => update(qi, { scoreAfter: e.target.value })}
-              className="w-150 h-40"
+              className="w-150 h-30"
             />
             <Input
               id={`conceded-${qi}`}
@@ -48,7 +48,7 @@ export default function PostQuartersContent({
               variant="input"
               value={q.conceded}
               onChange={(e) => update(qi, { conceded: Math.max(0, Number(e.target.value)) })}
-              className="w-150 h-40"
+              className="w-150 h-30"
             />
           </div>
         </div>
