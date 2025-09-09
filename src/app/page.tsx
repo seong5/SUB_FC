@@ -16,6 +16,7 @@ import type {
   QuarterData, // Step3/4 데이터 { goals[], conceded, scoreAfter }
   ModalVariant,
 } from '@/constants/modal'
+import { useQueryClient } from '@tanstack/react-query'
 
 type SortOrder = 'latest' | 'oldest'
 
@@ -31,6 +32,7 @@ const players = [
 ]
 
 export default function Home() {
+  const queryClient = useQueryClient()
   const [items, setItems] = useState([...MOCKS])
 
   // ▼ 멀티스텝 모달 상태
@@ -104,6 +106,9 @@ export default function Home() {
       date: step1?.date ?? new Date().toISOString(),
     }
     setItems((prev) => [newItem, ...prev])
+
+    // React Query 캐시 무효화 → PlayersPage / FirstPrize 자동 최신화
+    queryClient.invalidateQueries({ queryKey: ['players'] })
 
     // 최종 종료
     setVariant(null)

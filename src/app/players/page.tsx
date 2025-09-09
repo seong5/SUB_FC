@@ -18,7 +18,6 @@ export default function PlayersPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
-    staleTime: 10 * 60 * 1000, // 10분 캐싱
   })
 
   const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정

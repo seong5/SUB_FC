@@ -14,7 +14,6 @@ export default function FirstPrize() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
-    staleTime: 10 * 60 * 1000,
   })
 
   if (isLoading) return <p className="text-center py-20">불러오는 중…</p>
