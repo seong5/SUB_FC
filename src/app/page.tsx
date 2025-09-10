@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { matchLocations as MOCKS } from '@/mocks/matchLocation'
 import Pagination from '@/components/common/Pagination'
 import SearchBar from '@/components/SearchBar'
 import DropDown from '@/components/common/DropDown'
@@ -16,7 +15,7 @@ import type { PostMatchData, RosterData, QuarterData, ModalVariant } from '@/con
 
 type SortOrder = 'latest' | 'oldest'
 
-/** 서버가 /api/matches 에서 내려주는 원본 타입(예상) */
+/** 서버가 /api/matches 에서 내려주는 타입 */
 type ServerMatchItem = {
   id: number
   date: string
@@ -25,42 +24,28 @@ type ServerMatchItem = {
   score: string
 }
 
-/** UI 리스트 카드에서 쓰는 아이템 타입 */
-type UIMatchItem = { id: number; name: string; address: string; date: string }
-
-/** 서버가 /api/players 에서 내려주는 원본 타입 */
+/** 서버가 /api/players 에서 내려주는 타입 (필요 시) */
 type ServerPlayer = {
-  id: number // int8
-  name: string
-  position: 'GK' | 'DF' | 'MF' | 'FW'
-  back_number?: number | null
-  goals?: number
-  assists?: number
-  attendance_matches?: number
-}
-
-/** 모달에서 사용할 플레이어 타입(id는 string으로 통일) */
-type UIPlayer = {
-  id: string
+  id: number
   name: string
   position: 'GK' | 'DF' | 'MF' | 'FW'
   back_number?: number | null
 }
 
-/* Fetchers (컴포넌트 밖에 정의) */
-async function fetchMatches(): Promise<UIMatchItem[]> {
+async function fetchMatches(): Promise<ServerMatchItem[]> {
   const { data } = await api.get<ServerMatchItem[]>('/matches')
-  return data.map((it) => ({
-    id: it.id,
-    name: it.opponent,
-    address: it.place,
-    date: it.date,
-  }))
+  return data ?? []
 }
 
-async function fetchPlayers(): Promise<UIPlayer[]> {
+async function fetchPlayers(): Promise<
+  Array<{
+    id: string
+    name: string
+    position: ServerPlayer['position']
+    back_number?: number | null
+  }>
+> {
   const { data } = await api.get<ServerPlayer[]>('/players')
-  // 모달/로스터에서 id를 string으로 쓰는 경우가 많으므로 문자열로 통일
   return (data ?? []).map((p) => ({
     id: String(p.id),
     name: p.name,
@@ -72,17 +57,17 @@ async function fetchPlayers(): Promise<UIPlayer[]> {
 export default function Home() {
   const queryClient = useQueryClient()
 
-  // 경기 목록 불러오기
+  // ✅ 경기 목록 (실데이터)
   const {
     data: matchesData,
-    isLoading: isMatchesLoading,
-    error: matchesError,
+    isLoading,
+    error,
   } = useQuery({
     queryKey: ['matches'],
     queryFn: fetchMatches,
   })
 
-  // 선수 목록 불러오기
+  // ✅ 선수 목록 (Step2/3에서 사용)
   const {
     data: players = [],
     isLoading: isPlayersLoading,
@@ -92,19 +77,16 @@ export default function Home() {
     queryFn: fetchPlayers,
   })
 
-  // 페이지 내부에서 검색/정렬/페이지네이션에 사용하는 원본 배열
-  const [items, setItems] = useState<UIMatchItem[]>([...MOCKS])
-
-  // 서버 데이터가 오면 한번만 덮어쓰기
+  // 페이지네이션/검색/정렬용 로컬 상태
+  const [items, setItems] = useState<ServerMatchItem[]>([])
   useEffect(() => {
     if (matchesData) setItems(matchesData)
   }, [matchesData])
 
-  // 모달 상태
+  // 모달 상태 & 스텝 데이터
   const [variant, setVariant] = useState<ModalVariant | null>(null)
   const openStep1 = () => setVariant('postMatch')
 
-  // 스텝 데이터
   const [step1, setStep1] = useState<PostMatchData | null>(null)
   const [step2, setStep2] = useState<RosterData | null>(null)
   const [step3, setStep3] = useState<QuarterData[] | null>(null)
@@ -117,15 +99,13 @@ export default function Home() {
   const handleSubmitSearch = () => setPage(1)
 
   const q = query.trim().toLowerCase()
-
   const filtered = useMemo(
     () =>
       q
-        ? items.filter((loc) => [loc.name, loc.address].some((v) => v.toLowerCase().includes(q)))
+        ? items.filter((m) => [m.opponent, m.place].some((v) => v.toLowerCase().includes(q)))
         : items,
     [items, q]
   )
-
   const sorted = useMemo(() => {
     const copy = [...filtered]
     copy.sort((a, b) =>
@@ -135,7 +115,6 @@ export default function Home() {
     )
     return copy
   }, [filtered, sortOrder])
-
   const totalCount = sorted.length
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
@@ -146,39 +125,35 @@ export default function Home() {
     setPage(1)
   }, [query, sortOrder])
 
-  // Step1 → Step2
+  // Step handlers
   const handleStep1Submit = (data: PostMatchData) => {
     setStep1(data)
     setVariant('postRoster')
   }
-
-  // Step2 → Step3
   const handleStep2Submit = (data: RosterData) => {
     setStep2(data)
     setVariant('postQuarters')
   }
-
-  // Step3 → Step4
   const handleStep3Submit = (quarters: QuarterData[]) => {
     setStep3(quarters)
     setVariant('postScores')
   }
 
-  // Step4 완료
+  // 최종 제출 (등록 성공 후 목록 갱신)
   const handleStep4Submit = (final: QuarterData[]) => {
     setStep3(final)
 
-    // (선택) 낙관적 추가
-    const nextId = (items.reduce((m, it) => Math.max(m, it.id), 0) || 0) + 1
-    const optimistic: UIMatchItem = {
-      id: nextId,
-      name: step1?.opponent ?? '상대팀',
-      address: step1?.place ?? '-',
+    // (선택) 낙관적 카드 1개 추가 – 서버에서 재조회되면 덮어씌워짐
+    const optimistic = {
+      id: Date.now(),
       date: step1?.date ?? new Date().toISOString(),
-    }
+      opponent: step1?.opponent ?? '상대팀',
+      place: step1?.place ?? '-',
+      score: final?.[final.length - 1]?.scoreAfter ?? step1?.score ?? '0-0',
+    } satisfies ServerMatchItem
     setItems((prev) => [optimistic, ...prev])
 
-    // 실제 등록 API 성공 시 목록 최신화
+    // 서버 최신화
     queryClient.invalidateQueries({ queryKey: ['matches'] })
     queryClient.invalidateQueries({ queryKey: ['players'] })
 
@@ -189,13 +164,11 @@ export default function Home() {
     setStep3(null)
   }
 
-  // Step2 → Step3/4에 넘길 득점/도움 후보(로스터 선택된 선수만)
+  // 로스터에서 선택된 선수만 득점/도움 후보로
   const eligiblePlayers = useMemo(() => {
     if (!step2 || players.length === 0) return []
     const ids = new Set([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW]) // string[]
-    return players
-      .filter((p) => ids.has(p.id)) // p.id 는 string (fetchPlayers에서 변환)
-      .map((p) => ({ id: p.id, name: p.name }))
+    return players.filter((p) => ids.has(p.id)).map((p) => ({ id: p.id, name: p.name }))
   }, [step2, players])
 
   return (
@@ -223,7 +196,7 @@ export default function Home() {
           variant="primary"
           className="rounded-[20px] txt-16_B w-250 md:w-500 h-47 px-12 py-4"
           onClick={openStep1}
-          disabled={isPlayersLoading || !!playersError} // 선수 없으면 등록 비활성화(선택)
+          disabled={isPlayersLoading || !!playersError}
         >
           {isPlayersLoading ? '선수 불러오는 중…' : '경기 등록'}
         </Button>
@@ -231,14 +204,14 @@ export default function Home() {
 
       <ul className="space-y-3 mt-6">
         {current.length > 0 ? (
-          current.map((loc) => (
-            <li key={loc.id}>
-              <MatchInfoCard matchId={loc.id} />
+          current.map((m) => (
+            <li key={m.id}>
+              <MatchInfoCard match={m} />
             </li>
           ))
-        ) : isMatchesLoading ? (
+        ) : isLoading ? (
           <li className="rounded-md p-6 text-gray-500 text-center">불러오는 중…</li>
-        ) : matchesError ? (
+        ) : error ? (
           <li className="rounded-md p-6 text-red-500 text-center">목록을 불러오지 못했어요.</li>
         ) : (
           <li className="rounded-md p-6 text-gray-500 text-center">
@@ -261,14 +234,14 @@ export default function Home() {
         <Modal variant="postMatch" onClose={() => setVariant(null)} onSubmit={handleStep1Submit} />
       )}
 
-      {/* Step2: DB에서 불러온 players 사용 */}
+      {/* Step2 */}
       {variant === 'postRoster' && (
         <Modal
           variant="postRoster"
           onBack={() => setVariant('postMatch')}
           onClose={() => setVariant(null)}
           onSubmit={handleStep2Submit}
-          players={players} // ← DB 선수
+          players={players} // DB 선수 목록
           initial={step2 ?? undefined}
         />
       )}
@@ -280,7 +253,7 @@ export default function Home() {
           onBack={() => setVariant('postRoster')}
           onClose={() => setVariant(null)}
           onSubmit={handleStep3Submit}
-          eligiblePlayers={eligiblePlayers} // ← 로스터에서 고른 선수만
+          eligiblePlayers={eligiblePlayers}
           initial={step3 ?? undefined}
         />
       )}
