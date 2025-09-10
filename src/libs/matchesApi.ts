@@ -1,20 +1,23 @@
 import api from './axios'
-import type { PostMatchData, RosterData, QuarterData } from '@/constants/modal'
+import {
+  CreateMatchPayload,
+  MatchCreatedResponse,
+  MatchListItem,
+  UIMatchSummary,
+  mapToUIMatchSummary,
+} from '@/types/match'
 
-export interface CreateMatchPayload {
-  match: PostMatchData
-  roster: RosterData
-  quarters: QuarterData[]
-}
-
-// 경기 등록
 export async function createMatch(payload: CreateMatchPayload) {
-  const { data } = await api.post('/matches', payload)
+  const { data } = await api.post<MatchCreatedResponse>('/matches', payload)
   return data
 }
 
-// 경기 조회
-export async function getMatches() {
-  const { data } = await api.get('/matches')
-  return data as CreateMatchPayload[]
+export async function getMatchesRaw() {
+  const { data } = await api.get<MatchListItem[]>('/matches')
+  return data
+}
+
+export async function getMatches(): Promise<UIMatchSummary[]> {
+  const list = await getMatchesRaw()
+  return list.map(mapToUIMatchSummary)
 }
