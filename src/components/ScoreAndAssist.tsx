@@ -1,29 +1,87 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { sampleMatch, QuarterScore } from '@/mocks/QuarterScores'
 
-type Props = {
-  selectedLabel: QuarterScore['label'] | '' // ''일 때는 안내만 표시
+/** API 응답 타입 (실제 응답 구조에 맞춰 수정) */
+type QuarterScore = {
+  label: string // 예: "1 쿼터"
+  goals: string[] // 득점자 이름들
+  assists: string[] // 도움자 이름들
+  conceded: number // 실점 수
+  scoreAfter: string // 예: "2 - 1"
+}
+type MatchSummary = {
+  matchId: number
+  date: string
+  opponent: string
+  finalScore: string
+  quarters: QuarterScore[]
+  place?: string
 }
 
-export default function ScoreAndAssist({ selectedLabel }: Props) {
-  const quarter = selectedLabel
-    ? sampleMatch.quarters.find((q) => q.label === selectedLabel)
-    : undefined
+type Props = {
+  matchId: number | string
+  selectedLabel: QuarterScore['label'] | '' // ''이면 안내만 표시
+}
+
+export default function ScoreAndAssist({ matchId, selectedLabel }: Props) {
+  const [data, setData] = useState<MatchSummary | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const res = await fetch(`/api/matches/${matchId}`, { cache: 'no-store' })
+        if (!res.ok) throw new Error('상세 데이터를 불러오지 못했습니다.')
+        const json: MatchSummary = await res.json()
+
+        if (alive) setData(json)
+      } catch (e: unknown) {
+        if (!alive) return
+        if (e instanceof Error) setError(e.message)
+        else setError('알 수 없는 오류')
+      } finally {
+        if (alive) setLoading(false)
+      }
+    })()
+
+    return () => {
+      alive = false
+    }
+  }, [matchId])
+
+  const quarter =
+    data && selectedLabel ? data.quarters.find((q) => q.label === selectedLabel) : undefined
+
+  if (loading) {
+    return <section className="text-gray-500">불러오는 중…</section>
+  }
+  if (error || !data) {
+    return <section className="text-red-500">불러오지 못했어요. {error ?? ''}</section>
+  }
 
   return (
     <section>
       <h1 className="txt-28_M md:txt-32_M text-gray-800 mt-30">Score</h1>
+
       <h1 className="txt-30_M md:text-[28px] font-semibold text-center text-gray-800 mt-30">
-        전체 스코어 <div>{sampleMatch.finalScore}</div>
+        전체 스코어 <div>{data.finalScore}</div>
       </h1>
+
       <h2 className="text-center text-[18px] md:text-[24px] font-bold my-20">
-        SubFC : {sampleMatch.opponent}
+        SubFC : {data.opponent}
       </h2>
+
       <h1 className="text-center text-[28px] md:txt-32_B">{quarter?.scoreAfter ?? ''}</h1>
 
       <div className="py-30 px-20 grid grid-cols-3 gap-4 text-center txt-12_M">
+        {/* 득점 */}
         <div>
           <Image
             src="/score-icon.png"
@@ -45,6 +103,8 @@ export default function ScoreAndAssist({ selectedLabel }: Props) {
             )}
           </div>
         </div>
+
+        {/* 도움 */}
         <div>
           <Image
             src="/assist-icon.png"
@@ -66,6 +126,8 @@ export default function ScoreAndAssist({ selectedLabel }: Props) {
             )}
           </div>
         </div>
+
+        {/* 실점 */}
         <div>
           <Image
             src="/lost-score-icon.png"
