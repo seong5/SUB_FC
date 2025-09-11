@@ -1,7 +1,11 @@
 import axios from 'axios'
 
+const isServer = typeof window === 'undefined'
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
+  baseURL: isServer
+    ? process.env.NEXT_PUBLIC_SITE_URL + '/api' //서버에서는 절대 URL
+    : '/api', //클라이언트에서는 상대 URL
   timeout: 10_000,
   withCredentials: false,
 })
@@ -17,9 +21,7 @@ api.interceptors.request.use(
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
 
 // 응답 인터셉터: 공통 에러 처리
@@ -28,7 +30,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.warn('인증 만료 또는 권한 없음')
-      // TODO: 여기서 로그인 페이지로 이동 처리 가능
+      // TODO: 로그인 페이지로 이동 처리 가능
     }
     return Promise.reject(error)
   }
