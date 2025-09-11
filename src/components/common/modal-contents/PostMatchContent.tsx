@@ -45,6 +45,7 @@ export function PostMatchContent({ onClose, onSubmit }: PostMatchProps) {
           id="match-date"
           label="날짜"
           variant="date-custom"
+          value={date}
           onChange={handleDateChange}
           onBlur={() => setTouched((t) => ({ ...t, date: true }))}
           errorMessage={!date && touched.date ? '날짜를 선택해 주세요.' : undefined}
