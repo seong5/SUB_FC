@@ -1,27 +1,29 @@
-// 서버에 보내는 페이로드(네가 이미 쓰는 타입들)
 export interface PostMatchData {
   date: string
   opponent: string
   place: string
-  score: string
+  score: string // "2-1" 같은 최종 스코어
 }
+
 export interface RosterData {
-  formation: string
-  GK: string[]
+  formation: string // e.g. '4-2-3-1'
+  GK: string[] // player ids (문자열 id 사용)
   DF: string[]
   MF: string[]
   FW: string[]
 }
+
 export interface QuarterGoal {
   minute?: number
   scorerId: string
   assistId?: string | null
 }
+
 export interface QuarterData {
   quarter: 1 | 2 | 3 | 4
   goals: QuarterGoal[]
   conceded: number
-  scoreAfter: string
+  scoreAfter: string // "1-0" 등
 }
 
 export interface CreateMatchPayload {
@@ -30,7 +32,6 @@ export interface CreateMatchPayload {
   quarters: QuarterData[]
 }
 
-// 서버가 돌려주는 응답 타입(예상/계약에 맞춰 수정)
 export type MatchCreatedResponse = {
   id: number
   date: string
@@ -48,20 +49,20 @@ export type MatchListItem = {
   score: string
 }
 
-// UI에서 바로 쓰는 요약 타입
 export type UIMatchSummary = {
   id: number
-  name: string // opponent
-  address: string // place
   date: string
+  opponent: string
+  place: string
+  score: string
 }
 
-// UI 매핑 함수
 export function mapToUIMatchSummary(item: MatchListItem): UIMatchSummary {
   return {
     id: item.id,
-    name: item.opponent,
-    address: item.place,
     date: item.date,
+    opponent: item.opponent,
+    place: item.place,
+    score: item.score, // 서버가 final_score라면 여기서 매핑
   }
 }

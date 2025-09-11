@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Pagination from '@/components/common/Pagination'
 import SearchBar from '@/components/SearchBar'
 import DropDown from '@/components/common/DropDown'
@@ -8,80 +8,65 @@ import Icon from '@/components/common/Icon'
 import MatchInfoCard from '@/components/MatchInfoCard'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { useMatchesQuery, useCreateMatchMutation } from '@/hooks/useMatches'
 import api from '@/libs/axios'
 
-import type { PostMatchData, RosterData, QuarterData, ModalVariant } from '@/constants/modal'
+import type { ModalVariant } from '@/constants/modal'
+import type {
+  UIMatchSummary,
+  CreateMatchPayload,
+  PostMatchData,
+  RosterData,
+  QuarterData,
+} from '@/types/match'
 
 type SortOrder = 'latest' | 'oldest'
 
-/** 서버가 /api/matches 에서 내려주는 타입 */
-type ServerMatchItem = {
-  id: number
-  date: string
-  opponent: string
-  place: string
-  score: string
-}
-
-/** 서버가 /api/players 에서 내려주는 타입 (필요 시) */
+/** 서버가 /api/players 에서 내려주는 타입 */
 type ServerPlayer = {
   id: number
   name: string
   position: 'GK' | 'DF' | 'MF' | 'FW'
-  back_number?: number | null
+  back_number: number | null
 }
 
-async function fetchMatches(): Promise<ServerMatchItem[]> {
-  const { data } = await api.get<ServerMatchItem[]>('/matches')
-  return data ?? []
+/** UI에서 사용할 선수 타입 */
+type UIPlayer = {
+  id: string
+  name: string
+  position: ServerPlayer['position']
+  back_number: number | null
 }
 
-async function fetchPlayers(): Promise<
-  Array<{
-    id: string
-    name: string
-    position: ServerPlayer['position']
-    back_number?: number | null
-  }>
-> {
+async function fetchPlayers(): Promise<UIPlayer[]> {
   const { data } = await api.get<ServerPlayer[]>('/players')
-  return (data ?? []).map((p) => ({
+  const list = data ?? []
+  return list.map((p) => ({
     id: String(p.id),
     name: p.name,
     position: p.position,
-    back_number: p.back_number ?? null,
+    back_number: p.back_number,
   }))
 }
 
 export default function Home() {
-  const queryClient = useQueryClient()
-
-  // ✅ 경기 목록 (실데이터)
+  // 경기 목록
   const {
-    data: matchesData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['matches'],
-    queryFn: fetchMatches,
-  })
+    data: matchesData = [],
+    isLoading: isMatchesLoading,
+    error: matchesError,
+  } = useMatchesQuery()
 
-  // ✅ 선수 목록 (Step2/3에서 사용)
+  // 선수 목록 (Step2/3에서 사용)
   const {
     data: players = [],
     isLoading: isPlayersLoading,
     error: playersError,
-  } = useQuery({
+  } = useQuery<UIPlayer[]>({
     queryKey: ['players'],
     queryFn: fetchPlayers,
   })
-
-  // 페이지네이션/검색/정렬용 로컬 상태
-  const [items, setItems] = useState<ServerMatchItem[]>([])
-  useEffect(() => {
-    if (matchesData) setItems(matchesData)
-  }, [matchesData])
 
   // 모달 상태 & 스텝 데이터
   const [variant, setVariant] = useState<ModalVariant | null>(null)
@@ -92,21 +77,24 @@ export default function Home() {
   const [step3, setStep3] = useState<QuarterData[] | null>(null)
 
   // 검색/정렬/페이지네이션
-  const [page, setPage] = useState(1)
-  const [query, setQuery] = useState('')
+  const [page, setPage] = useState<number>(1)
+  const [query, setQuery] = useState<string>('')
   const [sortOrder, setSortOrder] = useState<SortOrder>('latest')
   const PAGE_SIZE = 5
   const handleSubmitSearch = () => setPage(1)
 
+  const items: UIMatchSummary[] = matchesData
+
   const q = query.trim().toLowerCase()
-  const filtered = useMemo(
+  const filtered = useMemo<UIMatchSummary[]>(
     () =>
       q
         ? items.filter((m) => [m.opponent, m.place].some((v) => v.toLowerCase().includes(q)))
         : items,
     [items, q]
   )
-  const sorted = useMemo(() => {
+
+  const sorted = useMemo<UIMatchSummary[]>(() => {
     const copy = [...filtered]
     copy.sort((a, b) =>
       sortOrder === 'latest'
@@ -115,6 +103,7 @@ export default function Home() {
     )
     return copy
   }, [filtered, sortOrder])
+
   const totalCount = sorted.length
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
@@ -139,35 +128,51 @@ export default function Home() {
     setVariant('postScores')
   }
 
+  // 경기 등록 뮤테이션
+  const createMatch = useCreateMatchMutation()
+
   // 최종 제출 (등록 성공 후 목록 갱신)
   const handleStep4Submit = (final: QuarterData[]) => {
-    setStep3(final)
+    if (!step1 || !step2) return
 
-    // (선택) 낙관적 카드 1개 추가 – 서버에서 재조회되면 덮어씌워짐
-    const optimistic = {
-      id: Date.now(),
-      date: step1?.date ?? new Date().toISOString(),
-      opponent: step1?.opponent ?? '상대팀',
-      place: step1?.place ?? '-',
-      score: final?.[final.length - 1]?.scoreAfter ?? step1?.score ?? '0-0',
-    } satisfies ServerMatchItem
-    setItems((prev) => [optimistic, ...prev])
+    // quarter 번호 보강
+    const quartersPayload: QuarterData[] = final.map((q, i) => ({
+      ...q,
+      quarter: (i + 1) as 1 | 2 | 3 | 4,
+    }))
 
-    // 서버 최신화
-    queryClient.invalidateQueries({ queryKey: ['matches'] })
-    queryClient.invalidateQueries({ queryKey: ['players'] })
+    const payload: CreateMatchPayload = {
+      match: {
+        date: step1.date,
+        opponent: step1.opponent,
+        place: step1.place,
+        score: step1.score,
+      },
+      roster: {
+        formation: step2.formation,
+        GK: step2.GK,
+        DF: step2.DF,
+        MF: step2.MF,
+        FW: step2.FW,
+      },
+      quarters: quartersPayload,
+    }
 
-    // 리셋
-    setVariant(null)
-    setStep1(null)
-    setStep2(null)
-    setStep3(null)
+    createMatch.mutate(payload, {
+      onSuccess: () => {
+        setVariant(null)
+        setStep1(null)
+        setStep2(null)
+        setStep3(null)
+      },
+      onError: (err) => alert(err.message),
+    })
   }
 
   // 로스터에서 선택된 선수만 득점/도움 후보로
-  const eligiblePlayers = useMemo(() => {
+  const eligiblePlayers = useMemo<Array<{ id: string; name: string }>>(() => {
     if (!step2 || players.length === 0) return []
-    const ids = new Set([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW]) // string[]
+    const ids = new Set<string>([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW])
     return players.filter((p) => ids.has(p.id)).map((p) => ({ id: p.id, name: p.name }))
   }, [step2, players])
 
@@ -196,7 +201,7 @@ export default function Home() {
           variant="primary"
           className="rounded-[20px] txt-16_B w-250 md:w-500 h-47 px-12 py-4"
           onClick={openStep1}
-          disabled={isPlayersLoading || !!playersError}
+          disabled={isPlayersLoading || Boolean(playersError)}
         >
           {isPlayersLoading ? '선수 불러오는 중…' : '경기 등록'}
         </Button>
@@ -209,9 +214,9 @@ export default function Home() {
               <MatchInfoCard match={m} />
             </li>
           ))
-        ) : isLoading ? (
+        ) : isMatchesLoading ? (
           <li className="rounded-md p-6 text-gray-500 text-center">불러오는 중…</li>
-        ) : error ? (
+        ) : matchesError ? (
           <li className="rounded-md p-6 text-red-500 text-center">목록을 불러오지 못했어요.</li>
         ) : (
           <li className="rounded-md p-6 text-gray-500 text-center">
@@ -241,7 +246,7 @@ export default function Home() {
           onBack={() => setVariant('postMatch')}
           onClose={() => setVariant(null)}
           onSubmit={handleStep2Submit}
-          players={players} // DB 선수 목록
+          players={players}
           initial={step2 ?? undefined}
         />
       )}
