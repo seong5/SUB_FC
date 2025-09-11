@@ -4,8 +4,8 @@ const isServer = typeof window === 'undefined'
 
 const api = axios.create({
   baseURL: isServer
-    ? process.env.NEXT_PUBLIC_SITE_URL + '/api' //서버에서는 절대 URL
-    : '/api', //클라이언트에서는 상대 URL
+    ? process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') + '/api' // 서버에서는 절대 URL
+    : '/api', // 클라이언트에서는 상대 URL
   timeout: 10_000,
   withCredentials: false,
 })
@@ -13,7 +13,7 @@ const api = axios.create({
 // 요청 인터셉터: 토큰 자동 첨부
 api.interceptors.request.use(
   (config) => {
-    if (typeof window !== 'undefined') {
+    if (!isServer) {
       const token = localStorage.getItem('accessToken')
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
