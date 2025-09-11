@@ -31,6 +31,9 @@ export default async function MatchesPage({ params }: PageProps) {
   return (
     <div className="p-6 space-y-6">
       <Formation />
+      <p className="my-5 text-[16px] font-bold text-gray-800">
+        구장 주소 : <span>{match.place_address ?? match.place}</span>
+      </p>
       <LoadKakaoMap
         address={match.place_address ?? match.place}
         lat={match.place_lat ?? undefined}
