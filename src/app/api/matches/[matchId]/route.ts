@@ -9,17 +9,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-type MatchRow = {
-  id: number
-  date: string
-  opponent: string
-  place: string
-  score: string
-  place_name: string | null
-  place_address: string | null
-  place_lat: number | null
-  place_lng: number | null
-}
 type QuarterRow = { quarter: number; conceded: number; score_after: string }
 type GoalRow = {
   quarter: number
@@ -33,16 +22,30 @@ type GoalRow = {
 export async function GET(_req: NextRequest, context: { params: Promise<{ matchId: string }> }) {
   const { matchId } = await context.params
   const id = Number(matchId)
-  if (!Number.isFinite(id)) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  if (!Number.isFinite(id)) {
+    return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  }
 
+  // 1) 경기 기본 정보 + 장소 조인
   const { data: match, error: mErr } = await supabase
     .from('matches')
-    .select('id, date, opponent, place, score, place_name, place_address, place_lat, place_lng')
+    .select('id, date, opponent, place, score')
     .eq('id', id)
-    .single<MatchRow>()
-  if (mErr || !match)
-    return NextResponse.json({ error: mErr?.message ?? 'Not found' }, { status: 404 })
+    .single<{
+      id: number
+      date: string
+      opponent: string
+      place: string
+      score: string
+      place_id: number | null
+      places: { id: number; name: string; address: string; lat: number; lng: number } | null
+    }>()
 
+  if (mErr || !match) {
+    return NextResponse.json({ error: mErr?.message ?? 'Not found' }, { status: 404 })
+  }
+
+  // 2) 쿼터
   const { data: quarters } = await supabase
     .from('match_quarters')
     .select('quarter, conceded, score_after')
@@ -50,6 +53,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ matchI
     .order('quarter', { ascending: true })
     .returns<QuarterRow[]>()
 
+  // 3) 골 이벤트
   const { data: goals } = await supabase
     .from('v_match_goals')
     .select('quarter, minute, scorer_id, scorer_name, assist_id, assist_name')
@@ -58,6 +62,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ matchI
     .order('minute', { ascending: true, nullsFirst: true })
     .returns<GoalRow[]>()
 
+  // 4) 쿼터별로 데이터 합치기
   const byQuarter = new Map<
     number,
     {
@@ -66,8 +71,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ matchI
       scoreAfter: string
     }
   >()
-  for (const q of quarters ?? [])
+
+  for (const q of quarters ?? []) {
     byQuarter.set(q.quarter, { goals: [], conceded: q.conceded, scoreAfter: q.score_after })
+  }
+
   for (const g of goals ?? []) {
     const slot = byQuarter.get(g.quarter)
     if (!slot) continue
@@ -77,6 +85,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ matchI
       assist: g.assist_name ?? undefined,
     })
   }
+
   const resultQuarters = Array.from(byQuarter.entries())
     .sort((a, b) => a[0] - b[0])
     .map(([quarter, v]) => ({
@@ -86,16 +95,17 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ matchI
       scoreAfter: v.scoreAfter,
     }))
 
+  // 5) 최종 응답
   return NextResponse.json({
     matchId: match.id,
     date: match.date,
     opponent: match.opponent,
     finalScore: match.score,
-    place: match.place, // 원문
-    place_name: match.place_name, // 정규화명
-    place_address: match.place_address,
-    place_lat: match.place_lat,
-    place_lng: match.place_lng,
+    place: match.place, // 사용자가 입력한 원문
+    place_name: match.places?.name ?? null, // 정규화 이름
+    place_address: match.places?.address ?? null,
+    place_lat: match.places?.lat ?? null,
+    place_lng: match.places?.lng ?? null,
     quarters: resultQuarters,
   })
 }
