@@ -1,3 +1,5 @@
+import { Formation } from '@/constants/modal'
+
 export interface PostMatchData {
   date: string
   opponent: string
@@ -6,7 +8,7 @@ export interface PostMatchData {
 }
 
 export interface RosterData {
-  formation: string // e.g. '4-2-3-1'
+  formation: Formation // e.g. '4-2-3-1'
   GK: string[] // player ids (문자열 id 사용)
   DF: string[]
   MF: string[]
