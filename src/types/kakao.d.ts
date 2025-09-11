@@ -46,6 +46,8 @@ declare global {
     setCenter(latlng: LatLng): void
     getCenter(): LatLng
     setLevel(level: number): void
+    setZoomable(zoomable: boolean): void
+    setDraggable(draggable: boolean): void
   }
   interface KakaoMarker {
     setMap(map: KakaoMap | null): void

@@ -14,8 +14,12 @@ export default function RenderKakaoMap({ address, lat, lng }: Props) {
     const container = ref.current
     const map = new kakao.maps.Map(container, {
       center: new kakao.maps.LatLng(37.5665, 126.978), // 서울시청
-      level: 2,
+      level: 1,
     })
+
+    map.setZoomable(false)
+    map.setDraggable(false)
+
     const marker = new kakao.maps.Marker({ map, position: map.getCenter() })
 
     const placeByCoord = (plat: number, plng: number, label?: string) => {
