@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Button from '@/components/common/Button'
-import type { PostScoresContentProps, QuarterData, GoalEvent } from '@/constants/modal'
+import type { PostScoresContentProps } from '@/constants/modal'
+import { QuarterData, QuarterGoal } from '@/types/match'
 
 export default function PostScoresContent({
   onBack,
@@ -18,7 +19,7 @@ export default function PostScoresContent({
     update(qi, { goals })
   }
 
-  const updateGoal = (qi: number, gi: number, patch: Partial<GoalEvent>) => {
+  const updateGoal = (qi: number, gi: number, patch: Partial<QuarterGoal>) => {
     const goals = quarters[qi].goals.map((g, i) => (i === gi ? { ...g, ...patch } : g))
     update(qi, { goals })
   }
