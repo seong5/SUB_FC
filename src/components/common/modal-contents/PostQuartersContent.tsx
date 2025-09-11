@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
-import type { PostQuartersContentProps, QuarterData } from '@/constants/modal'
+import type { PostQuartersContentProps } from '@/constants/modal'
+import { QuarterData } from '@/types/match'
 
 export default function PostQuartersContent({
   onBack,
@@ -13,10 +14,10 @@ export default function PostQuartersContent({
 }: PostQuartersContentProps) {
   const [quarters, setQuarters] = useState<QuarterData[]>(
     initial ?? [
-      { goals: [], conceded: 0, scoreAfter: '' },
-      { goals: [], conceded: 0, scoreAfter: '' },
-      { goals: [], conceded: 0, scoreAfter: '' },
-      { goals: [], conceded: 0, scoreAfter: '' },
+      { quarter: 1, goals: [], conceded: 0, scoreAfter: '' },
+      { quarter: 2, goals: [], conceded: 0, scoreAfter: '' },
+      { quarter: 3, goals: [], conceded: 0, scoreAfter: '' },
+      { quarter: 4, goals: [], conceded: 0, scoreAfter: '' },
     ]
   )
 
