@@ -1,6 +1,6 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
-import { matchLocations as MOCKS } from '@/mocks/matchLocation'
+
+import { useMemo, useState, useEffect } from 'react'
 import Pagination from '@/components/common/Pagination'
 import SearchBar from '@/components/SearchBar'
 import DropDown from '@/components/common/DropDown'
@@ -8,55 +8,93 @@ import Icon from '@/components/common/Icon'
 import MatchInfoCard from '@/components/MatchInfoCard'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
+import { useQuery } from '@tanstack/react-query'
+import { useMatchesQuery, useCreateMatchMutation } from '@/hooks/useMatches'
+import api from '@/libs/axios'
 
-// ▼ 추가: 모달 타입/프롭(프로젝트 정의에 맞춰 import)
+import type { ModalVariant } from '@/constants/modal'
 import type {
-  PostMatchData, // Step1 데이터 { date, opponent, place, score }
-  RosterData, // Step2 데이터 { formation, GK, DF, MF, FW }
-  QuarterData, // Step3/4 데이터 { goals[], conceded, scoreAfter }
-  ModalVariant,
-} from '@/constants/modal'
+  UIMatchSummary,
+  CreateMatchPayload,
+  PostMatchData,
+  RosterData,
+  QuarterData,
+} from '@/types/match'
 
 type SortOrder = 'latest' | 'oldest'
 
-// ▼ 예시 플레이어(나중에 실제 데이터로 대체)
-const players = [
-  { id: 'u1', name: '김GK', position: 'GK' as const },
-  { id: 'u2', name: '박DF', position: 'DF' as const },
-  { id: 'u3', name: '이DF', position: 'DF' as const },
-  { id: 'u4', name: '최MF', position: 'MF' as const },
-  { id: 'u5', name: '정MF', position: 'MF' as const },
-  { id: 'u6', name: '한FW', position: 'FW' as const },
-  { id: 'u7', name: '문FW', position: 'FW' as const },
-]
+/** 서버가 /api/players 에서 내려주는 타입 */
+type ServerPlayer = {
+  id: number
+  name: string
+  position: 'GK' | 'DF' | 'MF' | 'FW'
+  back_number: number | null
+}
+
+/** UI에서 사용할 선수 타입 */
+type UIPlayer = {
+  id: string
+  name: string
+  position: ServerPlayer['position']
+  back_number: number | null
+}
+
+async function fetchPlayers(): Promise<UIPlayer[]> {
+  const { data } = await api.get<ServerPlayer[]>('/players')
+  const list = data ?? []
+  return list.map((p) => ({
+    id: String(p.id),
+    name: p.name,
+    position: p.position,
+    back_number: p.back_number,
+  }))
+}
 
 export default function Home() {
-  const [items, setItems] = useState([...MOCKS])
+  // 경기 목록
+  const {
+    data: matchesData = [],
+    isLoading: isMatchesLoading,
+    error: matchesError,
+  } = useMatchesQuery()
 
-  // ▼ 멀티스텝 모달 상태
+  // 선수 목록 (Step2/3에서 사용)
+  const {
+    data: players = [],
+    isLoading: isPlayersLoading,
+    error: playersError,
+  } = useQuery<UIPlayer[]>({
+    queryKey: ['players'],
+    queryFn: fetchPlayers,
+  })
+
+  // 모달 상태 & 스텝 데이터
   const [variant, setVariant] = useState<ModalVariant | null>(null)
   const openStep1 = () => setVariant('postMatch')
 
-  // ▼ 스텝 데이터 (등록 페이로드 임시 보관)
   const [step1, setStep1] = useState<PostMatchData | null>(null)
   const [step2, setStep2] = useState<RosterData | null>(null)
   const [step3, setStep3] = useState<QuarterData[] | null>(null)
 
-  // ▼ 검색/정렬/페이지네이션 (기존 그대로)
-  const [page, setPage] = useState(1)
-  const [query, setQuery] = useState('')
+  // 검색/정렬/페이지네이션
+  const [page, setPage] = useState<number>(1)
+  const [query, setQuery] = useState<string>('')
   const [sortOrder, setSortOrder] = useState<SortOrder>('latest')
   const PAGE_SIZE = 5
   const handleSubmitSearch = () => setPage(1)
+
+  const items: UIMatchSummary[] = matchesData
+
   const q = query.trim().toLowerCase()
-  const filtered = useMemo(
+  const filtered = useMemo<UIMatchSummary[]>(
     () =>
       q
-        ? items.filter((loc) => [loc.name, loc.address].some((v) => v.toLowerCase().includes(q)))
+        ? items.filter((m) => [m.opponent, m.place].some((v) => v.toLowerCase().includes(q)))
         : items,
     [items, q]
   )
-  const sorted = useMemo(() => {
+
+  const sorted = useMemo<UIMatchSummary[]>(() => {
     const copy = [...filtered]
     copy.sort((a, b) =>
       sortOrder === 'latest'
@@ -65,63 +103,83 @@ export default function Home() {
     )
     return copy
   }, [filtered, sortOrder])
+
   const totalCount = sorted.length
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
   const start = (safePage - 1) * PAGE_SIZE
   const current = sorted.slice(start, start + PAGE_SIZE)
+
   useEffect(() => {
     setPage(1)
   }, [query, sortOrder])
 
-  // Step1 완료 → Step2로
+  // Step handlers
   const handleStep1Submit = (data: PostMatchData) => {
     setStep1(data)
     setVariant('postRoster')
   }
-
-  // Step2 완료 → Step3로
   const handleStep2Submit = (data: RosterData) => {
     setStep2(data)
     setVariant('postQuarters')
   }
-
-  // Step3 완료 → Step4로
   const handleStep3Submit = (quarters: QuarterData[]) => {
     setStep3(quarters)
     setVariant('postScores')
   }
 
-  // Step4 완료(최종) → 리스트 반영 + 모달 닫기
+  // 경기 등록 뮤테이션
+  const createMatch = useCreateMatchMutation()
+
+  // 최종 제출 (등록 성공 후 목록 갱신)
   const handleStep4Submit = (final: QuarterData[]) => {
-    setStep3(final)
+    if (!step1 || !step2) return
 
-    const nextId = (items.reduce((m, it) => Math.max(m, it.id), 0) || 0) + 1
-    const newItem = {
-      id: nextId,
-      name: step1?.opponent ?? '상대팀',
-      address: step1?.place ?? '-',
-      date: step1?.date ?? new Date().toISOString(),
+    // quarter 번호 보강
+    const quartersPayload: QuarterData[] = final.map((q, i) => ({
+      ...q,
+      quarter: (i + 1) as 1 | 2 | 3 | 4,
+    }))
+
+    const payload: CreateMatchPayload = {
+      match: {
+        date: step1.date,
+        opponent: step1.opponent,
+        place: step1.place,
+        score: step1.score,
+      },
+      roster: {
+        formation: step2.formation,
+        GK: step2.GK,
+        DF: step2.DF,
+        MF: step2.MF,
+        FW: step2.FW,
+      },
+      quarters: quartersPayload,
     }
-    setItems((prev) => [newItem, ...prev])
 
-    // 최종 종료
-    setVariant(null)
-    setStep1(null)
-    setStep2(null)
-    setStep3(null)
+    createMatch.mutate(payload, {
+      onSuccess: () => {
+        setVariant(null)
+        setStep1(null)
+        setStep2(null)
+        setStep3(null)
+      },
+      onError: (err) => alert(err.message),
+    })
   }
 
-  // Step2 → Step3/4에 넘길 득점/도움 후보(로스터 선택된 선수만)
-  const eligiblePlayers = useMemo(() => {
-    if (!step2) return []
-    const ids = new Set([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW])
+  // 로스터에서 선택된 선수만 득점/도움 후보로
+  const eligiblePlayers = useMemo<Array<{ id: string; name: string }>>(() => {
+    if (!step2 || players.length === 0) return []
+    const ids = new Set<string>([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW])
     return players.filter((p) => ids.has(p.id)).map((p) => ({ id: p.id, name: p.name }))
-  }, [step2])
+  }, [step2, players])
 
   return (
     <main className="bg-primary-100 p-20">
       <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
+
       <div className="mt-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <DropDown
@@ -138,31 +196,39 @@ export default function Home() {
             ]}
           />
         </div>
+
         <Button
           variant="primary"
           className="rounded-[20px] txt-16_B w-250 md:w-500 h-47 px-12 py-4"
           onClick={openStep1}
+          disabled={isPlayersLoading || Boolean(playersError)}
         >
-          경기 등록
+          {isPlayersLoading ? '선수 불러오는 중…' : '경기 등록'}
         </Button>
       </div>
+
       <ul className="space-y-3 mt-6">
         {current.length > 0 ? (
-          current.map((loc) => (
-            <li key={loc.id}>
-              <MatchInfoCard matchId={loc.id} />
+          current.map((m) => (
+            <li key={m.id}>
+              <MatchInfoCard match={m} />
             </li>
           ))
+        ) : isMatchesLoading ? (
+          <li className="rounded-md p-6 text-gray-500 text-center">불러오는 중…</li>
+        ) : matchesError ? (
+          <li className="rounded-md p-6 text-red-500 text-center">목록을 불러오지 못했어요.</li>
         ) : (
           <li className="rounded-md p-6 text-gray-500 text-center">
             검색 결과를 찾을 수 없습니다.
           </li>
         )}
       </ul>
+
       <div className="flex items-center justify-center mt-6">
         <Pagination
           currentPage={safePage}
-          pageSize={PAGE_SIZE}
+          pageSize={5}
           totalCount={totalCount}
           onPageChange={setPage}
         />

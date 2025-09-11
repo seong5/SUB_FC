@@ -2,82 +2,63 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-interface RenderKakaoMapProps {
-  address: string
-}
+type Props = { address: string; lat?: number; lng?: number }
 
-export default function RenderKakaoMap({ address }: RenderKakaoMapProps) {
-  const mapRef = useRef<HTMLDivElement>(null)
+export default function RenderKakaoMap({ address, lat, lng }: Props) {
+  const ref = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
 
-  // 리사이즈 핸들러를 useEffect 바깥에 정의 가능하도록 초기화
-  const resizeHandlerRef = useRef<(() => void) | null>(null)
-
   useEffect(() => {
-    if (!window.kakao || !mapRef.current) {
-      setError('지도 정보를 불러올 수 없습니다.')
-      return
+    if (!ref.current) return
+    const { kakao } = window as typeof window & { kakao: Kakao }
+    const container = ref.current
+    const map = new kakao.maps.Map(container, {
+      center: new kakao.maps.LatLng(37.5665, 126.978), // 서울시청
+      level: 1,
+    })
+
+    map.setZoomable(false)
+    map.setDraggable(false)
+
+    const marker = new kakao.maps.Marker({ map, position: map.getCenter() })
+
+    const placeByCoord = (plat: number, plng: number, label?: string) => {
+      const ll = new kakao.maps.LatLng(plat, plng)
+      map.setCenter(ll)
+      marker.setPosition(ll)
+      if (label) container.setAttribute('data-label', label)
     }
 
-    const geocoder = new window.kakao.maps.services.Geocoder()
+    const geocoder = new kakao.maps.services.Geocoder()
 
-    geocoder.addressSearch(address, (result, status) => {
-      if (status !== window.kakao.maps.services.Status.OK) {
-        console.error('주소 검색 실패:', status)
-        setError('올바른 주소를 입력해주세요.')
+    // 1) 주소로 시도
+    geocoder.addressSearch(address.trim(), (result, status) => {
+      if (status === kakao.maps.services.Status.OK && result.length > 0) {
+        const { x, y } = result[0] // x=lng, y=lat
+        placeByCoord(Number(y), Number(x), address)
         return
       }
 
-      try {
-        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x)
-
-        const map = new window.kakao.maps.Map(mapRef.current!, {
-          center: coords,
-          level: 3,
-          draggable: false,
-          scrollwheel: false,
-          disableDoubleClick: true,
-          disableDoubleClickZoom: true,
-        })
-
-        const marker = new window.kakao.maps.Marker({
-          map,
-          position: map.getCenter(),
-        })
-
-        const handleResize = () => {
-          map.setCenter(coords)
-          marker.setPosition(coords)
+      // 2) 주소 실패 → 키워드(장소명)로 폴백
+      const places = new kakao.maps.services.Places()
+      places.keywordSearch(address.trim(), (data, pStatus) => {
+        if (pStatus === kakao.maps.services.Status.OK && data.length > 0) {
+          const { x, y, place_name, road_address_name, address_name } = data[0]
+          const label = place_name || road_address_name || address_name || address
+          placeByCoord(Number(y), Number(x), label)
+          return
         }
 
-        // 핸들러를 ref에 저장해서 클린업 함수에 접근 가능하게 함
-        resizeHandlerRef.current = handleResize
-
-        window.addEventListener('resize', handleResize)
-      } catch (e) {
-        console.error('지도 로딩 중 에러:', e)
-        setError('지도를 표시하는 중 문제가 발생했습니다.')
-      }
+        // 3) 그래도 실패 → 좌표가 있으면 좌표로, 없으면 에러
+        if (typeof lat === 'number' && typeof lng === 'number') {
+          placeByCoord(lat, lng, address)
+        } else {
+          setError('주소/장소를 좌표로 변환하지 못했습니다.')
+        }
+      })
     })
+  }, [address, lat, lng])
 
-    return () => {
-      if (resizeHandlerRef.current) {
-        window.removeEventListener('resize', resizeHandlerRef.current)
-      }
-    }
-  }, [address])
-
-  return (
-    <div className="flex flex-col border-t border-gray-200 py-40 md:p-40">
-      <p className="txt-16_B md:txt-24_B my-5 leading-21 text-gray-950">축구장 주소</p>
-      <p className="txt-14_M my-5 leading-24 font-semibold opacity-75">{address}</p>
-      <div>
-        {error ? (
-          <p className="text-sm text-red-500">{error}</p>
-        ) : (
-          <div ref={mapRef} className="h-180 w-full rounded-[16px] md:h-500 md:rounded-[24px]" />
-        )}
-      </div>
-    </div>
-  )
+  if (error) return <p className="text-red-500">{error}</p>
+  return <div ref={ref} className="w-full h-[320px] rounded-lg shadow" />
 }

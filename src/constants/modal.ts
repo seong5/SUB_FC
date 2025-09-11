@@ -2,25 +2,15 @@ import { OnlyTextContent } from '@/components/common/modal-contents/OnlyTextCont
 import { PostMatchContent } from '@/components/common/modal-contents/PostMatchContent'
 import ScheduleContent from '@/components/common/modal-contents/ScheduleContent'
 import { WarningContent } from '@/components/common/modal-contents/WarningContent'
-import { EventsType } from '@/mocks/calenderEvents'
 import PostRosterContent from '@/components/common/modal-contents/PostRosterContent'
 import PostQuartersContent from '@/components/common/modal-contents/PostQuartersContent'
 import PostScoresContent from '@/components/common/modal-contents/PostScoresContent'
 
-type ContentMapType = {
-  [V in ModalVariant]: React.FC<Extract<ModalProps, { variant: V }>>
-}
+import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
+import type { EventsType } from '@/mocks/calenderEvents'
+import type { FC } from 'react'
 
-export const ContentMap: ContentMapType = {
-  onlyText: OnlyTextContent,
-  warning: WarningContent,
-  postMatch: PostMatchContent,
-  scheduleEvent: ScheduleContent,
-  postRoster: PostRosterContent,
-  postQuarters: PostQuartersContent,
-  postScores: PostScoresContent,
-} as const
-
+/** UI 전용 타입들 */
 export type ModalVariant =
   | 'onlyText'
   | 'warning'
@@ -33,24 +23,7 @@ export type ModalVariant =
 export type Position = 'GK' | 'DF' | 'MF' | 'FW'
 export type Formation = '4-4-2' | '4-2-3-1'
 
-export type RosterData = {
-  formation: Formation
-  GK: string[]
-  DF: string[]
-  MF: string[]
-  FW: string[]
-}
-
-export type PostMatchData = {
-  date: string
-  opponent: string
-  place: string
-  score: string
-}
-
-export type GoalEvent = { scorerId: string; assistId?: string | null }
-export type QuarterData = { goals: GoalEvent[]; conceded: number; scoreAfter: string }
-
+/** 각 모달 콘텐츠 컴포넌트가 받을 Props */
 export interface OnlyTextModalProps {
   variant: 'onlyText'
   message: string
@@ -82,11 +55,8 @@ export interface PostRosterContentProps {
   variant: 'postRoster'
   onBack: () => void
   onClose: () => void
-  // “다음” 누르면 참가자/포메이션 전달
   onSubmit: (data: RosterData) => void
-  // 플레이어 소스 (id/name/position) 를 상위에서 주입
   players: { id: string; name: string; position: Position }[]
-  // 필요하다면 초기값(수정 플로우) 지원
   initial?: RosterData
 }
 
@@ -95,7 +65,7 @@ export interface PostQuartersContentProps {
   onBack: () => void
   onClose: () => void
   onSubmit: (data: QuarterData[]) => void
-  // 2단계에서 선택된 선수들만 득점/도움 후보로
+  /** 2단계에서 선택된 선수들만 득점/도움 후보로 */
   eligiblePlayers: { id: string; name: string }[]
   initial?: QuarterData[]
 }
@@ -109,6 +79,7 @@ export interface PostScoresContentProps {
   eligiblePlayers: { id: string; name: string }[]
 }
 
+/** 모달 전체 유니언 */
 export type ModalProps =
   | OnlyTextModalProps
   | WarningModalProps
@@ -117,3 +88,18 @@ export type ModalProps =
   | PostRosterContentProps
   | PostQuartersContentProps
   | PostScoresContentProps
+
+/** variant → 컴포넌트 매핑 */
+type ContentMapType = {
+  [V in ModalVariant]: FC<Extract<ModalProps, { variant: V }>>
+}
+
+export const ContentMap: ContentMapType = {
+  onlyText: OnlyTextContent,
+  warning: WarningContent,
+  postMatch: PostMatchContent,
+  scheduleEvent: ScheduleContent,
+  postRoster: PostRosterContent,
+  postQuarters: PostQuartersContent,
+  postScores: PostScoresContent,
+} as const
