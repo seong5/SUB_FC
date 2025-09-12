@@ -31,10 +31,10 @@ const KAKAO_BASE = ['bg-yellow', 'text-kakao-black', 'rounded-[12px]']
   kakaoButton : 카카오 로그인/회원가입에 사용하는 버튼을 보여줍니다. */
 export const BUTTON_VARIANTS: Record<buttonVariants, string> = {
   primary: cn(
-    'bg-primary-500',
+    'bg-sub-navy',
     'text-white',
     'cursor-pointer',
-    'active:bg-blue-500',
+    'active:bg-navy-400',
     ...DISABLED_CLASSES
   ),
   secondary: cn('active:bg-gray-100', ...SECONDARY_BASE_CLASSEES),

@@ -17,6 +17,9 @@
   /** brand **/
   --color-primary-100: #e5f3ff;
   --color-primary-500: #3d9ef2;
+  --color-sub-gray: #d3d6cf;
+  --color-sub-red: #990000;
+  --color-sub-navy: #000066;
   /** red **/
   --color-red-500: #ff2727;
 

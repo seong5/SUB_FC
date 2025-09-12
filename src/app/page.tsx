@@ -177,15 +177,15 @@ export default function Home() {
   }, [step2, players])
 
   return (
-    <main className="bg-primary-100 p-20">
+    <main className="bg-sub-gray rounded-[16px] p-20">
       <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
 
       <div className="mt-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <DropDown
             trigger={
-              <div className="flex items-center gap-2 min-w-90 min-h-47 justify-center bg-white rounded-full px-8 py-4 text-black cursor-pointer">
-                <span>{sortOrder === 'latest' ? '최근순' : '오래된순'}</span>
+              <div className="flex items-center gap-2 min-w-90 min-h-47 justify-center border-2 border-sub-red bg-white rounded-full px-8 py-4 text-black cursor-pointer">
+                <span className="txt-16_M">{sortOrder === 'latest' ? '최근순' : '오래된순'}</span>
                 <Icon icon="ChevDown" />
               </div>
             }

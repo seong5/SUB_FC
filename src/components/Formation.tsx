@@ -31,15 +31,17 @@ export default function FormationPage() {
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-[400px_640px] md:px-30 md:py-20">
-      <aside className="px-20">
+      <aside>
         <QuarterFilter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
         <ScoreAndAssist matchId={Number(params.matchId)} selectedLabel={selectedQuarterLabel} />
       </aside>
-      <div className="relative aspect-square w-[100vw] max-w-[640px]">
-        <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90" priority />
-        {players.map((p) => (
-          <Uniform key={p.id} number={p.number} name={p.name} x={p.x} y={p.y} />
-        ))}
+      <div className="flex justify-center items-center w-full">
+        <div className="relative aspect-square w-[100vw] max-w-[640px]">
+          <Image src="/pitch.svg" alt="pitch" fill className="object-contain rotate-90 " priority />
+          {players.map((p) => (
+            <Uniform key={p.id} number={p.number} name={p.name} x={p.x} y={p.y} />
+          ))}
+        </div>
       </div>
     </main>
   )

@@ -1,6 +1,6 @@
 export default function WinRate() {
   return (
-    <section className="p-20 text-[25px] md:text-[50px] font-bold text-center">
+    <section className="bg-white rounded-[16px] p-20 text-[25px] md:text-[50px] font-bold text-center">
       <h1>2025 SUB FC</h1>
       <h2>전체 경기</h2>
       <h3>15 경기</h3>

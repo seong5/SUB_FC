@@ -51,7 +51,7 @@ export default function Pagination({
           className={cn(
             'txt-14_M size-40 p-8 leading-24 transition-colors duration-150',
             page === currentPage
-              ? 'border-primary-500 border-b-2 text-gray-950'
+              ? 'border-sub-red border-b-2 text-gray-950'
               : 'text-gray-300 hover:text-gray-500'
           )}
           onClick={() => onPageChange(page)}

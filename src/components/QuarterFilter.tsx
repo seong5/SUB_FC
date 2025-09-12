@@ -20,8 +20,8 @@ export default function QuarterFilter({ selectedType, onChange }: TypeFilterProp
             className={`inline-flex items-center justify-center w-80 md:w-100 h-40 md:h-42 px-4 border rounded-full cursor-pointer transition
               ${
                 selectedType === type
-                  ? 'bg-primary-500 text-white border'
-                  : 'bg-white text-black border-gray-300 hover:border-primary-100 hover:bg-primary-100 hover:text-black'
+                  ? 'bg-sub-navy text-white border'
+                  : 'bg-white text-black border-gray-200 hover:border-gray-100 hover:bg-blue-800 hover:text-white'
               }`}
             onClick={() => onChange(selectedType === type ? '' : type)}
           >
