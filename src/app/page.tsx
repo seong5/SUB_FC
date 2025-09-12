@@ -2,10 +2,10 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import Pagination from '@/components/common/Pagination'
-import SearchBar from '@/components/SearchBar'
+import SearchBar from '@/components/main/SearchBar'
 import DropDown from '@/components/common/DropDown'
 import Icon from '@/components/common/Icon'
-import MatchInfoCard from '@/components/MatchInfoCard'
+import MatchInfoCard from '@/components/main/MatchInfoCard'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
 import { useQuery } from '@tanstack/react-query'

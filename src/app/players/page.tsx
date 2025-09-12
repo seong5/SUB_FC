@@ -3,9 +3,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { getPlayers } from '@/libs/playersApi'
 import type { Player } from '@/libs/playersApi'
-import PlayerCard from '@/components/PlayerCard'
+import PlayerCard from '@/components/players/PlayerCard'
 import { Position } from '@/constants/positionColor'
-import FirstPrize from '@/components/FirstPrize'
+import FirstPrize from '@/components/players/FirstPrize'
 
 const POSITION_LABEL: Record<Position, string> = {
   GK: 'GK',

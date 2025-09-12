@@ -1,4 +1,4 @@
-import Icon from '../common/Icon'
+import Icon from '@/components/common/Icon'
 
 type HeaderProps = {
   title: string

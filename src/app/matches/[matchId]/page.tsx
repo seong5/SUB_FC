@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
-import Formation from '@/components/Formation'
-import LoadKakaoMap from '@/components/LoadKakaoMap'
+import Formation from '@/components/matches/Formation'
+import LoadKakaoMap from '@/components/matches/LoadKakaoMap'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

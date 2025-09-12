@@ -1,6 +1,6 @@
-import Calender from '@/components/calender/Calender'
-import Schedule from '@/components/Schedule'
-import WinRate from '@/components/WinRate'
+import Calender from '@/components/teams/calender/Calender'
+import Schedule from '@/components/teams/Schedule'
+import WinRate from '@/components/teams/WinRate'
 
 export default function TeamPage() {
   return (

@@ -1,8 +1,8 @@
 'use client'
 
-import Button from './common/Button'
+import Button from '../common/Button'
 import { useState } from 'react'
-import Modal from './common/Modal'
+import Modal from '../common/Modal'
 import { useScheduleStore } from '@/stores/useScheduleStore'
 
 export default function Schedule() {
