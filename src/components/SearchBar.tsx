@@ -12,7 +12,7 @@ export default function SearchBar({ value, onChange, onSubmit }: Props) {
   const id = useId()
   return (
     <div>
-      <h1 className="txt-16_B md:txt-32_B text-center my-10">지난 매치를 검색하고 싶으신가요?</h1>
+      <h1 className="txt-16_B md:txt-32_B text-center my-10">지난 매치들을 검색해 보세요!</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -28,8 +28,8 @@ export default function SearchBar({ value, onChange, onSubmit }: Props) {
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="축구장 혹은 주소를 입력해주세요."
-          className="flex-1 bg-white txt-12_M md:txt-16_M md:w/full md:h-70 rounded-[20px] px-15 py-10 card-shadow"
+          placeholder="검색어를 입력해주세요."
+          className="flex-1 bg-white txt-13_M md:txt-16_M md:w/full md:h-70 rounded-[20px] px-15 py-10 card-shadow"
         />
         <Button
           type="submit"
