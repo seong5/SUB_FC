@@ -177,7 +177,7 @@ export default function Home() {
   }, [step2, players])
 
   return (
-    <main className="bg-sub-gray p-20">
+    <main className="bg-sub-gray rounded-[16px] p-20">
       <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
 
       <div className="mt-20 flex items-center justify-between">
