@@ -1,8 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import CalendarHeader from '@/components/calender/CalenderHeader'
-import CalendarGrid from '@/components/calender/CalenderGrid'
+import CalendarHeader from '@/components/teams/calender/CalenderHeader'
+import CalendarGrid from '@/components/teams/calender/CalenderGrid'
 import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/utils/calenderUtils'
 
 type Props = {

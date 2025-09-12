@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
-import Uniform from '@/components/Uniform'
+import Uniform from '@/components/matches/Uniform'
 import { playersRoster } from '@/mocks/playersRoster'
 import { FORMATIONS, FormationKey } from '@/constants/formation'
 import QuarterFilter from './QuarterFilter'

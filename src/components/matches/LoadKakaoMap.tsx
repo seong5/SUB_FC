@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import RenderKakaoMap from '@/components/KakaoMap'
+import RenderKakaoMap from '@/components/matches/KakaoMap'
 
 type Props = { address: string; lat?: number; lng?: number }
 
