@@ -28,7 +28,7 @@ export default function PlayersPage() {
   return (
     <>
       <FirstPrize />
-      <main className="space-y-12 my-40 px-20 md:px-40">
+      <main className="bg-gray-100 space-y-12 my-40 px-20 md:px-40">
         {positions.map((pos) => {
           const players = (data ?? []).filter((p: Player) => p.position === pos)
           if (players.length === 0) return null
