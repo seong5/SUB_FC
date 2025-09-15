@@ -23,6 +23,11 @@ export async function getMatches(): Promise<UIMatchSummary[]> {
   return list.map(mapToUIMatchSummary)
 }
 
+export async function getMatchDetail(id: number): Promise<UIMatchSummary> {
+  const { data } = await api.get<MatchListItem>(`/matches/${id}`)
+  return mapToUIMatchSummary(data)
+}
+
 export async function deleteMatch(id: number): Promise<void> {
   await api.delete(`/matches/${id}`)
 }

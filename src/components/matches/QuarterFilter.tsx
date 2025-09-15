@@ -117,9 +117,10 @@ export default function QuarterFilter({
 
       {openEdit && (
         <Modal
-          onClose={() => setOpenEdit(false)}
-          variant="editMatch"
+          variant="postMatch"
+          mode="edit"
           initial={initialMatch}
+          onClose={() => setOpenEdit(false)}
           onSubmit={handleEditSubmit}
         />
       )}

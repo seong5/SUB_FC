@@ -9,9 +9,12 @@ import QuarterFilter from './QuarterFilter'
 import ScoreAndAssist from './ScoreAndAssist'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import { useParams } from 'next/navigation'
+import { getMatchDetail } from '@/libs/matchesApi'
+import { useQuery } from '@tanstack/react-query'
 
 export default function FormationPage() {
   const params = useParams<{ matchId: string }>()
+  const matchId = Number(params.matchId)
   const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<QuarterLabel | ''>('1 쿼터')
   const currentFormation: FormationKey = '4-4-2'
   const spots = FORMATIONS[currentFormation]
@@ -29,10 +32,35 @@ export default function FormationPage() {
     })
   }, [spots])
 
+  const {
+    data: detail,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['match', matchId],
+    queryFn: () => getMatchDetail(matchId),
+  })
+
+  if (isLoading || !detail) return <div className="p-6">로딩 중…</div>
+
+  // input[type="date"]에 맞게 yyyy-MM-dd (ISO면 앞 10자리)
+  const dateForInput = (detail.date ?? '').slice(0, 10)
+
   return (
     <main className="grid grid-cols-1 md:grid-cols-[400px_640px] md:px-30 md:py-20">
       <aside>
-        <QuarterFilter selectedType={selectedQuarterLabel} onChange={setSelectedQuarterLabel} />
+        <QuarterFilter
+          selectedType={selectedQuarterLabel}
+          onChange={setSelectedQuarterLabel}
+          matchId={matchId}
+          initialMatch={{
+            date: dateForInput,
+            place: detail.place,
+            score: detail.score,
+            opponent: detail.opponent,
+          }}
+          onRefetch={() => refetch()}
+        />
         <ScoreAndAssist matchId={Number(params.matchId)} selectedLabel={selectedQuarterLabel} />
       </aside>
       <div className="flex justify-center items-center w-full">
