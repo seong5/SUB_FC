@@ -3,6 +3,7 @@ import {
   CreateMatchPayload,
   MatchCreatedResponse,
   MatchListItem,
+  PostMatchData,
   UIMatchSummary,
   mapToUIMatchSummary,
 } from '@/types/match'
@@ -24,4 +25,8 @@ export async function getMatches(): Promise<UIMatchSummary[]> {
 
 export async function deleteMatch(id: number): Promise<void> {
   await api.delete(`/matches/${id}`)
+}
+
+export async function patchMatch(id: number, payload: Partial<PostMatchData>) {
+  await api.patch(`/matches/${id}`, payload)
 }

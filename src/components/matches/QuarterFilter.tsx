@@ -1,35 +1,68 @@
 'use client'
 
+import { useState } from 'react'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import Icon from '../common/Icon'
 import DropDown from '../common/DropDown'
 import Modal from '../common/Modal'
-import { deleteMatch } from '@/libs/matchesApi'
-import { useState } from 'react'
+import { deleteMatch, patchMatch } from '@/libs/matchesApi'
 
 interface TypeFilterProps {
   selectedType: QuarterLabel | ''
   onChange: (type: QuarterLabel | '') => void
-  matchId?: number
+  matchId: number
+  initialMatch: {
+    date: string
+    place: string
+    score: string
+    opponent: string
+  }
+  onRefetch?: () => void
 }
 
 const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터'] as const
 
-export default function QuarterFilter({ selectedType, onChange, matchId }: TypeFilterProps) {
-  const [open, setOpen] = useState(false)
+export default function QuarterFilter({
+  selectedType,
+  onChange,
+  matchId,
+  initialMatch,
+  onRefetch,
+}: TypeFilterProps) {
+  const [openDelete, setOpenDelete] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleDelete = async () => {
-    if (!matchId) return
     try {
       setLoading(true)
       await deleteMatch(matchId)
-      setOpen(false)
-      // TODO: react-query invalidateQueries(['matches']) 등으로 리스트 갱신
+      setOpenDelete(false)
+      onRefetch?.()
       alert('삭제가 완료되었습니다.')
     } catch (err) {
       console.error(err)
       alert('삭제에 실패했습니다.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleEditSubmit = async (payload: {
+    date: string
+    place: string
+    score: string
+    opponent: string
+  }) => {
+    try {
+      setLoading(true)
+      await patchMatch(matchId, payload)
+      setOpenEdit(false)
+      onRefetch?.()
+      alert('수정이 완료되었습니다.')
+    } catch (err) {
+      console.error(err)
+      alert('수정에 실패했습니다.')
     } finally {
       setLoading(false)
     }
@@ -41,22 +74,18 @@ export default function QuarterFilter({ selectedType, onChange, matchId }: TypeF
         Quaters
         <DropDown
           trigger={
-            <button>
+            <button type="button">
               <Icon icon="More" className="w-22 h-22 text-black" />
             </button>
           }
           items={[
-            { text: '수정하기', onClick: () => console.log('수정하기') },
-            {
-              text: '삭제하기',
-              onClick: () => {
-                setOpen(true)
-              },
-            },
+            { text: '수정하기', onClick: () => setOpenEdit(true) },
+            { text: '삭제하기', onClick: () => setOpenDelete(true) },
           ]}
           position="left"
         />
       </div>
+
       <div className="flex gap-10 mt-20">
         {TYPES.map((type) => (
           <div
@@ -73,15 +102,25 @@ export default function QuarterFilter({ selectedType, onChange, matchId }: TypeF
           </div>
         ))}
       </div>
-      {open && (
+
+      {openDelete && (
         <Modal
-          onClose={() => setOpen(false)}
+          onClose={() => setOpenDelete(false)}
           variant="warning"
           message="정말 삭제하시겠습니까?"
-          onCancel={() => setOpen(false)}
+          onCancel={() => setOpenDelete(false)}
           onConfirm={handleDelete}
           cancelText="아니오"
           confirmText={loading ? '삭제 중' : '삭제하기'}
+        />
+      )}
+
+      {openEdit && (
+        <Modal
+          onClose={() => setOpenEdit(false)}
+          variant="editMatch"
+          initial={initialMatch}
+          onSubmit={handleEditSubmit}
         />
       )}
     </section>

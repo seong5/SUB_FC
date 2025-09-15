@@ -5,6 +5,7 @@ import { WarningContent } from '@/components/common/modal-contents/WarningConten
 import PostRosterContent from '@/components/common/modal-contents/PostRosterContent'
 import PostQuartersContent from '@/components/common/modal-contents/PostQuartersContent'
 import PostScoresContent from '@/components/common/modal-contents/PostScoresContent'
+import EditMatchContent from '@/components/common/modal-contents/EditMatchContent'
 
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
 import type { EventsType } from '@/mocks/calenderEvents'
@@ -19,6 +20,7 @@ export type ModalVariant =
   | 'postRoster'
   | 'postQuarters'
   | 'postScores'
+  | 'editMatch'
 
 export type Position = 'GK' | 'DF' | 'MF' | 'FW'
 export type Formation = '4-4-2' | '4-2-3-1'
@@ -79,6 +81,13 @@ export interface PostScoresContentProps {
   eligiblePlayers: { id: string; name: string }[]
 }
 
+export interface EditMatchContentProps {
+  variant: 'editMatch'
+  initial: { date: string; place: string; score: string; opponent: string }
+  onSubmit: (p: { date: string; place: string; score: string; opponent: string }) => void
+  onClose: () => void
+}
+
 /** 모달 전체 유니언 */
 export type ModalProps =
   | OnlyTextModalProps
@@ -88,6 +97,7 @@ export type ModalProps =
   | PostRosterContentProps
   | PostQuartersContentProps
   | PostScoresContentProps
+  | EditMatchContentProps
 
 /** variant → 컴포넌트 매핑 */
 type ContentMapType = {
@@ -102,4 +112,5 @@ export const ContentMap: ContentMapType = {
   postRoster: PostRosterContent,
   postQuarters: PostQuartersContent,
   postScores: PostScoresContent,
+  editMatch: EditMatchContent,
 } as const
