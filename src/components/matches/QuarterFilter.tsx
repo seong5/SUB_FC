@@ -1,6 +1,7 @@
 'use client'
 
 import { QuarterLabel } from '@/mocks/QuarterScores'
+import Icon from '../common/Icon'
 
 interface TypeFilterProps {
   selectedType: QuarterLabel | ''
@@ -12,7 +13,12 @@ const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터'] as const
 export default function QuarterFilter({ selectedType, onChange }: TypeFilterProps) {
   return (
     <section>
-      <div className="text-gray-800 txt-28_M md:txt-32_M mb-2">Quaters</div>
+      <div className="flex flex-row justify-between items-center text-gray-800 txt-28_M md:txt-32_M mb-2">
+        Quaters
+        <button>
+          <Icon icon="More" className="w-22 h-22 text-black" />
+        </button>
+      </div>
       <div className="flex gap-10 mt-20">
         {TYPES.map((type) => (
           <div
