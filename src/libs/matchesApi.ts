@@ -21,3 +21,7 @@ export async function getMatches(): Promise<UIMatchSummary[]> {
   const list = await getMatchesRaw()
   return list.map(mapToUIMatchSummary)
 }
+
+export async function deleteMatch(id: number): Promise<void> {
+  await api.delete(`/matches/${id}`)
+}
