@@ -8,6 +8,7 @@ import {
   mapToUIMatchSummary,
   RosterData,
   QuarterData,
+  MatchEditSeed,
 } from '@/types/match'
 
 export async function createMatch(payload: CreateMatchPayload) {
@@ -51,4 +52,9 @@ export async function patchQuarters(id: number, payload: QuarterData[]): Promise
 // Scores (득점/도움 → QuarterData에 goals 포함)
 export async function patchScores(id: number, payload: QuarterData[]): Promise<void> {
   await api.patch(`/matches/${id}/scores`, payload)
+}
+
+export async function getMatchEditSeed(id: number): Promise<MatchEditSeed> {
+  const { data } = await api.get<MatchEditSeed>(`/matches/${id}/edit-seed`)
+  return data
 }

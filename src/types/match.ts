@@ -79,3 +79,11 @@ export function mapToUIMatchSummary(item: MatchListItem): UIMatchSummary {
     score: item.score, // 서버가 final_score라면 여기서 매핑
   }
 }
+
+export type MatchEditSeed = {
+  match: PostMatchData
+  roster: RosterData
+  quarters: QuarterData[]
+  scores: QuarterData[] // scores = quarters 그대로 복사
+  players: PlayerLite[]
+}
