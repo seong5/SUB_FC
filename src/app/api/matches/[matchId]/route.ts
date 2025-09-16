@@ -155,3 +155,33 @@ export async function DELETE(
   // 삭제 후 리다이렉트
   return NextResponse.redirect(new URL('/', _req.url))
 }
+
+export async function PATCH(
+  req: NextRequest,
+  context: { params: Promise<{ id?: string; matchId?: string }> }
+) {
+  const { id, matchId } = await context.params
+  const targetId = id ?? matchId
+  if (!targetId) {
+    return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+  }
+
+  // 들어온 변경 필드만 부분 업데이트 (예: { score: '3-2', opponent: 'FC A' })
+  const patch = await req.json().catch(() => null)
+  if (!patch || typeof patch !== 'object') {
+    return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
+  }
+
+  const { supabase } = createServerClientForRoute(req)
+
+  const { error } = await supabase
+    .from('matches')
+    .update(patch) // 부분 업데이트
+    .eq('id', Number(targetId))
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json({ ok: true })
+}
