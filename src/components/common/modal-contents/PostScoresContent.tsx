@@ -10,8 +10,9 @@ export default function PostScoresContent({
   onClose,
   onSubmit,
   initial = [],
+  mode = 'create',
   eligiblePlayers,
-}: PostScoresContentProps) {
+}: PostScoresContentProps & { mode?: 'create' | 'edit' }) {
   const [quarters, setQuarters] = useState<QuarterData[]>(initial)
 
   const addGoal = (qi: number) => {
@@ -96,7 +97,7 @@ export default function PostScoresContent({
           variant="primary"
           onClick={() => onSubmit(quarters)}
         >
-          완료
+          {mode === 'edit' ? '저장' : '완료'}
         </Button>
       </div>
     </div>

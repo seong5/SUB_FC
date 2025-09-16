@@ -11,7 +11,8 @@ export default function PostQuartersContent({
   onClose,
   onSubmit,
   initial,
-}: PostQuartersContentProps) {
+  mode = 'create',
+}: PostQuartersContentProps & { mode?: 'create' | 'edit' }) {
   const [quarters, setQuarters] = useState<QuarterData[]>(
     initial ?? [
       { quarter: 1, goals: [], conceded: 0, scoreAfter: '' },
@@ -69,7 +70,7 @@ export default function PostQuartersContent({
           disabled={!isValid}
           onClick={() => onSubmit(quarters)}
         >
-          다음
+          {mode === 'edit' ? '저장' : '다음'}
         </Button>
       </div>
     </div>

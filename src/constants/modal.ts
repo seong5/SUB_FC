@@ -65,6 +65,7 @@ export interface PostRosterContentProps {
   onSubmit: (data: RosterData) => void
   players: { id: string; name: string; position: Position }[]
   initial?: RosterData
+  mode?: 'create' | 'edit'
 }
 
 export interface PostQuartersContentProps {
@@ -75,6 +76,7 @@ export interface PostQuartersContentProps {
   /** 2단계에서 선택된 선수들만 득점/도움 후보로 */
   eligiblePlayers: { id: string; name: string }[]
   initial?: QuarterData[]
+  mode?: 'create' | 'edit'
 }
 
 export interface PostScoresContentProps {
@@ -84,6 +86,7 @@ export interface PostScoresContentProps {
   onSubmit: (data: QuarterData[]) => void
   initial?: QuarterData[]
   eligiblePlayers: { id: string; name: string }[]
+  mode?: 'create' | 'edit'
 }
 
 /** 모달 전체 유니언 */
