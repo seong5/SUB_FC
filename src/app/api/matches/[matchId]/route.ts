@@ -133,3 +133,25 @@ export async function GET(
   cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
   return json
 }
+
+export async function DELETE(
+  _req: NextRequest,
+  context: { params: Promise<{ id?: string; matchId?: string }> }
+) {
+  const { id, matchId } = await context.params
+  const targetId = id ?? matchId // 폴더명이 [id]든 [matchId]든 대응
+  if (!targetId) {
+    return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+  }
+
+  const { supabase } = createServerClientForRoute(_req)
+
+  //matches 테이블에서 id 기준 삭제
+  const { error } = await supabase.from('matches').delete().eq('id', Number(targetId))
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+  // 삭제 후 리다이렉트
+  return NextResponse.redirect(new URL('/', _req.url))
+}
