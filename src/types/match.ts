@@ -51,12 +51,23 @@ export type MatchListItem = {
   score: string
 }
 
+export type PlayerLite = {
+  id: string
+  name: string
+  position: 'GK' | 'DF' | 'MF' | 'FW'
+}
+
 export type UIMatchSummary = {
   id: number
   date: string
   opponent: string
   place: string
   score: string
+  match?: PostMatchData
+  roster?: RosterData
+  quarters?: QuarterData[]
+  scores?: QuarterData[]
+  players?: PlayerLite[]
 }
 
 export function mapToUIMatchSummary(item: MatchListItem): UIMatchSummary {

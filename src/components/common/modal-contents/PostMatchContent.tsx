@@ -130,7 +130,7 @@ export function PostMatchContent({ mode = 'create', initial, onClose, onSubmit }
           disabled={!isValid}
           onClick={submit}
         >
-          {mode === 'edit' ? '저장' : '다음'}
+          {mode === 'edit' ? '다음' : '저장'}
         </Button>
       </div>
     </div>

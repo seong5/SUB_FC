@@ -6,6 +6,8 @@ import {
   PostMatchData,
   UIMatchSummary,
   mapToUIMatchSummary,
+  RosterData,
+  QuarterData,
 } from '@/types/match'
 
 export async function createMatch(payload: CreateMatchPayload) {
@@ -34,4 +36,19 @@ export async function deleteMatch(id: number): Promise<void> {
 
 export async function patchMatch(id: number, payload: Partial<PostMatchData>) {
   await api.patch(`/matches/${id}`, payload)
+}
+
+// Roster
+export async function patchRoster(id: number, payload: RosterData): Promise<void> {
+  await api.patch(`/matches/${id}/roster`, payload)
+}
+
+// Quarters
+export async function patchQuarters(id: number, payload: QuarterData[]): Promise<void> {
+  await api.patch(`/matches/${id}/quarters`, payload)
+}
+
+// Scores (득점/도움 → QuarterData에 goals 포함)
+export async function patchScores(id: number, payload: QuarterData[]): Promise<void> {
+  await api.patch(`/matches/${id}/scores`, payload)
 }

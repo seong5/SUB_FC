@@ -112,7 +112,7 @@ export default function PostRosterContent({
           disabled={!isValid}
           onClick={handleNext}
         >
-          {mode === 'edit' ? '저장' : '다음'}
+          {mode === 'edit' ? '다음' : '저장'}
         </Button>
       </div>
     </div>

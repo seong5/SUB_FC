@@ -11,6 +11,7 @@ import { QuarterLabel } from '@/mocks/QuarterScores'
 import { useParams } from 'next/navigation'
 import { getMatchDetail } from '@/libs/matchesApi'
 import { useQuery } from '@tanstack/react-query'
+import type { PlayerLite } from '@/types/match'
 
 export default function FormationPage() {
   const params = useParams<{ matchId: string }>()
@@ -19,6 +20,7 @@ export default function FormationPage() {
   const currentFormation: FormationKey = '4-4-2'
   const spots = FORMATIONS[currentFormation]
 
+  // 화면 배치용 (유니폼 위치)
   const players = useMemo(() => {
     return spots.map((s, idx) => {
       const rp = playersRoster[idx]
@@ -31,6 +33,12 @@ export default function FormationPage() {
       }
     })
   }, [spots])
+
+  const eligiblePlayers: PlayerLite[] = playersRoster.map((p) => ({
+    id: String(p.id),
+    name: p.name,
+    position: p.position, // 'GK' | 'DF' | 'MF' | 'FW'
+  }))
 
   const {
     data: detail,
@@ -59,9 +67,10 @@ export default function FormationPage() {
             score: detail.score,
             opponent: detail.opponent,
           }}
+          players={eligiblePlayers}
           onRefetch={() => refetch()}
         />
-        <ScoreAndAssist matchId={Number(params.matchId)} selectedLabel={selectedQuarterLabel} />
+        <ScoreAndAssist matchId={matchId} selectedLabel={selectedQuarterLabel} />
       </aside>
       <div className="flex justify-center items-center w-full">
         <div className="relative aspect-square w-[100vw] max-w-[640px]">
