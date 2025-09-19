@@ -18,7 +18,6 @@ describe('<Spinner />', () => {
     const icon = screen.getByTestId('icon')
     expect(icon).toBeInTheDocument()
     expect(icon).toHaveAttribute('data-icon', 'SoccerBall')
-    // 아이콘 텍스트가 노출되도록 mock했으니 이 검증도 가능
     expect(screen.getByText(/SoccerBall/i)).toBeInTheDocument()
   })
 })
