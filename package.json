@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "prepare": "husky && husky install",
-    "test": "echo 'Test passed!'"
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
