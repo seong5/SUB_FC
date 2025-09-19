@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, ChangeEvent } from 'react'
+import { useEffect, useMemo, useState, ChangeEvent } from 'react'
 import type { PostMatchProps } from '@/constants/modal'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
@@ -11,11 +11,29 @@ type Touched = {
   score: boolean
   opponent: boolean
 }
-export function PostMatchContent({ onClose, onSubmit }: PostMatchProps) {
-  const [date, setDate] = useState('')
-  const [place, setPlace] = useState('')
-  const [score, setScore] = useState('')
-  const [opponent, setOpponent] = useState('')
+
+export function PostMatchContent({ mode = 'create', initial, onClose, onSubmit }: PostMatchProps) {
+  const safe = useMemo(
+    () => ({
+      date: initial?.date ?? '',
+      place: initial?.place ?? '',
+      score: initial?.score ?? '',
+      opponent: initial?.opponent ?? '',
+    }),
+    [initial]
+  )
+
+  const [date, setDate] = useState(safe.date)
+  const [place, setPlace] = useState(safe.place)
+  const [score, setScore] = useState(safe.score)
+  const [opponent, setOpponent] = useState(safe.opponent)
+
+  useEffect(() => {
+    setDate(safe.date)
+    setPlace(safe.place)
+    setScore(safe.score)
+    setOpponent(safe.opponent)
+  }, [safe])
 
   const [touched, setTouched] = useState<Touched>({
     date: false,
@@ -23,23 +41,34 @@ export function PostMatchContent({ onClose, onSubmit }: PostMatchProps) {
     score: false,
     opponent: false,
   })
-  // date-custom 인풋
+
+  // 날짜 인풋 (date-custom 대응)
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value
     const iso = v.includes('-') ? v : ('20' + v).replaceAll('/', '-')
     setDate(iso)
   }
-  const isValid = Boolean(date && place.trim() && score.trim() && opponent.trim())
+
+  // 스코어 형식: 2-1 또는 2:1 허용
+  const SCORE_RE = /^\d+\s*[:\-]\s*\d+$/
+
+  const isValid =
+    Boolean(date && place.trim() && score.trim() && opponent.trim()) && SCORE_RE.test(score)
+
   const submit = () => {
-    // 최종 제출 시 빈 값 있으면 에러가 보이도록 touched 전부 true 처리
+    // 터치 플래그 모두 true → 에러 메시지 노출
     setTouched({ date: true, place: true, score: true, opponent: true })
     if (!isValid) return
-    onSubmit({ date, opponent, place, score })
+    const normalizedScore = score.replace(/\s+/g, '')
+    onSubmit({ date, opponent, place, score: normalizedScore })
   }
 
   return (
     <div className="px-15 py-10 w-350 md:w-400">
-      <h2 className="text-lg font-bold mb-4 text-center">경기 등록</h2>
+      <h2 className="text-lg font-bold mb-4 text-center">
+        {mode === 'edit' ? '경기 수정' : '경기 등록'}
+      </h2>
+
       <div className="flex flex-col gap-20">
         <Input
           id="match-date"
@@ -69,9 +98,11 @@ export function PostMatchContent({ onClose, onSubmit }: PostMatchProps) {
           value={score}
           onChange={(e) => setScore(e.target.value)}
           onBlur={() => setTouched((t) => ({ ...t, score: true }))}
-          placeholder="예시: 5:3"
+          placeholder="예시: 2-1 또는 2:1"
           errorMessage={
-            !score.trim() && touched.score ? '스코어를 입력해 주세요. (예: 2-1)' : undefined
+            touched.score && !SCORE_RE.test(score || '')
+              ? '스코어 형식이 올바르지 않습니다. 예: 2-1 또는 2:1'
+              : undefined
           }
         />
         <Input
@@ -99,7 +130,7 @@ export function PostMatchContent({ onClose, onSubmit }: PostMatchProps) {
           disabled={!isValid}
           onClick={submit}
         >
-          다음
+          {mode === 'edit' ? '다음' : '저장'}
         </Button>
       </div>
     </div>

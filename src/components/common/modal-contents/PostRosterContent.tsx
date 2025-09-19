@@ -16,7 +16,8 @@ export default function PostRosterContent({
   onSubmit,
   players,
   initial,
-}: PostRosterContentProps) {
+  mode = 'create',
+}: PostRosterContentProps & { mode?: 'create' | 'edit' }) {
   // 초기값 세팅 (없으면 기본값)
   const [formation, setFormation] = useState<Formation>(initial?.formation ?? '4-2-3-1')
   const [roster, setRoster] = useState<Record<Position, string[]>>({
@@ -111,7 +112,7 @@ export default function PostRosterContent({
           disabled={!isValid}
           onClick={handleNext}
         >
-          다음
+          {mode === 'edit' ? '다음' : '저장'}
         </Button>
       </div>
     </div>
