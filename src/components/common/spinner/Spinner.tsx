@@ -1,9 +1,5 @@
 import Icon from '../Icon'
 
 export default function Spinner() {
-  return (
-    <div>
-      <Icon icon="SoccerBall" />
-    </div>
-  )
+  return <Icon icon="SoccerBall" className="w-70 h-70 animate-spin" />
 }

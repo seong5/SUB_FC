@@ -1,3 +1,9 @@
+import Spinner from '@/components/common/spinner/Spinner'
+
 export default function MyPage() {
-  return <div>마이페이지</div>
+  return (
+    <div>
+      <Spinner />
+    </div>
+  )
 }
