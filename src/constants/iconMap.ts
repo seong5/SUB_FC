@@ -13,6 +13,7 @@ const ICON_MAP = {
   ChevRight: () => import('@/assets/chevron-right.svg') as Promise<SvgModule>,
   OpenEye: () => import('@/assets/open-eye.svg') as Promise<SvgModule>,
   CloseEye: () => import('@/assets/close-eye.svg') as Promise<SvgModule>,
+  SoccerBall: () => import('@/assets/soccer-ball.svg') as Promise<SvgModule>,
 } satisfies Record<string, Loader>
 
 export type IconName = keyof typeof ICON_MAP
