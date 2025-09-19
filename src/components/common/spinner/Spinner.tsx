@@ -1,3 +1,9 @@
+import Icon from '../Icon'
+
 export default function Spinner() {
-  return <div>스피너</div>
+  return (
+    <div>
+      <Icon icon="SoccerBall" />
+    </div>
+  )
 }
