@@ -20,6 +20,7 @@ import type {
   RosterData,
   QuarterData,
 } from '@/types/match'
+import Spinner from '@/components/common/spinner/Spinner'
 
 type SortOrder = 'latest' | 'oldest'
 
@@ -215,7 +216,9 @@ export default function Home() {
             </li>
           ))
         ) : isMatchesLoading ? (
-          <li className="rounded-md p-6 text-gray-500 text-center">불러오는 중…</li>
+          <li className="rounded-md p-6 text-gray-500 text-center">
+            <Spinner />
+          </li>
         ) : matchesError ? (
           <li className="rounded-md p-6 text-red-500 text-center">목록을 불러오지 못했어요.</li>
         ) : (
