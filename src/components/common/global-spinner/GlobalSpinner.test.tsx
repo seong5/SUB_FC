@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import GlobalSpinner from './GlobalSpinner'
 import { useIsFetching, useIsMutating } from '@tanstack/react-query'
@@ -8,35 +8,34 @@ jest.mock('@tanstack/react-query', () => ({
   useIsMutating: jest.fn(),
 }))
 
-jest.mock('../spinner/Spinner', () => ({
+jest.mock('@/components/common/spinner/Spinner', () => ({
   __esModule: true,
   default: () => <div data-testid="spinner" />,
 }))
 
-const mockUseIsFetching = useIsFetching as jest.Mock
-const mockUseIsMutating = useIsMutating as jest.Mock
+const mockFetch = useIsFetching as jest.Mock
+const mockMutate = useIsMutating as jest.Mock
 
-describe('<GlobalSpinner />', () => {
-  afterEach(() => jest.clearAllMocks())
-
-  it('로딩이 없으면 아무것도 렌더링하지 않는다', () => {
-    mockUseIsFetching.mockReturnValue(0)
-    mockUseIsMutating.mockReturnValue(0)
-    render(<GlobalSpinner />)
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument()
+describe('GlobalSpinner (timers, with mocked Spinner)', () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+  })
+  afterEach(() => {
+    jest.runOnlyPendingTimers()
+    jest.useRealTimers()
+    jest.clearAllMocks()
   })
 
-  it('패칭 중이면 Spinner가 렌더링된다', () => {
-    mockUseIsFetching.mockReturnValue(1)
-    mockUseIsMutating.mockReturnValue(0)
-    render(<GlobalSpinner />)
-    expect(screen.getByTestId('spinner')).toBeInTheDocument()
-  })
+  it('50ms 전에는 안 보이고, 50ms 지나면 보인다', () => {
+    mockFetch.mockReturnValue(1)
+    mockMutate.mockReturnValue(0)
 
-  it('뮤테이션 중이면 Spinner가 렌더링된다', () => {
-    mockUseIsFetching.mockReturnValue(0)
-    mockUseIsMutating.mockReturnValue(2)
     render(<GlobalSpinner />)
+    expect(screen.queryByTestId('spinner')).toBeNull()
+
+    act(() => {
+      jest.advanceTimersByTime(50)
+    })
     expect(screen.getByTestId('spinner')).toBeInTheDocument()
   })
 })
