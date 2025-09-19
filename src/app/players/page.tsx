@@ -22,7 +22,7 @@ export default function PlayersPage() {
 
   const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정
 
-  if (isLoading) return <main className="p-20">불러오는 중…</main>
+  if (isLoading) return <main className="p-20">불러오는 중...</main>
   if (isError) return <main className="p-20 text-red-500">데이터 불러오기 실패</main>
 
   return (
