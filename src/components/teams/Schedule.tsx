@@ -3,7 +3,7 @@
 import Button from '../common/Button'
 import { useState } from 'react'
 import Modal from '../common/Modal'
-import { useScheduleStore } from '@/stores/useScheduleStore'
+import { useScheduleStore } from '@/store/useScheduleStore'
 
 export default function Schedule() {
   const [isOpen, setIsOpen] = useState(false)
