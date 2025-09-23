@@ -3,6 +3,7 @@ import './globals.css'
 import Footer from '@/components/common/Footer'
 import QueryProvider from './provider/QueryProvider'
 import GlobalSpinner from '@/components/common/global-spinner/GlobalSpinner'
+import AuthProvider from './provider/AuthProvider'
 
 export default function RootLayout({
   children,
@@ -14,9 +15,11 @@ export default function RootLayout({
       <body>
         <QueryProvider>
           <GlobalSpinner />
-          <Gnb />
-          {children}
-          <Footer />
+          <AuthProvider>
+            <Gnb />
+            {children}
+            <Footer />
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

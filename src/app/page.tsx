@@ -11,6 +11,7 @@ import Button from '@/components/common/Button'
 import { useQuery } from '@tanstack/react-query'
 import { useMatchesQuery, useCreateMatchMutation } from '@/hooks/useMatches'
 import api from '@/libs/axios'
+import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
 
 import type { ModalVariant } from '@/constants/modal'
 import type {
@@ -51,6 +52,9 @@ async function fetchPlayers(): Promise<UIPlayer[]> {
 }
 
 export default function Home() {
+  const isLoggedIn = useIsLoggedIn()
+  const authLoading = useAuthLoading()
+
   // 경기 목록
   const {
     data: matchesData = [],
@@ -200,10 +204,14 @@ export default function Home() {
         <Button
           variant="primary"
           className="rounded-[20px] txt-16_B w-250 md:w-500 h-47 px-12 py-4"
-          onClick={openStep1}
-          disabled={isPlayersLoading || Boolean(playersError)}
+          onClick={isLoggedIn ? openStep1 : undefined}
+          disabled={authLoading || !isLoggedIn || isPlayersLoading || Boolean(playersError)}
         >
-          {isPlayersLoading ? '선수 불러오는 중…' : '경기 등록'}
+          {isPlayersLoading
+            ? '선수 불러오는 중…'
+            : !isLoggedIn
+              ? '로그인 후 이용 가능합니다.'
+              : '경기 등록'}
         </Button>
       </div>
 

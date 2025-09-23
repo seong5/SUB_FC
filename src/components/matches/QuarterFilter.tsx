@@ -7,6 +7,7 @@ import DropDown from '../common/DropDown'
 import Modal from '../common/Modal'
 import { deleteMatch, patchMatch, patchRoster, patchQuarters, patchScores } from '@/libs/matchesApi'
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
+import { useIsLoggedIn } from '@/store/useAuthStore'
 
 interface TypeFilterProps {
   selectedType: QuarterLabel | ''
@@ -39,6 +40,7 @@ export default function QuarterFilter({
   const [openDelete, setOpenDelete] = useState(false)
   const [loading, setLoading] = useState(false)
   const [flow, setFlow] = useState<FlowState>(null)
+  const isLoggedIn = useIsLoggedIn()
 
   // 삭제
   const handleDelete = async () => {
@@ -86,18 +88,20 @@ export default function QuarterFilter({
     <section>
       <div className="flex flex-row justify-between items-center text-gray-800 txt-28_M md:txt-32_M mb-2">
         Quaters
-        <DropDown
-          trigger={
-            <button type="button">
-              <Icon icon="More" className="w-22 h-22 text-black" />
-            </button>
-          }
-          items={[
-            { text: '수정하기', onClick: () => setFlow({ mode: 'edit', step: 'match' }) },
-            { text: '삭제하기', onClick: () => setOpenDelete(true) },
-          ]}
-          position="left"
-        />
+        {isLoggedIn && (
+          <DropDown
+            trigger={
+              <button type="button">
+                <Icon icon="More" className="w-22 h-22 text-black" />
+              </button>
+            }
+            items={[
+              { text: '수정하기', onClick: () => setFlow({ mode: 'edit', step: 'match' }) },
+              { text: '삭제하기', onClick: () => setOpenDelete(true) },
+            ]}
+            position="left"
+          />
+        )}
       </div>
 
       {/* 쿼터 선택 버튼 */}
