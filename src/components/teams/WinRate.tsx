@@ -1,16 +1,13 @@
 'use client'
 
 import { useTeamStatsQuery } from '@/hooks/useTeams'
+import WinRateSkeleton from './WinRateSkeleton'
 
 export default function WinRate() {
   const { data: stats, isLoading, error } = useTeamStatsQuery()
 
   if (isLoading) {
-    return (
-      <section className="bg-white rounded-[16px] p-20 text-[25px] md:text-[50px] font-bold text-center">
-        <p>로딩 중...</p>
-      </section>
-    )
+    return <WinRateSkeleton />
   }
 
   if (error) {

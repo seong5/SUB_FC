@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import CalendarHeader from '@/components/teams/calender/CalenderHeader'
 import CalendarGrid from '@/components/teams/calender/CalenderGrid'
+import CalendarSkeleton from '@/components/teams/calender/CalendarSkeleton'
 import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/utils/calenderUtils'
 import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/hooks/useTeams'
 import type { CalendarEvent } from '@/components/teams/calender/CalenderGrid'
@@ -50,6 +51,16 @@ export default function Calendar({ value, onChange, className }: Props) {
     }
   }
 
+  if (isLoading) {
+    return (
+      <CalendarSkeleton
+        viewDate={viewDate}
+        onPrev={goPrevMonth}
+        onNext={goNextMonth}
+      />
+    )
+  }
+
   return (
     <section
       className={`p-20 my-20 w-full border border-gray-100 rounded-[20px] bg-white card-shadow ${className ?? ''}`}
@@ -62,20 +73,16 @@ export default function Calendar({ value, onChange, className }: Props) {
         onNext={goNextMonth}
       />
 
-      {isLoading ? (
-        <div className="text-center py-20">로딩 중...</div>
-      ) : (
-        <CalendarGrid
-          viewDate={viewDate}
-          dates={dates}
-          today={today}
-          selected={selected}
-          onSelect={(d) => onChange?.(d)}
-          isSameDate={isSameDate}
-          events={calendarEvents}
-          onDeleteEvent={handleDeleteEvent}
-        />
-      )}
+      <CalendarGrid
+        viewDate={viewDate}
+        dates={dates}
+        today={today}
+        selected={selected}
+        onSelect={(d) => onChange?.(d)}
+        isSameDate={isSameDate}
+        events={calendarEvents}
+        onDeleteEvent={handleDeleteEvent}
+      />
     </section>
   )
 }
