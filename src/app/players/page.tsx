@@ -18,9 +18,11 @@ export default function PlayersPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
-  const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정
+  const positions: Position[] = ['FW', 'MF', 'DF', 'GK']
 
   if (isLoading) return <main className="p-20">불러오는 중...</main>
   if (isError) return <main className="p-20 text-red-500">데이터 불러오기 실패</main>
@@ -44,10 +46,10 @@ export default function PlayersPage() {
                   <PlayerCard
                     key={p.id}
                     name={p.name}
-                    number={p.back_number} // ← DB 컬럼명 매핑
+                    number={p.back_number} //  DB 컬럼명 매핑
                     goals={p.goals}
                     assists={p.assists}
-                    attendancePercent={p.attendance_percent} // ← DB 컬럼명 매핑
+                    attendancePercent={p.attendance_percent} // DB 컬럼명 매핑
                     position={p.position}
                   />
                 ))}
