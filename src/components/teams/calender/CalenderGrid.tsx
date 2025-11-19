@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import { formatDate } from '@/utils/calenderUtils'
-import { mockEvents } from '@/mocks/calenderEvents'
 import DayEventsPopover from './DayEventsPopover'
 
 const weekdays = ['일', '월', '화', '수', '목', '금', '토']
@@ -41,7 +40,7 @@ export default function CalendarGrid({
   selected,
   onSelect,
   isSameDate,
-  events = mockEvents,
+  events = [],
   onDeleteEvent,
 }: GridProps) {
   const isSameMonth = (a: Date, b: Date) =>
