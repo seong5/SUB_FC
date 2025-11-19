@@ -29,7 +29,9 @@ export default function Skeleton({
     none: '',
   }
 
-  const style: React.CSSProperties = {}
+  const style: React.CSSProperties = {
+    minHeight: height ? (typeof height === 'number' ? `${height}px` : height) : undefined,
+  }
   if (width) style.width = typeof width === 'number' ? `${width}px` : width
   if (height) style.height = typeof height === 'number' ? `${height}px` : height
 
