@@ -14,6 +14,7 @@ import { useClickOutside } from '@/hooks/useClickOutside'
 import { cn } from '@/utils/cn'
 import CloseEye from '@/assets/close-eye.svg'
 import OpenEye from '@/assets/open-eye.svg'
+import InputCalender from '@/assets/input-calender.svg'
 
 /** HTML input 에서 사용할 수 있는 타입들 */
 type InputType =
@@ -290,41 +291,58 @@ function DateCustomInput({
   const textRef = useRef<HTMLInputElement>(null)
   const dateRef = useRef<HTMLInputElement>(null)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // yy/mm/dd 형식 외 문자 제거
-    e.target.value = e.target.value.replace(/[^\d/]/g, '')
-    if (e.target.value && e.target.validity.valid && dateRef.current) {
-      dateRef.current.value = '20' + e.target.value.replaceAll('/', '-')
+  const handleInputClick = () => {
+    // 입력 필드 클릭 시에도 날짜 선택기 열기
+    if (dateRef.current) {
+      if (typeof dateRef.current.showPicker === 'function') {
+        dateRef.current.showPicker()
+      } else {
+        dateRef.current.click()
+      }
     }
-    onChange?.(e)
   }
 
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (textRef.current) {
-      textRef.current.value = e.target.value.replaceAll('-', '/').slice(2)
+    const dateValue = e.target.value
+    // 선택된 날짜를 yy/mm/dd 형식으로 표시
+    if (textRef.current && dateValue) {
+      textRef.current.value = dateValue.replaceAll('-', '/').slice(2)
+    } else if (textRef.current && !dateValue) {
+      textRef.current.value = ''
     }
     onChange?.(e)
   }
 
   return (
     <div className={cn('relative', className)}>
-      {/* 보이는 텍스트 입력 (yy/mm/dd) */}
+      {/* 보이는 텍스트 입력 (readOnly, 클릭 시 날짜 선택기 열림) */}
       <input
         ref={textRef}
-        maxLength={8}
-        minLength={8}
-        pattern="\d{2}/(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])"
-        placeholder="yy/mm/dd"
-        onChange={handleChange}
+        readOnly
+        placeholder="날짜를 선택하세요"
+        onClick={handleInputClick}
+        onKeyDown={(e) => {
+          // 키보드 입력 방지 (Tab, Enter는 허용)
+          if (e.key !== 'Tab' && e.key !== 'Enter') {
+            e.preventDefault()
+          }
+          // Enter 키로도 날짜 선택기 열기
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            handleInputClick()
+          }
+        }}
+        className="cursor-pointer"
         {...props}
       />
 
-      {/* 우측 숨겨진 date input (실제 선택기) */}
+      {/* 우측 날짜 선택 버튼 */}
       <div className="absolute top-15 right-20 bottom-15 w-24">
-        <div className="relative size-full">
+        <div className="relative size-full flex items-center justify-center">
+          <InputCalender className="w-24 h-24 pointer-events-none" />
           <input
             ref={dateRef}
-            className="absolute inset-0 opacity-0"
+            className="absolute inset-0 opacity-0 cursor-pointer"
             max="2099-12-31"
             min="2000-01-01"
             type="date"

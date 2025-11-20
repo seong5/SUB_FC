@@ -61,35 +61,35 @@ export default function DayEventsPopover({
     <div
       ref={ref}
       data-popover
-      className="fixed z-50 w-150 rounded-xl bg-white border border-gray-200 shadow-xl px-10 py-10"
+      className="fixed z-50 min-w-200 max-w-300 rounded-xl bg-white border border-gray-200 shadow-xl px-15 py-15"
       style={{ top: pos.top, left: pos.left }}
       role="dialog"
       aria-label={`${date} 일정`}
     >
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-10">
         <p className="text-sm font-semibold">{date}</p>
       </div>
 
       {events.length === 0 ? (
         <p className="text-[13px] text-gray-500">등록된 일정이 없습니다.</p>
       ) : (
-        <ul className="space-y-2 max-h-260 overflow-auto pr-1">
+        <ul className="space-y-10 max-h-260 overflow-auto">
           {events.map((ev) => (
             <li
               key={ev.id ?? ev.title ?? ev.place ?? Math.random()}
-              className="flex items-center gap-8"
+              className="flex items-start gap-8"
             >
-              <span className={`px-8 py-5 rounded-full text-xs shrink-0 ${badge(ev.type)}`}>
+              <span className={`px-6 py-3 rounded-full text-[10px] shrink-0 ${badge(ev.type)}`}>
                 {ev.type}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold truncate">{ev.title ?? '(제목 없음)'}</p>
-                {ev.place && <p className="text-xs text-gray-500 truncate">장소: {ev.place}</p>}
+                <p className="text-sm font-semibold break-words">{ev.title ?? '(제목 없음)'}</p>
+                {ev.place && <p className="text-xs text-gray-500 break-words mt-2">장소: {ev.place}</p>}
               </div>
               {!!onDelete && (
                 <button
                   onClick={() => onDelete(ev.id)}
-                  className="text-xs text-red-500 hover:text-red-600"
+                  className="text-xs text-red-500 hover:text-red-600 shrink-0"
                 >
                   삭제
                 </button>
