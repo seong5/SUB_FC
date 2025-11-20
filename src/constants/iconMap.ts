@@ -14,6 +14,7 @@ const ICON_MAP = {
   OpenEye: () => import('@/assets/open-eye.svg') as Promise<SvgModule>,
   CloseEye: () => import('@/assets/close-eye.svg') as Promise<SvgModule>,
   SoccerBall: () => import('@/assets/soccer-ball.svg') as Promise<SvgModule>,
+  Calender: () => import('@/assets/input-calender.svg') as Promise<SvgModule>,
 } satisfies Record<string, Loader>
 
 export type IconName = keyof typeof ICON_MAP
