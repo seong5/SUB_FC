@@ -6,6 +6,7 @@ import SearchBar from '@/components/main/SearchBar'
 import DropDown from '@/components/common/DropDown'
 import Icon from '@/components/common/Icon'
 import MatchInfoCard from '@/components/main/MatchInfoCard'
+import MatchInfoCardSkeleton from '@/components/main/MatchInfoCardSkeleton'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
 import { useQuery } from '@tanstack/react-query'
@@ -216,14 +217,18 @@ export default function Home() {
       </div>
 
       <ul className="space-y-3 mt-6">
-        {current.length > 0 ? (
+        {isMatchesLoading ? (
+          Array.from({ length: PAGE_SIZE }).map((_, index) => (
+            <li key={`skeleton-${index}`}>
+              <MatchInfoCardSkeleton />
+            </li>
+          ))
+        ) : current.length > 0 ? (
           current.map((m) => (
             <li key={m.id}>
               <MatchInfoCard match={m} />
             </li>
           ))
-        ) : isMatchesLoading ? (
-          <li className="rounded-md p-6 text-gray-500 text-center">불러오는 중...</li>
         ) : matchesError ? (
           <li className="rounded-md p-6 text-red-500 text-center">목록을 불러오지 못했어요.</li>
         ) : (
