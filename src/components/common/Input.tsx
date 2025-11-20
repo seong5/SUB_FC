@@ -14,6 +14,7 @@ import { useClickOutside } from '@/hooks/useClickOutside'
 import { cn } from '@/utils/cn'
 import CloseEye from '@/assets/close-eye.svg'
 import OpenEye from '@/assets/open-eye.svg'
+import InputCalender from '@/assets/input-calender.svg'
 
 /** HTML input 에서 사용할 수 있는 타입들 */
 type InputType =
@@ -319,12 +320,13 @@ function DateCustomInput({
         {...props}
       />
 
-      {/* 우측 숨겨진 date input (실제 선택기) */}
+      {/* 우측 날짜 선택 버튼 */}
       <div className="absolute top-15 right-20 bottom-15 w-24">
-        <div className="relative size-full">
+        <div className="relative size-full flex items-center justify-center">
+          <InputCalender className="w-24 h-24 pointer-events-none" />
           <input
             ref={dateRef}
-            className="absolute inset-0 opacity-0"
+            className="absolute inset-0 opacity-0 cursor-pointer"
             max="2099-12-31"
             min="2000-01-01"
             type="date"
