@@ -6,6 +6,7 @@ import type { Player } from '@/libs/playersApi'
 import PlayerCard from '@/components/players/PlayerCard'
 import { Position } from '@/constants/positionColor'
 import FirstPrize from '@/components/players/FirstPrize'
+import Spinner from '@/components/common/spinner/Spinner'
 
 const POSITION_LABEL: Record<Position, string> = {
   GK: 'GK',
@@ -18,11 +19,18 @@ export default function PlayersPage() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
-  const positions: Position[] = ['FW', 'MF', 'DF', 'GK'] // 보여줄 순서 지정
+  const positions: Position[] = ['FW', 'MF', 'DF', 'GK']
 
-  if (isLoading) return <main className="p-20">불러오는 중...</main>
+  if (isLoading)
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60">
+        <Spinner />
+      </div>
+    )
   if (isError) return <main className="p-20 text-red-500">데이터 불러오기 실패</main>
 
   return (
@@ -44,10 +52,10 @@ export default function PlayersPage() {
                   <PlayerCard
                     key={p.id}
                     name={p.name}
-                    number={p.back_number} // ← DB 컬럼명 매핑
+                    number={p.back_number} //  DB 컬럼명 매핑
                     goals={p.goals}
                     assists={p.assists}
-                    attendancePercent={p.attendance_percent} // ← DB 컬럼명 매핑
+                    attendancePercent={p.attendance_percent} // DB 컬럼명 매핑
                     position={p.position}
                   />
                 ))}

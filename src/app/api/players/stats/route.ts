@@ -14,10 +14,13 @@ export async function GET(request: NextRequest) {
 
   const { supabase, cookieResponse } = createServerClientForRoute(request)
 
-  // 1. 모든 선수 기본 정보 가져오기
+  // 모든 경기에서 득점과 도움을 실시간으로 계산
+  // match_goals 테이블에서 scorer_id와 assist_id를 집계
+
+  // 1. 모든 선수 목록 가져오기
   const { data: players, error: playersError } = await supabase
     .from('players')
-    .select('id, name, back_number, position, attendance_matches, attendance_percent, created_at')
+    .select('id, name')
 
   if (playersError) {
     const json = NextResponse.json({ error: playersError.message }, { status: 500 })
@@ -25,7 +28,7 @@ export async function GET(request: NextRequest) {
     return json
   }
 
-  // 2. 모든 match_goals에서 득점과 도움 실시간 계산
+  // 2. 모든 match_goals 데이터 가져오기
   const { data: allGoals, error: goalsError } = await supabase
     .from('match_goals')
     .select('scorer_id, assist_id')
@@ -36,15 +39,16 @@ export async function GET(request: NextRequest) {
     return json
   }
 
-  // 3. 선수별 득점과 도움 집계
+  // 3. 선수별 득점과 도움 계산
   const statsMap = new Map<
     string,
-    { goals: number; assists: number }
+    { name: string; goals: number; assists: number }
   >()
 
   // 초기화
   players?.forEach((player) => {
     statsMap.set(String(player.id), {
+      name: player.name,
       goals: 0,
       assists: 0,
     })
@@ -69,23 +73,11 @@ export async function GET(request: NextRequest) {
     }
   })
 
-  // 4. 선수 정보와 통계 합치기
-  const result = players?.map((player) => {
-    const stats = statsMap.get(String(player.id)) || { goals: 0, assists: 0 }
-    return {
-      id: player.id,
-      name: player.name,
-      back_number: player.back_number,
-      position: player.position,
-      goals: stats.goals, // 실시간 계산된 득점
-      assists: stats.assists, // 실시간 계산된 도움
-      attendance_matches: player.attendance_matches,
-      attendance_percent: player.attendance_percent,
-      created_at: player.created_at,
-    }
-  })
+  // 배열로 변환
+  const stats = Array.from(statsMap.values()).sort((a, b) => b.goals - a.goals)
 
-  const json = NextResponse.json(result ?? [], { status: 200 })
+  const json = NextResponse.json(stats, { status: 200 })
   cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
   return json
 }
+

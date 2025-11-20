@@ -32,21 +32,21 @@ export default function PlayerCard({
         </span>
       </div>
       <div className="-mt-30 p-10 md:p-15 h-110 md:h-160 rounded-[24px] bg-white shadow-md">
-        <h3 className="text-[14px] md:text-[22px] text-center font-semibold text-gray-900 truncate">
+        <h3 className="text-[14px] md:text-[22px] text-center font-semibold text-gray-900 truncate mb-4">
           {name}
         </h3>
-        <div className="mt-3 flex flex-col gap-2 text-[14px] md:text-[18px] text-gray-700">
-          <div className="flex items-center justify-evenly">
-            <span className="text-gray-500">득 점</span>
-            <span className="font-semibold">{goals}</span>
+        <div className="flex flex-col gap-3 text-[12px] md:text-[16px]">
+          <div className="flex items-center justify-between px-2">
+            <span className="text-gray-600 font-medium">득점</span>
+            <span className="font-bold text-gray-900">{goals}</span>
           </div>
-          <div className="flex items-center justify-evenly">
-            <span className="text-gray-500">도 움</span>
-            <span className="font-semibold">{assists}</span>
+          <div className="flex items-center justify-between px-2">
+            <span className="text-gray-600 font-medium">도움</span>
+            <span className="font-bold text-gray-900">{assists}</span>
           </div>
-          <div className="flex items-center justify-evenly">
-            <span className="text-gray-500">참석률</span>
-            <span className="font-semibold">{attendancePercent}%</span>
+          <div className="flex items-center justify-between px-2">
+            <span className="text-gray-600 font-medium">참석률</span>
+            <span className="font-bold text-gray-900">{attendancePercent}%</span>
           </div>
         </div>
       </div>
