@@ -17,6 +17,16 @@ type MatchInfoCardProps = {
 export default function MatchInfoCard({ match }: MatchInfoCardProps) {
   const result = getResultFromFinalScore(match.score)
 
+  // 승/무/패에 따른 색상 클래스
+  const resultColorClass =
+    result === '승'
+      ? 'text-blue-500'
+      : result === '무'
+        ? 'text-green-500'
+        : result === '패'
+          ? 'text-red-500'
+          : 'text-gray-950'
+
   return (
     <Link href={`/matches/${match.id}`}>
       <section className="flex flex-row gap-10 items-center md:gap-100 w-full card-shadow bg-white rounded-[16px] px-15 md:px-20 py-15 md:py-20 my-20">
@@ -28,7 +38,7 @@ export default function MatchInfoCard({ match }: MatchInfoCardProps) {
           <h1>{match.opponent}</h1>
           <h1>{match.score}</h1>
           <h1>{match.place}</h1>
-          <h1>{result}</h1>
+          <h1 className={resultColorClass}>{result || '-'}</h1>
         </div>
       </section>
     </Link>
