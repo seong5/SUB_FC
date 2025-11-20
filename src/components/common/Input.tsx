@@ -291,32 +291,48 @@ function DateCustomInput({
   const textRef = useRef<HTMLInputElement>(null)
   const dateRef = useRef<HTMLInputElement>(null)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // yy/mm/dd 형식 외 문자 제거
-    e.target.value = e.target.value.replace(/[^\d/]/g, '')
-    if (e.target.value && e.target.validity.valid && dateRef.current) {
-      dateRef.current.value = '20' + e.target.value.replaceAll('/', '-')
+  const handleInputClick = () => {
+    // 입력 필드 클릭 시에도 날짜 선택기 열기
+    if (dateRef.current) {
+      if (typeof dateRef.current.showPicker === 'function') {
+        dateRef.current.showPicker()
+      } else {
+        dateRef.current.click()
+      }
     }
-    onChange?.(e)
   }
 
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (textRef.current) {
-      textRef.current.value = e.target.value.replaceAll('-', '/').slice(2)
+    const dateValue = e.target.value
+    // 선택된 날짜를 yy/mm/dd 형식으로 표시
+    if (textRef.current && dateValue) {
+      textRef.current.value = dateValue.replaceAll('-', '/').slice(2)
+    } else if (textRef.current && !dateValue) {
+      textRef.current.value = ''
     }
     onChange?.(e)
   }
 
   return (
     <div className={cn('relative', className)}>
-      {/* 보이는 텍스트 입력 (yy/mm/dd) */}
+      {/* 보이는 텍스트 입력 (readOnly, 클릭 시 날짜 선택기 열림) */}
       <input
         ref={textRef}
-        maxLength={8}
-        minLength={8}
-        pattern="\d{2}/(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])"
-        placeholder="yy/mm/dd"
-        onChange={handleChange}
+        readOnly
+        placeholder="날짜를 선택하세요"
+        onClick={handleInputClick}
+        onKeyDown={(e) => {
+          // 키보드 입력 방지 (Tab, Enter는 허용)
+          if (e.key !== 'Tab' && e.key !== 'Enter') {
+            e.preventDefault()
+          }
+          // Enter 키로도 날짜 선택기 열기
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            handleInputClick()
+          }
+        }}
+        className="cursor-pointer"
         {...props}
       />
 
