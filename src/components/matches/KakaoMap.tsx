@@ -14,7 +14,7 @@ export default function RenderKakaoMap({ address, lat, lng }: Props) {
     const container = ref.current
     const map = new kakao.maps.Map(container, {
       center: new kakao.maps.LatLng(37.5665, 126.978), // 서울시청
-      level: 1,
+      level: 3,
     })
 
     map.setZoomable(false)
