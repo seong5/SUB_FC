@@ -36,7 +36,7 @@ export default function PlayersPage() {
   return (
     <>
       <FirstPrize />
-      <main className="bg-sub-gray rounded-[16px] space-y-12 my-40 py-10 px-20 md:px-40">
+      <main className="bg-sub-gray rounded-b-[16px] space-y-12 py-10 px-20 md:px-40">
         {positions.map((pos) => {
           const players = (data ?? []).filter((p: Player) => p.position === pos)
           if (players.length === 0) return null
