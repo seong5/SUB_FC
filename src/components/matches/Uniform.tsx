@@ -19,6 +19,7 @@ export default function Uniform({ number, name, x, y, hideName }: UnifomProps) {
           src="/uniform.png"
           alt="uniform"
           fill
+          sizes="(max-width: 768px) 38px, 72px"
           className="object-contain select-none pointer-events-none"
           priority
         />

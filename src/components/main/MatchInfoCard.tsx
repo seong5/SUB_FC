@@ -31,7 +31,7 @@ export default function MatchInfoCard({ match }: MatchInfoCardProps) {
     <Link href={`/matches/${match.id}`}>
       <section className="flex flex-row gap-10 items-center md:gap-100 w-full card-shadow bg-white rounded-[16px] px-15 md:px-20 py-15 md:py-20 my-20">
         <div className="bg-white w-100 md:w-200 h-100 md:h-200 rounded-[20px]">
-          <Image src="/subfc.png" alt="SUBFC" width={200} height={100} />
+          <Image src="/subfc.png" alt="SUBFC" width={200} height={100} priority />
         </div>
         <div className="txt-16_B md:txt-24_B text-gray-950">
           <h1>{formatKoreanDate(match.date)}</h1>
