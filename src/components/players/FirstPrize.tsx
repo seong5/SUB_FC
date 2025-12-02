@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import { getPlayers, type Player } from '@/libs/playersApi'
+import FirstPrizeSkeleton from './FirstPrizeSkeleton'
 
 const EXCLUDED_PLAYERS = ['제갈진석', '차우현']
 
@@ -44,7 +45,7 @@ export default function FirstPrize() {
     staleTime: 0,
   })
 
-  if (isLoading) return <p className="text-center py-20">불러오는 중…</p>
+  if (isLoading) return <FirstPrizeSkeleton />
   if (isError || !data)
     return <p className="text-center py-20 text-red-500">데이터를 불러오지 못했습니다.</p>
 
