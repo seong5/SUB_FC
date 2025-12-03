@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import { getPlayers, type Player } from '@/libs/playersApi'
+import FirstPrizeSkeleton from './FirstPrizeSkeleton'
 
 const EXCLUDED_PLAYERS = ['제갈진석', '차우현']
 
@@ -44,7 +45,7 @@ export default function FirstPrize() {
     staleTime: 0,
   })
 
-  if (isLoading) return <p className="text-center py-20">불러오는 중…</p>
+  if (isLoading) return <FirstPrizeSkeleton />
   if (isError || !data)
     return <p className="text-center py-20 text-red-500">데이터를 불러오지 못했습니다.</p>
 
@@ -58,57 +59,59 @@ export default function FirstPrize() {
   const topAttendance = topAttendancePlayers[0]
 
   return (
-    <>
-      <h1 className="text-center text-[30px] md:text-[60px] font-bold mb-10">
-        SUB FC <br />
-        부문별 1위
-      </h1>
-      <section className="text-center flex flex-row justify-center items-center gap-50">
-        <div className="flex flex-col gap-5">
-          <Image
-            src="/score-icon.png"
-            alt="득점"
-            width={100}
-            height={100}
-            className="w-60 h-60 md:w-80 md:h-80"
-          />
-          <h3 className="txt-16_B md:txt-24_B">득점</h3>
-          <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">
-            <TopPlayersNames players={topGoalPlayers} />
-          </h1>
-          <p className="txt-14_M md:txt-18_M text-gray-600">{topGoal?.goals ?? 0} 골</p>
-        </div>
-        <div className="flex flex-col gap-5">
-          <Image
-            src="/assist-icon.png"
-            alt="도움"
-            width={100}
-            height={100}
-            className="w-60 h-60 md:w-80 md:h-80"
-          />
-          <h3 className="txt-16_B md:txt-24_B">도움</h3>
-          <h1 className="txt-20_B md:txt-32_B text-green-500 mt-10">
-            <TopPlayersNames players={topAssistPlayers} />
-          </h1>
-          <p className="txt-14_M md:txt-18_M text-gray-600">{topAssist?.assists ?? 0} 도움</p>
-        </div>
-        <div className="flex flex-col gap-5">
-          <Image
-            src="/attendance-icon.png"
-            alt="참석"
-            width={100}
-            height={100}
-            className="w-60 h-60 md:w-80 md:h-80"
-          />
-          <h3 className="txt-16_B md:txt-24_B">참석률</h3>
-          <h1 className="txt-20_B md:txt-32_B text-yellow-500 mt-10">
-            <TopPlayersNames players={topAttendancePlayers} />
-          </h1>
-          <p className="txt-14_M md:txt-18_M text-gray-600">
-            {topAttendance?.attendance_percent ?? 0}%
-          </p>
-        </div>
-      </section>
-    </>
+    <section className="bg-sub-gray rounded-t-[16px] py-10">
+      <div className="bg-white m-20 rounded-[16px]">
+        <h1 className="text-center text-[30px] md:text-[60px] pt-10 font-bold">
+          SUB FC <br />
+          부문별 1위
+        </h1>
+        <article className="text-center flex flex-row p-15 justify-center items-center gap-50">
+          <div className="flex flex-col gap-5">
+            <Image
+              src="/score-icon.png"
+              alt="득점"
+              width={100}
+              height={100}
+              className="w-60 h-60 md:w-80 md:h-80"
+            />
+            <h3 className="txt-16_B md:txt-24_B">득점</h3>
+            <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">
+              <TopPlayersNames players={topGoalPlayers} />
+            </h1>
+            <p className="txt-14_M md:txt-18_M text-gray-600">{topGoal?.goals ?? 0} 골</p>
+          </div>
+          <div className="flex flex-col gap-5">
+            <Image
+              src="/assist-icon.png"
+              alt="도움"
+              width={100}
+              height={100}
+              className="w-60 h-60 md:w-80 md:h-80"
+            />
+            <h3 className="txt-16_B md:txt-24_B">도움</h3>
+            <h1 className="txt-20_B md:txt-32_B text-green-500 mt-10">
+              <TopPlayersNames players={topAssistPlayers} />
+            </h1>
+            <p className="txt-14_M md:txt-18_M text-gray-600">{topAssist?.assists ?? 0} 도움</p>
+          </div>
+          <div className="flex flex-col gap-5">
+            <Image
+              src="/attendance-icon.png"
+              alt="참석"
+              width={100}
+              height={100}
+              className="w-60 h-60 md:w-80 md:h-80"
+            />
+            <h3 className="txt-16_B md:txt-24_B">참석률</h3>
+            <h1 className="txt-20_B md:txt-32_B text-yellow-500 mt-10">
+              <TopPlayersNames players={topAttendancePlayers} />
+            </h1>
+            <p className="txt-14_M md:txt-18_M text-gray-600">
+              {topAttendance?.attendance_percent ?? 0}%
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
   )
 }
