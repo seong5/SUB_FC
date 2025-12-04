@@ -2,6 +2,7 @@
 
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
+import { generateId } from '@/utils/uuid'
 
 export type EventsType = '매치' | '회식' | '기타'
 
@@ -29,7 +30,7 @@ export const useScheduleStore = create<State>()(
     persist(
       (set, get) => ({
         events: [],
-        add: (dto) => set((s) => ({ events: [...s.events, { ...dto, id: crypto.randomUUID() }] })),
+        add: (dto) => set((s) => ({ events: [...s.events, { ...dto, id: generateId() }] })),
         update: (id, patch) =>
           set((s) => ({
             events: s.events.map((e) => (e.id === id ? { ...e, ...patch } : e)),

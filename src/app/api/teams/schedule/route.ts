@@ -97,8 +97,47 @@ export async function POST(request: NextRequest) {
     return json
   }
 
+  // 등록 성공 후 Broadcast 알림 전송
+  if (data) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (user) {
+        const schedule = data as ScheduleEvent
+        const channel = supabase.channel('notifications')
+        const scheduleTitle = schedule.title || schedule.type
+        const formatDateForNotification = (dateString: string): string => {
+          const date = new Date(dateString)
+          const year = date.getFullYear()
+          const month = date.getMonth() + 1
+          const day = date.getDate()
+          return `${year}년 ${month}월 ${day}일`
+        }
+
+        const formattedDate = formatDateForNotification(schedule.date)
+
+        await channel.send({
+          type: 'broadcast',
+          event: 'schedule_created',
+          payload: {
+            message: `새로운 일정이 등록되었습니다: ${scheduleTitle}`,
+            date: formattedDate,
+            createdBy: user.id,
+            scheduleId: schedule.id,
+          },
+        })
+        // 채널 정리
+        await supabase.removeChannel(channel)
+      }
+    } catch (broadcastError) {
+      // Broadcast 실패해도 API 응답은 성공 (알림은 선택사항)
+      console.error('Broadcast 전송 실패:', broadcastError)
+    }
+  }
+
   const json = NextResponse.json(data as ScheduleEvent, { status: 201 })
   cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
   return json
 }
-
