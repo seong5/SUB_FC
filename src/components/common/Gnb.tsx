@@ -6,9 +6,13 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/libs/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import Icon from './Icon'
+import { useNotifications } from '@/store/useNotificationStore'
 
 export default function Gnb() {
   const [user, setUser] = useState<User | null>(null)
+  const notifications = useNotifications()
+  const hasNotifications = notifications.length > 0
 
   useEffect(() => {
     const supabase = createClient()
@@ -59,7 +63,18 @@ export default function Gnb() {
                 className="rounded-full w-32 h-32"
               />
             )}
-            <span>{displayName}</span>
+            <div className="flex items-center gap-5">
+              <button
+                className="flex items-center justify-center w-20 h-20 md:w-28 md:h-28"
+                aria-label={hasNotifications ? '알림 있음' : '알림 없음'}
+              >
+                <Icon
+                  icon={hasNotifications ? 'Notification' : 'NotificationNone'}
+                  className="w-18 h-18"
+                />
+              </button>
+              <span>{displayName}</span>
+            </div>
             <button
               onClick={async () => {
                 const supabase = createClient()
