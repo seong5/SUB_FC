@@ -4,6 +4,8 @@ import Footer from '@/components/common/Footer'
 import QueryProvider from './provider/QueryProvider'
 import GlobalSpinner from '@/components/common/global-spinner/GlobalSpinner'
 import AuthProvider from './provider/AuthProvider'
+import NotificationProvider from './provider/NotificationProvider'
+import Notification from '@/components/common/Notification'
 
 export default function RootLayout({
   children,
@@ -16,9 +18,12 @@ export default function RootLayout({
         <QueryProvider>
           <GlobalSpinner />
           <AuthProvider>
-            <Gnb />
-            {children}
-            <Footer />
+            <NotificationProvider>
+              <Gnb />
+              {children}
+              <Footer />
+              <Notification />
+            </NotificationProvider>
           </AuthProvider>
         </QueryProvider>
       </body>
