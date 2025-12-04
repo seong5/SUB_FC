@@ -12,6 +12,7 @@ import {
 
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { cn } from '@/utils/cn'
+import { generateId } from '@/utils/uuid'
 import CloseEye from '@/assets/close-eye.svg'
 import OpenEye from '@/assets/open-eye.svg'
 import InputCalender from '@/assets/input-calender.svg'
@@ -168,7 +169,7 @@ function DropdownInput({
   const [isOpen, setIsOpen] = useState(false)
 
   // items 변경될 때마다 key 재생성
-  const elements = useMemo(() => items.map((item) => ({ item, key: crypto.randomUUID() })), [items])
+  const elements = useMemo(() => items.map((item) => ({ item, key: generateId() })), [items])
 
   const ref = useRef<HTMLDivElement>(null)
   useClickOutside(ref, () => setIsOpen(false))

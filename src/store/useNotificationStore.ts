@@ -1,6 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
+import { generateId } from '@/utils/uuid'
 
 export type NotificationType = 'match' | 'schedule'
 
@@ -29,7 +30,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
         ...state.notifications,
         {
           ...notification,
-          id: crypto.randomUUID(),
+          id: generateId(),
           timestamp: Date.now(),
         },
       ],
