@@ -41,6 +41,9 @@ export default function Notification() {
               )}
             </div>
             <p className="txt-14_M text-gray-800 break-words">{notification.message}</p>
+            {notification.date && (
+              <p className="txt-14_M text-gray-600 mt-4">{notification.date}</p>
+            )}
           </div>
           <button
             onClick={() => removeNotification(notification.id)}

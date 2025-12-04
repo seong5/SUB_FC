@@ -13,6 +13,7 @@ export type Notification = {
   createdBy?: string // 등록한 사용자 id
   matchId?: number // 경기 id
   scheduleId?: string // 일정 id
+  date?: string // 일정 날짜 (예: "2024년 12월 7일")
 }
 
 type NotificationState = {

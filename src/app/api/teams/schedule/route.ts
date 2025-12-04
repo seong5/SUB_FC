@@ -108,11 +108,22 @@ export async function POST(request: NextRequest) {
         const schedule = data as ScheduleEvent
         const channel = supabase.channel('notifications')
         const scheduleTitle = schedule.title || schedule.type
+        const formatDateForNotification = (dateString: string): string => {
+          const date = new Date(dateString)
+          const year = date.getFullYear()
+          const month = date.getMonth() + 1
+          const day = date.getDate()
+          return `${year}년 ${month}월 ${day}일`
+        }
+
+        const formattedDate = formatDateForNotification(schedule.date)
+
         await channel.send({
           type: 'broadcast',
           event: 'schedule_created',
           payload: {
             message: `새로운 일정이 등록되었습니다: ${scheduleTitle}`,
+            date: formattedDate,
             createdBy: user.id,
             scheduleId: schedule.id,
           },

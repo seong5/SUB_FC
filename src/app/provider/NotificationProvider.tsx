@@ -40,8 +40,9 @@ export default function NotificationProvider({ children }: { children: React.Rea
         })
       })
       .on('broadcast', { event: 'schedule_created' }, (payload) => {
-        const { message, createdBy, scheduleId } = payload.payload as {
+        const { message, date, createdBy, scheduleId } = payload.payload as {
           message: string
+          date?: string
           createdBy?: string
           scheduleId?: string
         }
@@ -49,6 +50,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
         addNotification({
           type: 'schedule',
           message: message || '새로운 일정이 등록되었습니다.',
+          date,
           createdBy,
           scheduleId,
         })
