@@ -42,22 +42,31 @@ export async function POST(request: NextRequest) {
   }
 
   // 등록 성공 후 Broadcast 알림 전송
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  if (data) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
 
-  if (data && user) {
-    const match = data as MatchCreatedResponse
-    const channel = supabase.channel('notifications')
-    await channel.send({
-      type: 'broadcast',
-      event: 'match_created',
-      payload: {
-        message: `새로운 경기 결과가 등록되었습니다: ${match.opponent} vs SUB FC`,
-        createdBy: user.id,
-        matchId: match.id,
-      },
-    })
+      if (user) {
+        const match = data as MatchCreatedResponse
+        const channel = supabase.channel('notifications')
+        await channel.send({
+          type: 'broadcast',
+          event: 'match_created',
+          payload: {
+            message: `새로운 경기 결과가 등록되었습니다: ${match.opponent} vs SUB FC`,
+            createdBy: user.id,
+            matchId: match.id,
+          },
+        })
+        // 채널 정리
+        await supabase.removeChannel(channel)
+      }
+    } catch (broadcastError) {
+      // Broadcast 실패해도 API 응답은 성공 (알림은 선택사항)
+      console.error('Broadcast 전송 실패:', broadcastError)
+    }
   }
 
   const json = NextResponse.json(data as MatchCreatedResponse, { status: 201 })
