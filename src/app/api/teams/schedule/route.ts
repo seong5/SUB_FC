@@ -97,8 +97,27 @@ export async function POST(request: NextRequest) {
     return json
   }
 
+  // 등록 성공 후 Broadcast 알림 전송
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (data && user) {
+    const schedule = data as ScheduleEvent
+    const channel = supabase.channel('notifications')
+    const scheduleTitle = schedule.title || schedule.type
+    await channel.send({
+      type: 'broadcast',
+      event: 'schedule_created',
+      payload: {
+        message: `새로운 일정이 등록되었습니다: ${scheduleTitle}`,
+        createdBy: user.id,
+        scheduleId: schedule.id,
+      },
+    })
+  }
+
   const json = NextResponse.json(data as ScheduleEvent, { status: 201 })
   cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
   return json
 }
-
