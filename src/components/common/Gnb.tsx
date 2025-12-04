@@ -3,16 +3,27 @@
 import Link from 'next/link'
 import subfc from '../../../public/subfc.png'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/libs/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import Icon from './Icon'
 import { useNotifications } from '@/store/useNotificationStore'
+import Notification from './Notification'
+import { useClickOutside } from '@/hooks/useClickOutside'
 
 export default function Gnb() {
   const [user, setUser] = useState<User | null>(null)
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const notifications = useNotifications()
   const hasNotifications = notifications.length > 0
+  const notificationRef = useRef<HTMLDivElement>(null)
+
+  // 알림이 열려있을 때 외부 클릭 시 닫기
+  useClickOutside(notificationRef, () => {
+    if (isNotificationOpen) {
+      setIsNotificationOpen(false)
+    }
+  })
 
   useEffect(() => {
     const supabase = createClient()
@@ -64,15 +75,25 @@ export default function Gnb() {
               />
             )}
             <div className="flex items-center gap-5">
-              <button
-                className="flex items-center justify-center w-20 h-20 md:w-28 md:h-28"
-                aria-label={hasNotifications ? '알림 있음' : '알림 없음'}
-              >
-                <Icon
-                  icon={hasNotifications ? 'Notification' : 'NotificationNone'}
-                  className="w-18 h-18"
-                />
-              </button>
+              <div ref={notificationRef} className="relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (hasNotifications) {
+                      setIsNotificationOpen((prev) => !prev)
+                    }
+                  }}
+                  className="flex items-center justify-center w-20 h-20 md:w-28 md:h-28"
+                  aria-label={hasNotifications ? '알림 있음' : '알림 없음'}
+                  disabled={!hasNotifications}
+                >
+                  <Icon
+                    icon={hasNotifications ? 'Notification' : 'NotificationNone'}
+                    className="w-18 h-18"
+                  />
+                </button>
+                {isNotificationOpen && <Notification />}
+              </div>
               <span>{displayName}</span>
             </div>
             <button

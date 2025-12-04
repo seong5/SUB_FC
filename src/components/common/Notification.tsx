@@ -1,6 +1,7 @@
 'use client'
 
 import { useNotifications, useRemoveNotification } from '@/store/useNotificationStore'
+import { cn } from '@/utils/cn'
 
 export default function Notification() {
   const notifications = useNotifications()
@@ -9,11 +10,23 @@ export default function Notification() {
   if (notifications.length === 0) return null
 
   return (
-    <div className="fixed top-20 right-20 md:top-30 md:right-30 z-[100] flex flex-col gap-10 max-w-[320px] md:max-w-[400px]">
+    <div
+      className={cn(
+        'absolute z-50 top-full mt-10',
+        'flex flex-col w-[360px] md:w-[420px]',
+        'shadow-md rounded-[16px] border border-gray-50 bg-white',
+        'max-h-[60vh] overflow-y-auto',
+        'right-0'
+      )}
+      style={{
+        maxWidth: 'min(300px, calc(100vw - 40px))',
+        transform: 'translateX(100px)',
+      }}
+    >
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className="card-shadow bg-white rounded-[16px] p-15 md:p-20 flex items-start gap-12"
+          className="flex items-start gap-12 p-15 md:p-20 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
         >
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-8 mb-4">
