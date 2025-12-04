@@ -1,0 +1,46 @@
+'use client'
+
+import { create } from 'zustand'
+
+export type NotificationType = 'match' | 'schedule'
+
+export type Notification = {
+  id: string
+  type: NotificationType
+  message: string
+  timestamp: number
+  createdBy?: string // 등록한 사용자 id
+  matchId?: number // 경기 id
+  scheduleId?: string // 일정 id
+}
+
+type NotificationState = {
+  notifications: Notification[]
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void
+  removeNotification: (id: string) => void
+  clearAll: () => void
+}
+
+export const useNotificationStore = create<NotificationState>((set) => ({
+  notifications: [],
+  addNotification: (notification) =>
+    set((state) => ({
+      notifications: [
+        ...state.notifications,
+        {
+          ...notification,
+          id: crypto.randomUUID(),
+          timestamp: Date.now(),
+        },
+      ],
+    })),
+  removeNotification: (id) =>
+    set((state) => ({
+      notifications: state.notifications.filter((n) => n.id !== id),
+    })),
+  clearAll: () => set({ notifications: [] }),
+}))
+
+export const useNotifications = () => useNotificationStore((s) => s.notifications)
+export const useAddNotification = () => useNotificationStore((s) => s.addNotification)
+export const useRemoveNotification = () => useNotificationStore((s) => s.removeNotification)
