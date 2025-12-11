@@ -80,6 +80,8 @@ export default function Home() {
   const [step1, setStep1] = useState<PostMatchData | null>(null)
   const [step2, setStep2] = useState<RosterData | null>(null)
   const [step3, setStep3] = useState<QuarterData[] | null>(null)
+  const [step4, setStep4] = useState<QuarterData[] | null>(null)
+  const [step5, setStep5] = useState<string[] | null>(null)
 
   // 검색/정렬/페이지네이션
   const [page, setPage] = useState<number>(1)
@@ -133,15 +135,20 @@ export default function Home() {
     setVariant('postScores')
   }
 
+  const handleStep4Submit = (final: QuarterData[]) => {
+    setStep4(final)
+    setVariant('postMom')
+  }
+
   // 경기 등록 뮤테이션
   const createMatch = useCreateMatchMutation()
 
   // 최종 제출 (등록 성공 후 목록 갱신)
-  const handleStep4Submit = (final: QuarterData[]) => {
-    if (!step1 || !step2) return
+  const handleStep5Submit = (momPlayerIds: string[]) => {
+    if (!step1 || !step2 || !step4) return
 
     // quarter 번호 보강
-    const quartersPayload: QuarterData[] = final.map((q, i) => ({
+    const quartersPayload: QuarterData[] = step4.map((q, i) => ({
       ...q,
       quarter: (i + 1) as 1 | 2 | 3 | 4,
     }))
@@ -161,6 +168,7 @@ export default function Home() {
         FW: step2.FW,
       },
       quarters: quartersPayload,
+      mom_player_ids: momPlayerIds.length > 0 ? momPlayerIds : undefined,
     }
 
     createMatch.mutate(payload, {
@@ -169,6 +177,8 @@ export default function Home() {
         setStep1(null)
         setStep2(null)
         setStep3(null)
+        setStep4(null)
+        setStep5(null)
       },
       onError: (err) => alert(err.message),
     })
@@ -285,6 +295,18 @@ export default function Home() {
           onSubmit={handleStep4Submit}
           eligiblePlayers={eligiblePlayers}
           initial={step3 ?? undefined}
+        />
+      )}
+
+      {/* Step5 */}
+      {variant === 'postMom' && (
+        <Modal
+          variant="postMom"
+          onBack={() => setVariant('postScores')}
+          onClose={() => setVariant(null)}
+          onSubmit={handleStep5Submit}
+          eligiblePlayers={eligiblePlayers}
+          initial={step5 ?? undefined}
         />
       )}
     </main>

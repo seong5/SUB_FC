@@ -7,6 +7,7 @@ type PlayerCardProps = {
   number: number
   goals: number
   assists: number
+  mom: number
   attendancePercent: number
   position: Position
 }
@@ -16,6 +17,7 @@ export default function PlayerCard({
   number,
   goals,
   assists,
+  mom,
   attendancePercent,
   position,
 }: PlayerCardProps) {
@@ -31,7 +33,7 @@ export default function PlayerCard({
           {number}
         </span>
       </div>
-      <div className="-mt-30 p-10 md:p-15 h-110 md:h-160 rounded-[24px] bg-white shadow-md">
+      <div className="-mt-30 p-5 md:p-15 h-120 md:h-160 rounded-[24px] bg-white shadow-md">
         <h3 className="text-[14px] md:text-[22px] text-center font-semibold text-gray-900 truncate mb-4">
           {name}
         </h3>
@@ -43,6 +45,10 @@ export default function PlayerCard({
           <div className="flex items-center justify-between px-2">
             <span className="text-gray-600 font-medium">도움</span>
             <span className="font-bold text-gray-900">{assists}</span>
+          </div>
+          <div className="flex items-center justify-between px-2">
+            <span className="text-gray-600 font-medium">MOM</span>
+            <span className="font-bold text-gray-900">{mom}</span>
           </div>
           <div className="flex items-center justify-between px-2">
             <span className="text-gray-600 font-medium">참석률</span>

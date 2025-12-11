@@ -36,17 +36,26 @@ export async function GET(request: NextRequest) {
     return json
   }
 
-  // 3. 선수별 득점과 도움 집계
-  const statsMap = new Map<
-    string,
-    { goals: number; assists: number }
-  >()
+  // 3. 모든 match_moms에서 MOM 실시간 계산
+  const { data: allMoms, error: momsError } = await supabase
+    .from('match_moms')
+    .select('player_id')
+
+  if (momsError) {
+    const json = NextResponse.json({ error: momsError.message }, { status: 500 })
+    cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
+    return json
+  }
+
+  // 4. 선수별 득점, 도움, MOM 집계
+  const statsMap = new Map<string, { goals: number; assists: number; mom: number }>()
 
   // 초기화
   players?.forEach((player) => {
     statsMap.set(String(player.id), {
       goals: 0,
       assists: 0,
+      mom: 0,
     })
   })
 
@@ -69,9 +78,20 @@ export async function GET(request: NextRequest) {
     }
   })
 
-  // 4. 선수 정보와 통계 합치기
+  // MOM 집계
+  allMoms?.forEach((mom) => {
+    if (mom.player_id) {
+      const playerId = String(mom.player_id)
+      const stats = statsMap.get(playerId)
+      if (stats) {
+        stats.mom++
+      }
+    }
+  })
+
+  // 5. 선수 정보와 통계 합치기
   const result = players?.map((player) => {
-    const stats = statsMap.get(String(player.id)) || { goals: 0, assists: 0 }
+    const stats = statsMap.get(String(player.id)) || { goals: 0, assists: 0, mom: 0 }
     return {
       id: player.id,
       name: player.name,
@@ -79,6 +99,7 @@ export async function GET(request: NextRequest) {
       position: player.position,
       goals: stats.goals, // 실시간 계산된 득점
       assists: stats.assists, // 실시간 계산된 도움
+      mom: stats.mom, // 실시간 계산된 MOM 횟수
       attendance_matches: player.attendance_matches,
       attendance_percent: player.attendance_percent,
       created_at: player.created_at,

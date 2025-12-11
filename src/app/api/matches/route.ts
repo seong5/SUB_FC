@@ -41,6 +41,21 @@ export async function POST(request: NextRequest) {
     return json
   }
 
+  // MOM 데이터 처리 (RPC 함수에서 처리하지 않은 경우를 대비)
+  if (body.mom_player_ids && body.mom_player_ids.length > 0 && data) {
+    const match = data as MatchCreatedResponse
+    const momRows = body.mom_player_ids.map((playerId) => ({
+      match_id: match.id,
+      player_id: Number(playerId),
+    }))
+
+    const { error: momError } = await supabase.from('match_moms').insert(momRows)
+    if (momError) {
+      // MOM 저장 실패해도 경기 등록은 성공으로 처리 (로깅만)
+      console.error('MOM 저장 실패:', momError.message)
+    }
+  }
+
   // 등록 성공 후 Broadcast 알림 전송
   if (data) {
     try {

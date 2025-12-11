@@ -71,6 +71,7 @@ export default function PlayersPage() {
                     number={p.back_number} //  DB 컬럼명 매핑
                     goals={p.goals}
                     assists={p.assists}
+                    mom={p.mom}
                     attendancePercent={p.attendance_percent} // DB 컬럼명 매핑
                     position={p.position}
                   />
