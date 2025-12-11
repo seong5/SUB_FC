@@ -180,7 +180,28 @@ export default function Home() {
         setStep4(null)
         setStep5(null)
       },
-      onError: (err) => alert(err.message),
+      onError: (err: unknown) => {
+        console.error('경기 등록 에러:', err)
+        // 서버에서 반환한 에러 메시지 확인
+        let errorMessage = '경기 등록에 실패했습니다.'
+
+        if (err && typeof err === 'object') {
+          const error = err as {
+            response?: { data?: { error?: string; details?: string } }
+            message?: string
+          }
+          errorMessage =
+            error.response?.data?.error ||
+            error.response?.data?.details ||
+            error.message ||
+            errorMessage
+        } else if (err instanceof Error) {
+          errorMessage = err.message
+        }
+
+        console.error('서버 에러 메시지:', err)
+        alert(`경기 등록 실패: ${errorMessage}`)
+      },
     })
   }
 
@@ -188,7 +209,9 @@ export default function Home() {
   const eligiblePlayers = useMemo<Array<{ id: string; name: string }>>(() => {
     if (!step2 || players.length === 0) return []
     const ids = new Set<string>([...step2.GK, ...step2.DF, ...step2.MF, ...step2.FW])
-    return players.filter((p) => ids.has(p.id)).map((p) => ({ id: p.id, name: p.name }))
+    return players
+      .filter((p) => ids.has(String(p.id))) // 플레이어 id는 number, 로스터 id는 string이라 변환
+      .map((p) => ({ id: String(p.id), name: p.name }))
   }, [step2, players])
 
   return (

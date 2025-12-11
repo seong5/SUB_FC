@@ -150,10 +150,16 @@ export async function DELETE(
   const { error } = await supabase.from('matches').delete().eq('id', Number(targetId))
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    const json = NextResponse.json({ error: error.message }, { status: 500 })
+    return json
   }
-  // 삭제 후 리다이렉트
-  return NextResponse.redirect(new URL('/', _req.url))
+
+  // 삭제 성공 시 JSON 응답 반환 (리다이렉트 대신)
+  const json = NextResponse.json(
+    { success: true, message: '경기가 삭제되었습니다.' },
+    { status: 200 }
+  )
+  return json
 }
 
 export async function PATCH(

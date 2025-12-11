@@ -34,26 +34,23 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { data, error } = await supabase.rpc('create_match_full', { payload: body })
-  if (error) {
-    const json = NextResponse.json({ error: error.message }, { status: 400 })
-    cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
-    return json
+  // mom_player_ids를 숫자 배열로 변환 (RPC 함수에서 bigint로 변환하기 쉽도록)
+  const payloadForRpc = {
+    ...body,
+    mom_player_ids: body.mom_player_ids?.map((id) => Number(id)) || undefined,
   }
 
-  // MOM 데이터 처리 (RPC 함수에서 처리하지 않은 경우를 대비)
-  if (body.mom_player_ids && body.mom_player_ids.length > 0 && data) {
-    const match = data as MatchCreatedResponse
-    const momRows = body.mom_player_ids.map((playerId) => ({
-      match_id: match.id,
-      player_id: Number(playerId),
-    }))
-
-    const { error: momError } = await supabase.from('match_moms').insert(momRows)
-    if (momError) {
-      // MOM 저장 실패해도 경기 등록은 성공으로 처리 (로깅만)
-      console.error('MOM 저장 실패:', momError.message)
-    }
+  const { data, error } = await supabase.rpc('create_match_full', { payload: payloadForRpc })
+  if (error) {
+    // 더 자세한 에러 정보 로깅
+    console.error('RPC 함수 에러:', error)
+    console.error('Payload:', JSON.stringify(body, null, 2))
+    const json = NextResponse.json(
+      { error: error.message, details: error.details || error.hint || 'Unknown error' },
+      { status: 400 }
+    )
+    cookieResponse.headers.forEach((v, k) => json.headers.set(k, v))
+    return json
   }
 
   // 등록 성공 후 Broadcast 알림 전송
