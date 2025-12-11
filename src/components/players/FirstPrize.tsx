@@ -65,14 +65,14 @@ export default function FirstPrize() {
           SUB FC <br />
           부문별 1위
         </h1>
-        <article className="text-center flex flex-row p-15 justify-center items-center gap-50">
+        <article className="text-center flex flex-row p-15 justify-center items-center gap-30">
           <div className="flex flex-col gap-5">
             <Image
               src="/score-icon.png"
               alt="득점"
-              width={100}
-              height={100}
-              className="w-60 h-60 md:w-80 md:h-80"
+              width={80}
+              height={80}
+              className="w-50 h-50 md:w-80 md:h-80"
             />
             <h3 className="txt-16_B md:txt-24_B">득점</h3>
             <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">
@@ -84,9 +84,9 @@ export default function FirstPrize() {
             <Image
               src="/assist-icon.png"
               alt="도움"
-              width={100}
-              height={100}
-              className="w-60 h-60 md:w-80 md:h-80"
+              width={80}
+              height={80}
+              className="w-50 h-50 md:w-80 md:h-80"
             />
             <h3 className="txt-16_B md:txt-24_B">도움</h3>
             <h1 className="txt-20_B md:txt-32_B text-green-500 mt-10">
@@ -98,9 +98,9 @@ export default function FirstPrize() {
             <Image
               src="/attendance-icon.png"
               alt="참석"
-              width={100}
-              height={100}
-              className="w-60 h-60 md:w-80 md:h-80"
+              width={80}
+              height={80}
+              className="w-50 h-50 md:w-80 md:h-80"
             />
             <h3 className="txt-16_B md:txt-24_B">참석률</h3>
             <h1 className="txt-20_B md:txt-32_B text-yellow-500 mt-10">
@@ -109,6 +109,20 @@ export default function FirstPrize() {
             <p className="txt-14_M md:txt-18_M text-gray-600">
               {topAttendance?.attendance_percent ?? 0}%
             </p>
+          </div>
+          <div className="flex flex-col gap-5">
+            <Image
+              src="/motm-icon.png"
+              alt="MOM"
+              width={80}
+              height={80}
+              className="w-50 h-50 md:w-80 md:h-80"
+            />
+            <h3 className="txt-16_B md:txt-24_B">MOM</h3>
+            <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">
+              <TopPlayersNames players={topGoalPlayers} />
+            </h1>
+            <p className="txt-14_M md:txt-18_M text-gray-600">{topGoal?.goals ?? 0} 회</p>
           </div>
         </article>
       </div>
