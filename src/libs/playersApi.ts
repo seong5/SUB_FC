@@ -7,6 +7,7 @@ export interface Player {
   position: 'GK' | 'DF' | 'MF' | 'FW'
   goals: number
   assists: number
+  mom: number
   attendance_matches: number
   attendance_percent: number
   created_at: string

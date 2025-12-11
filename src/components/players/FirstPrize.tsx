@@ -53,10 +53,12 @@ export default function FirstPrize() {
   const topGoalPlayers = getTopPlayers(data, 'goals', true)
   const topAssistPlayers = getTopPlayers(data, 'assists', true)
   const topAttendancePlayers = getTopPlayers(data, 'attendance_percent', false)
+  const topMomPlayers = getTopPlayers(data, 'mom', false)
 
   const topGoal = topGoalPlayers[0]
   const topAssist = topAssistPlayers[0]
   const topAttendance = topAttendancePlayers[0]
+  const topMom = topMomPlayers[0]
 
   return (
     <section className="bg-sub-gray rounded-t-[16px] py-10">
@@ -120,9 +122,9 @@ export default function FirstPrize() {
             />
             <h3 className="txt-16_B md:txt-24_B">MOM</h3>
             <h1 className="txt-20_B md:txt-32_B text-primary-500 mt-10">
-              <TopPlayersNames players={topGoalPlayers} />
+              <TopPlayersNames players={topMomPlayers} />
             </h1>
-            <p className="txt-14_M md:txt-18_M text-gray-600">{topGoal?.goals ?? 0} 회</p>
+            <p className="txt-14_M md:txt-18_M text-gray-600">{topMom?.mom ?? 0} 회</p>
           </div>
         </article>
       </div>
