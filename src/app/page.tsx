@@ -180,12 +180,26 @@ export default function Home() {
         setStep4(null)
         setStep5(null)
       },
-      onError: (err: any) => {
+      onError: (err: unknown) => {
         console.error('경기 등록 에러:', err)
         // 서버에서 반환한 에러 메시지 확인
-        const serverError = err.response?.data?.error || err.response?.data?.details || err.message
-        const errorMessage = serverError || '경기 등록에 실패했습니다.'
-        console.error('서버 에러 메시지:', err.response?.data)
+        let errorMessage = '경기 등록에 실패했습니다.'
+
+        if (err && typeof err === 'object') {
+          const error = err as {
+            response?: { data?: { error?: string; details?: string } }
+            message?: string
+          }
+          errorMessage =
+            error.response?.data?.error ||
+            error.response?.data?.details ||
+            error.message ||
+            errorMessage
+        } else if (err instanceof Error) {
+          errorMessage = err.message
+        }
+
+        console.error('서버 에러 메시지:', err)
         alert(`경기 등록 실패: ${errorMessage}`)
       },
     })
