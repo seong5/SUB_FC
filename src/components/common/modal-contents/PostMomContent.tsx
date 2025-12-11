@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Button from '@/components/common/Button'
+
+const EXCLUDED_PLAYERS = ['제갈진석', '차우현', '윤동관', '유동엽', '현신우', 'Guest']
 
 export interface PostMomContentProps {
   onBack: () => void
@@ -21,6 +23,10 @@ export default function PostMomContent({
   mode = 'create',
 }: PostMomContentProps) {
   const [selectedMomIds, setSelectedMomIds] = useState<string[]>(initial)
+
+  const filteredPlayers = useMemo(() => {
+    return eligiblePlayers.filter((player) => !EXCLUDED_PLAYERS.includes(player.name))
+  }, [eligiblePlayers])
 
   const togglePlayer = (playerId: string) => {
     setSelectedMomIds((prev) => {
@@ -49,17 +55,17 @@ export default function PostMomContent({
       </p>
 
       <div className="flex flex-col gap-3 max-h-400 overflow-y-auto">
-        {eligiblePlayers.length === 0 ? (
+        {filteredPlayers.length === 0 ? (
           <p className="text-center text-gray-500 py-10">선택 가능한 선수가 없습니다.</p>
         ) : (
-          eligiblePlayers.map((player) => {
+          filteredPlayers.map((player) => {
             const isSelected = selectedMomIds.includes(player.id)
             return (
               <button
                 key={player.id}
                 type="button"
                 onClick={() => togglePlayer(player.id)}
-                className={`flex items-center justify-between my-5 p-4 rounded-[12px] border-2 transition-all ${
+                className={`flex items-center justify-between p-4 rounded-[12px] border-2 transition-all ${
                   isSelected
                     ? 'border-primary-500 bg-primary-50'
                     : 'border-gray-200 bg-white hover:border-gray-300'

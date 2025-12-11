@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import Icon from '../common/Icon'
 import DropDown from '../common/DropDown'
 import Modal from '../common/Modal'
-import { deleteMatch, patchMatch, patchRoster, patchQuarters, patchScores } from '@/libs/matchesApi'
+import { patchMatch, patchRoster, patchQuarters, patchScores } from '@/libs/matchesApi'
+import { useDeleteMatchMutation } from '@/hooks/useMatches'
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
 import { useIsLoggedIn } from '@/store/useAuthStore'
 
@@ -38,23 +40,23 @@ export default function QuarterFilter({
   onRefetch,
 }: TypeFilterProps) {
   const [openDelete, setOpenDelete] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [flow, setFlow] = useState<FlowState>(null)
   const isLoggedIn = useIsLoggedIn()
+  const router = useRouter()
+  const deleteMatchMutation = useDeleteMatchMutation()
 
   // 삭제
   const handleDelete = async () => {
     try {
-      setLoading(true)
-      await deleteMatch(matchId)
+      await deleteMatchMutation.mutateAsync(matchId)
       setOpenDelete(false)
-      onRefetch?.()
       alert('삭제가 완료되었습니다.')
+      // 삭제 성공 후 홈으로 이동하고 강제 새로고침
+      router.push('/')
+      router.refresh() // Next.js 서버 컴포넌트 캐시도 새로고침
     } catch (err) {
       console.error(err)
       alert('삭제에 실패했습니다.')
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -131,7 +133,7 @@ export default function QuarterFilter({
           onCancel={() => setOpenDelete(false)}
           onConfirm={handleDelete}
           cancelText="아니오"
-          confirmText={loading ? '삭제 중' : '삭제하기'}
+          confirmText={deleteMatchMutation.isPending ? '삭제 중' : '삭제하기'}
         />
       )}
 
