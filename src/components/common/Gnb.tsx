@@ -58,8 +58,14 @@ export default function Gnb() {
             priority
           />
         </Link>
-        <Link href="/teams">팀관리</Link>
-        <Link href="/players">선수관리</Link>
+        <Link href="/teams" aria-label="팀관리" className="flex flex-col items-center">
+          <Icon icon="TeamPage" className="w-28 h-28 text-black mt-5" />
+          <span className="text-[9px] md:txt-14_M">팀관리</span>
+        </Link>
+        <Link href="/players" aria-label="선수관리" className="flex flex-col items-center">
+          <Icon icon="PlayerPage" className="w-28 h-28 text-black mt-5" />
+          <span className="text-[9px] md:txt-14_M">선수관리</span>
+        </Link>
       </div>
 
       <div className="flex gap-15 md:gap-25 items-center txt-12_M md:txt-14_M">
