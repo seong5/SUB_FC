@@ -17,6 +17,8 @@ const ICON_MAP = {
   Calender: () => import('@/assets/input-calender.svg') as Promise<SvgModule>,
   Notification: () => import('@/assets/notification-yes.svg') as Promise<SvgModule>,
   NotificationNone: () => import('@/assets/notification-none.svg') as Promise<SvgModule>,
+  TeamPage: () => import('@/assets/team-page-icon.svg') as Promise<SvgModule>,
+  PlayerPage: () => import('@/assets/players-page-icon.svg') as Promise<SvgModule>,
 } satisfies Record<string, Loader>
 
 export type IconName = keyof typeof ICON_MAP
