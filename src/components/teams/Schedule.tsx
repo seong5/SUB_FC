@@ -36,7 +36,7 @@ export default function Schedule() {
       <Button
         variant="primary"
         size="xl"
-        className="my-10"
+        className="my-10 font-bold"
         onClick={() => {
           if (disabled) return // 로그인 안 했거나 로딩 중이면 클릭 방어
           setIsOpen(true)
