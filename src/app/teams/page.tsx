@@ -4,7 +4,7 @@ import WinRate from '@/components/teams/WinRate'
 
 export default function TeamPage() {
   return (
-    <main className="bg-sub-gray p-20">
+    <main className="bg-sub-gray p-20 rounded-[16px]">
       <WinRate />
       <Schedule />
       <Calender />
