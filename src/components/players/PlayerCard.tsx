@@ -1,6 +1,7 @@
 'use client'
 
-import { Position, POSITION_COLORS } from '@/constants/positionColor'
+import React from 'react'
+import { type Position, POSITION_GRADIENT, POSITION_BADGE_BG } from '@/constants/positionColor'
 
 type PlayerCardProps = {
   name: string
@@ -21,41 +22,71 @@ export default function PlayerCard({
   attendancePercent,
   position,
 }: PlayerCardProps) {
+  const gradient = POSITION_GRADIENT[position] ?? POSITION_GRADIENT.MF
+  const badgeBg = POSITION_BADGE_BG[position] ?? POSITION_BADGE_BG.MF
+
   return (
-    <section className="aspect-square w-full card-shadow">
+    <div className="group relative w-full max-w-[280px] transition-all duration-500 hover:-translate-y-2">
       <div
-        className={`flex h-110 md:h-160 items-center justify-center rounded-t-[24px] ${POSITION_COLORS[position]}`}
-      >
-        <span
-          className="text-[60px] md:text-[100px] font-extrabold text-gray-800 leading-none tracking-tight"
-          aria-label={`등번호 ${number}`}
-        >
-          {number}
-        </span>
-      </div>
-      <div className="-mt-30 p-5 md:p-15 h-120 md:h-160 rounded-[24px] bg-white shadow-md">
-        <h3 className="text-[14px] md:text-[22px] text-center font-semibold text-gray-900 truncate mb-4">
-          {name}
-        </h3>
-        <div className="flex flex-col gap-3 text-[12px] md:text-[16px]">
-          <div className="flex items-center justify-between px-2">
-            <span className="text-gray-600 font-medium">득점</span>
-            <span className="font-bold text-gray-900">{goals}</span>
+        className={`absolute -inset-0.5 bg-gradient-to-br ${gradient} rounded-[32px] blur-xl opacity-0 group-hover:opacity-30 transition duration-500`}
+      />
+
+      <div className="relative flex flex-col p-6 h-full bg-slate-900 border border-white/5 rounded-[30px] overflow-hidden shadow-2xl">
+        <div className="relative min-h-44 flex items-center justify-center py-4">
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent" />
+
+          <div className="relative z-10 flex flex-col items-center">
+            <span
+              className={`text-6xl md:text-7xl font-black leading-none text-transparent bg-clip-text bg-gradient-to-b ${gradient} select-none`}
+            >
+              {number}
+            </span>
+            <div
+              className={`mt-2 px-3 py-0.5 rounded-full ${badgeBg} border border-white/10 backdrop-blur-md`}
+            >
+              <span className="text-[10px] font-black uppercase tracking-widest text-white">
+                {position}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center justify-between px-2">
-            <span className="text-gray-600 font-medium">도움</span>
-            <span className="font-bold text-gray-900">{assists}</span>
+        </div>
+
+        <div className="flex-1 bg-slate-950/50 backdrop-blur-xl p-6 flex flex-col">
+          <div className="text-center mb-6">
+            <h3 className="text-lg font-black text-white uppercase tracking-tight truncate">
+              {name}
+            </h3>
+            <div className={`h-2 w-full mx-auto mt-2 bg-gradient-to-r ${gradient} rounded-full`} />
           </div>
-          <div className="flex items-center justify-between px-2">
-            <span className="text-gray-600 font-medium">MOM</span>
-            <span className="font-bold text-gray-900">{mom}</span>
-          </div>
-          <div className="flex items-center justify-between px-2">
-            <span className="text-gray-600 font-medium">참석률</span>
-            <span className="font-bold text-gray-900">{attendancePercent}%</span>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+                득점
+              </span>
+              <span className="text-sm font-black text-white">{goals}</span>
+            </div>
+            <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+                도움
+              </span>
+              <span className="text-sm font-black text-white">{assists}</span>
+            </div>
+            <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+                MOTM
+              </span>
+              <span className="text-sm font-black text-white">{mom}</span>
+            </div>
+            <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+                참석률
+              </span>
+              <span className="text-sm font-black text-white">{attendancePercent}%</span>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
