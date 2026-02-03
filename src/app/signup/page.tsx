@@ -63,70 +63,72 @@ export default function Signup() {
   }
 
   return (
-    <main className="flex flex-col justify-center items-center px-20 py-20">
-      <Image
-        src={subfc}
-        alt="로고"
-        width={200}
-        height={200}
-        className="w-150 h-150 md:w-200 md:h-200"
-      />
-      <form onSubmit={handleSubmit(onSubmit)} className="md:w-640 w-328 flex flex-col gap-10">
-        <Input
-          id="email"
-          variant="input"
-          type="email"
-          label="이메일"
-          placeholder="subfc@subfc.com"
-          errorMessage={errors.email?.message}
-          {...register('email')}
-          autoComplete="email"
+    <div className="min-h-screen bg-[#020617] flex flex-col justify-center items-center">
+      <main className="flex flex-col justify-center items-center px-20 py-20 w-full">
+        <Image
+          src={subfc}
+          alt="로고"
+          width={200}
+          height={200}
+          className="w-150 h-150 md:w-200 md:h-200"
         />
-        <Input
-          id="nickname"
-          variant="input"
-          label="닉네임"
-          placeholder="닉네임을 입력해주세요."
-          errorMessage={errors.nickname?.message}
-          {...register('nickname')}
-          autoComplete="nickname"
-        />
-        <Input
-          id="password"
-          variant="input"
-          type="password"
-          label="비밀번호"
-          placeholder="비밀번호는 8자리 이상 입력해주세요."
-          errorMessage={errors.password?.message}
-          {...register('password')}
-          autoComplete="new-password"
-        />
-        <Input
-          id="confirm"
-          variant="input"
-          type="password"
-          label="비밀번호 확인"
-          placeholder="비밀번호를 확인해주세요."
-          errorMessage={errors.confirm?.message}
-          {...register('confirm')}
-          autoComplete="new-password"
-        />
-        <Button
-          type="submit"
-          variant="primary"
-          size="xl"
-          disabled={!isValid || isSubmitting}
-          className="mt-10"
-        >
-          회원가입
-        </Button>
-      </form>
-      <div className="flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
-        <Link href={'/login'}>
-          <div className="underline">로그인</div>
-        </Link>
-        <h1>하러 가시겠어요?</h1>
-      </div>
-    </main>
+        <form onSubmit={handleSubmit(onSubmit)} className="md:w-640 w-328 flex flex-col gap-10">
+          <Input
+            id="email"
+            variant="input"
+            type="email"
+            label="이메일"
+            placeholder="subfc@subfc.com"
+            errorMessage={errors.email?.message}
+            {...register('email')}
+            autoComplete="email"
+          />
+          <Input
+            id="nickname"
+            variant="input"
+            label="닉네임"
+            placeholder="닉네임을 입력해주세요."
+            errorMessage={errors.nickname?.message}
+            {...register('nickname')}
+            autoComplete="nickname"
+          />
+          <Input
+            id="password"
+            variant="input"
+            type="password"
+            label="비밀번호"
+            placeholder="비밀번호는 8자리 이상 입력해주세요."
+            errorMessage={errors.password?.message}
+            {...register('password')}
+            autoComplete="new-password"
+          />
+          <Input
+            id="confirm"
+            variant="input"
+            type="password"
+            label="비밀번호 확인"
+            placeholder="비밀번호를 확인해주세요."
+            errorMessage={errors.confirm?.message}
+            {...register('confirm')}
+            autoComplete="new-password"
+          />
+          <Button
+            type="submit"
+            variant="primary"
+            size="xl"
+            disabled={!isValid || isSubmitting}
+            className="mt-10"
+          >
+            회원가입
+          </Button>
+        </form>
+        <div className="flex gap-5 items-center justify-center text-white/70 txt-16_M mt-20">
+          <Link href={'/login'}>
+            <div className="underline">로그인</div>
+          </Link>
+          <h1>하러 가시겠어요?</h1>
+        </div>
+      </main>
+    </div>
   )
 }

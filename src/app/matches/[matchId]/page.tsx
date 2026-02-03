@@ -29,16 +29,18 @@ export default async function MatchesPage({ params }: PageProps) {
   }
 
   return (
-    <div className="bg-gray-100 px-20 py-10 space-y-6">
-      <Formation />
-      <p className="my-5 text-[16px] font-bold text-gray-800">
-        구장 주소 : <span>{match.place_address ?? match.place}</span>
-      </p>
+    <div className="min-h-screen bg-[#020617]">
+      <main className="rounded-b-[16px] px-20 py-10 space-y-6 md:px-40">
+        <Formation />
+        <p className="my-5 text-[16px] font-bold text-white">
+          구장 주소 : <span>{match.place_address ?? match.place}</span>
+        </p>
       <LoadKakaoMap
         address={match.place_address ?? match.place}
         lat={match.place_lat ?? undefined}
         lng={match.place_lng ?? undefined}
       />
+      </main>
     </div>
   )
 }

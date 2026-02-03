@@ -65,71 +65,73 @@ export default function Login() {
   }
 
   return (
-    <main className="flex flex-col justify-center items-center px-20 py-40">
-      <Image
-        src={subfc}
-        alt="로고"
-        width={200}
-        height={200}
-        className="w-150 h-150 md:w-200 md:h-200"
-        priority
-      />
+    <div className="min-h-screen bg-[#020617] flex flex-col justify-center items-center">
+      <main className="flex flex-col justify-center items-center px-20 py-40 w-full">
+        <Image
+          src={subfc}
+          alt="로고"
+          width={200}
+          height={200}
+          className="w-150 h-150 md:w-200 md:h-200"
+          priority
+        />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10 md:w-640 w-328">
-        <Input
-          id="email"
-          type="email"
-          variant="input"
-          label="이메일"
-          placeholder="subfc@subfc.com"
-          autoComplete="email"
-          errorMessage={errors.email?.message}
-          {...register('email')}
-        />
-        <Input
-          id="password"
-          type="password"
-          variant="input"
-          label="비밀번호"
-          placeholder="비밀번호를 입력해주세요."
-          autoComplete="current-password"
-          errorMessage={errors.password?.message}
-          {...register('password')}
-        />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10 md:w-640 w-328">
+          <Input
+            id="email"
+            type="email"
+            variant="input"
+            label="이메일"
+            placeholder="subfc@subfc.com"
+            autoComplete="email"
+            errorMessage={errors.email?.message}
+            {...register('email')}
+          />
+          <Input
+            id="password"
+            type="password"
+            variant="input"
+            label="비밀번호"
+            placeholder="비밀번호를 입력해주세요."
+            autoComplete="current-password"
+            errorMessage={errors.password?.message}
+            {...register('password')}
+          />
+
+          <Button
+            type="submit"
+            variant="primary"
+            size="xl"
+            disabled={!isValid || isSubmitting}
+            className="my-15"
+          >
+            로그인
+          </Button>
+        </form>
+
+        <div className="flex items-center w-full">
+          <hr className="h-1 flex-grow border-white/20" />
+          <span className="text-center text-white/80 txt-16_M px-16">or</span>
+          <hr className="h-1 flex-grow border-white/20" />
+        </div>
 
         <Button
-          type="submit"
-          variant="primary"
+          onClick={handleKakaoLogin}
+          icon={<Icon icon="Kakao" className="w-24 h-24 mr-4" />}
+          variant="kakao"
           size="xl"
-          disabled={!isValid || isSubmitting}
-          className="my-15"
+          className="mt-15 md:w-640 w-328 text-[#000000] opacity-85"
         >
-          로그인
+          카카오 로그인
         </Button>
-      </form>
 
-      <div className="flex items-center w-full">
-        <hr className="h-1 flex-grow text-gray-100" />
-        <span className="text-center text-gray-950 txt-16_M px-16">or</span>
-        <hr className="h-1 flex-grow text-gray-100" />
-      </div>
-
-      <Button
-        onClick={handleKakaoLogin}
-        icon={<Icon icon="Kakao" className="w-24 h-24 mr-4" />}
-        variant="kakao"
-        size="xl"
-        className="mt-15 md:w-640 w-328 text-[#000000] opacity-85"
-      >
-        카카오 로그인
-      </Button>
-
-      <div className="flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
-        <Link href="/signup" className="underline">
-          회원가입
-        </Link>
-        <span>이 필요하신가요?</span>
-      </div>
-    </main>
+        <div className="flex gap-5 items-center justify-center text-gray-400 txt-16_M mt-20">
+          <Link href="/signup" className="underline">
+            회원가입
+          </Link>
+          <span>이 필요하신가요?</span>
+        </div>
+      </main>
+    </div>
   )
 }
