@@ -4,52 +4,66 @@ import { useEffect, useRef, useState } from 'react'
 import type { CalendarEvent, EventsType } from './CalenderGrid'
 import { useClickOutside } from '@/hooks/useClickOutside'
 
+type DayEventsPopoverProps = {
+  date: string
+  rect: DOMRect
+  events: CalendarEvent[]
+  onClose: () => void
+  onDelete?: (id?: string) => void
+  containerRef?: React.RefObject<HTMLElement | null>
+}
+
 export default function DayEventsPopover({
   date,
   rect,
   events,
   onClose,
   onDelete,
-}: {
-  date: string
-  rect: DOMRect
-  events: CalendarEvent[]
-  onClose: () => void
-  onDelete?: (id?: string) => void
-}) {
+  containerRef,
+}: DayEventsPopoverProps) {
   const [pos, setPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+  const [useAbsolute, setUseAbsolute] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useClickOutside(ref, () => onClose())
 
   useEffect(() => {
-    // 세로/가로 보정값
-    const yGap = -30 // 셀과 살짝 겹치게(0~4로 미세조정, 음수면 살짝 겹침)
-    const xOffset = -8 // 왼쪽으로 8px 당김(원하면 0~±16 정도로 조절)
-
-    const vw = window.innerWidth
-    const vh = window.innerHeight
-
+    const yGap = 4
+    const xOffset = 0
     const popW = ref.current?.offsetWidth ?? 280
     const popH = ref.current?.offsetHeight ?? 100
 
-    // 기본: 아래 배치
-    let top = rect.bottom + yGap
-    let left = rect.left + rect.width / 2 - popW / 2 + xOffset
-
-    // 아래로 넘치면 위로 뒤집기
-    const bottomEdge = top + popH
-    if (bottomEdge > vh - 8) {
-      top = rect.top - popH - yGap // 뒤집을 때도 동일 보정(겹치기 유지)
+    if (containerRef?.current) {
+      const containerRect = containerRef.current.getBoundingClientRect()
+      setUseAbsolute(true)
+      // 그리드 컨테이너 기준 절대 위치: 셀 아래 중앙 정렬
+      let top = rect.bottom - containerRect.top + yGap
+      let left = rect.left - containerRect.left + rect.width / 2 - popW / 2 + xOffset
+      // 컨테이너 안에서 클램프
+      const minLeft = 8
+      const maxLeft = containerRect.width - popW - 8
+      if (left < minLeft) left = minLeft
+      if (left > maxLeft) left = maxLeft
+      if (top + popH > containerRect.height - 8) {
+        top = rect.top - containerRect.top - popH - yGap
+      }
+      if (top < 8) top = 8
+      setPos({ top, left })
+    } else {
+      setUseAbsolute(false)
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      let top = rect.bottom + yGap
+      let left = rect.left + rect.width / 2 - popW / 2 + xOffset
+      if (top + popH > vh - 8) {
+        top = rect.top - popH - yGap
+      }
+      const minLeft = 8
+      const maxLeft = vw - popW - 8
+      if (left < minLeft) left = minLeft
+      if (left > maxLeft) left = maxLeft
+      setPos({ top, left })
     }
-
-    // 좌우 클램프
-    const minLeft = 8
-    const maxLeft = vw - popW - 8
-    if (left < minLeft) left = minLeft
-    if (left > maxLeft) left = maxLeft
-
-    setPos({ top, left })
-  }, [rect])
+  }, [rect, containerRef])
   const badge = (t: EventsType) =>
     t === '매치'
       ? 'px-8 py-5 bg-orange-200 text-orange-900'
@@ -61,7 +75,7 @@ export default function DayEventsPopover({
     <div
       ref={ref}
       data-popover
-      className="fixed z-50 min-w-200 max-w-300 rounded-xl bg-white border border-gray-200 shadow-xl px-15 py-15"
+      className={`z-50 min-w-[200px] max-w-[300px] rounded-xl border border-gray-200 bg-white px-4 py-4 shadow-xl ${useAbsolute ? 'absolute' : 'fixed'}`}
       style={{ top: pos.top, left: pos.left }}
       role="dialog"
       aria-label={`${date} 일정`}
@@ -84,7 +98,9 @@ export default function DayEventsPopover({
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold break-words">{ev.title ?? '(제목 없음)'}</p>
-                {ev.place && <p className="text-xs text-gray-500 break-words mt-2">장소: {ev.place}</p>}
+                {ev.place && (
+                  <p className="text-xs text-gray-500 break-words mt-2">장소: {ev.place}</p>
+                )}
               </div>
               {!!onDelete && (
                 <button
