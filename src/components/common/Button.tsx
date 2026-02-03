@@ -36,15 +36,15 @@ export default function Button({
   type = 'button',
   icon,
 }: ButtonProps) {
-  // size에 따라 기본 rounded 적용
   const resolvedRounded = rounded ?? (size ? DEFAULT_BUTTON_ROUNDED[size] : '12')
+  const isGhost = variant === 'ghost'
 
   return (
     <button
       className={cn(
         BUTTON_VARIANTS[variant],
-        BUTTON_ROUNDED[resolvedRounded],
-        size && BUTTON_SIZE[size],
+        !isGhost && BUTTON_ROUNDED[resolvedRounded],
+        !isGhost && size && BUTTON_SIZE[size],
         BUTTON_TEXT_SIZE(variant, size),
         'transition',
         className

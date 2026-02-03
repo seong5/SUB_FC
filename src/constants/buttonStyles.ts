@@ -2,7 +2,7 @@ import { cn } from '@/utils/cn'
 
 export type buttonRoundedPixel = '16' | '14' | '12' | '8'
 
-export type buttonVariants = 'primary' | 'secondary' | 'kakao'
+export type buttonVariants = 'primary' | 'secondary' | 'kakao' | 'ghost'
 
 export type buttonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
@@ -39,6 +39,7 @@ export const BUTTON_VARIANTS: Record<buttonVariants, string> = {
   ),
   secondary: cn('active:bg-gray-100', ...SECONDARY_BASE_CLASSEES),
   kakao: cn('flex flex-row gap-2 items-center justify-center', ...KAKAO_BASE),
+  ghost: cn('bg-transparent border-0 cursor-pointer p-0 min-w-0'),
 } as const
 
 /* 버튼 테두리 rounded 값
@@ -71,6 +72,7 @@ export const DEFAULT_BUTTON_ROUNDED: Record<buttonSize, buttonRoundedPixel> = {
 } as const
 
 export const BUTTON_TEXT_SIZE = (variant: buttonVariants, size?: buttonSize): string => {
+  if (variant === 'ghost') return ''
   if (variant === 'primary') {
     if (size === 'lg' || size === 'md') return 'txt-16_B'
     if (size === 'sm') return 'txt-14_B'
