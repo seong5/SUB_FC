@@ -7,6 +7,7 @@ import DropDown from '@/components/common/DropDown'
 import Icon from '@/components/common/Icon'
 import MatchInfoCard from '@/components/main/MatchInfoCard'
 import MatchInfoCardSkeleton from '@/components/main/MatchInfoCardSkeleton'
+import WinRate from '@/components/main/WinRate'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
 import { useQuery } from '@tanstack/react-query'
@@ -215,9 +216,9 @@ export default function Home() {
   }, [step2, players])
 
   return (
-    <main className="bg-sub-gray rounded-[16px] p-20">
+    <main className="bg-sub-gray rounded-[16px] p-20 space-y-16">
+      <WinRate />
       <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
-
       <div className="mt-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <DropDown
