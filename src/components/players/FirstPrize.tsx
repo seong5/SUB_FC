@@ -134,21 +134,15 @@ export default function FirstPrize() {
           </p>
         </div>
 
-        {/* 그리드 레이아웃 */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {sections.map((section) => {
             const Icon = section.icon
             return (
               <div key={section.id} className="group relative">
-                {/* 카드 뒷면 글로우 */}
                 <div
                   className={`absolute -inset-0.5 bg-gradient-to-br ${section.color} rounded-[32px] blur-xl opacity-0 group-hover:opacity-20 transition duration-700`}
                 />
-
-                {/* 메인 카드 */}
                 <div className="relative bg-slate-900/40 backdrop-blur-2xl border border-white/5 p-12 rounded-[32px] h-full flex flex-col justify-between overflow-hidden">
-                  <Icon className="absolute -top-6 -right-6 w-32 h-32 text-white/[0.03] -rotate-12 group-hover:rotate-0 transition-transform duration-700" />
-
                   <div>
                     <div className="flex items-center gap-10 mb-8">
                       <div
