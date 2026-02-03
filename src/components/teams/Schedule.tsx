@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Beer, MoreHorizontal, Trophy } from 'lucide-react'
+import { Beer, Calendar, MoreHorizontal, Trophy } from 'lucide-react'
 import Button from '../common/Button'
 import Modal from '../common/Modal'
 import { useCreateScheduleEventMutation } from '@/hooks/useTeams'
@@ -33,9 +33,12 @@ export default function Schedule() {
 
   return (
     <section>
-      <h2 className="border-t border-white/10 pt-20 text-3xl font-black uppercase leading-none tracking-tighter text-white">
-        SUB <span className="text-slate-500">Schedule</span>
-      </h2>
+      <div className="flex items-center gap-10 rounded-2xl border border-white/10 bg-white/5 px-10 py-10 backdrop-blur-md">
+        <Calendar size={22} className="text-blue-500" />
+        <h2 className="text-sm font-black uppercase tracking-[0.4em] text-white md:text-base">
+          SUB Schedule
+        </h2>
+      </div>
       <Button
         variant="primary"
         size="xl"
