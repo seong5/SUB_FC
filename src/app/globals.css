@@ -153,6 +153,7 @@
 
 body {
   font-family: 'Pretendard', 'sans-serif';
+  background-color: #020617;
 }
 
 @layer utilities {

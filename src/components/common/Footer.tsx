@@ -5,7 +5,7 @@ import { Youtube, Github, ExternalLink, Mail, Phone } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="relative mt-60 bg-slate-950 border-t border-white/5 overflow-hidden">
+    <footer className="relative mt-16 md:mt-24 bg-slate-950 border-t border-white/5 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-blue-600/5 via-transparent to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative z-10">

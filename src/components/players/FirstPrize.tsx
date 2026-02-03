@@ -78,7 +78,9 @@ export default function FirstPrize() {
 
   if (isLoading) return <FirstPrizeSkeleton />
   if (isError || !data)
-    return <p className="text-center py-20 text-red-500">데이터를 불러오지 못했습니다.</p>
+    return (
+      <p className="text-center py-20 text-red-400 bg-[#020617]">데이터를 불러오지 못했습니다.</p>
+    )
 
   const topGoalPlayers = getTopPlayers(data, 'goals', true)
   const topAssistPlayers = getTopPlayers(data, 'assists', true)

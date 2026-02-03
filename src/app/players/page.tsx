@@ -28,9 +28,9 @@ export default function PlayersPage() {
 
   if (isLoading) {
     return (
-      <>
+      <div className="min-h-screen bg-[#020617]">
         <FirstPrize />
-        <main className="bg-[#020617] rounded-b-[16px] space-y-12 py-10 px-20 md:px-40">
+        <main className="rounded-b-[16px] space-y-12 py-10 px-20 md:px-40">
           <div className="flex items-center gap-10 px-10 py-10 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
             <LayoutGrid size={22} className="text-blue-500" />
             <h1 className="text-sm md:text-base font-black uppercase tracking-[0.4em] text-white">
@@ -52,16 +52,21 @@ export default function PlayersPage() {
             </section>
           ))}
         </main>
-      </>
+      </div>
     )
   }
 
-  if (isError) return <main className="p-20 bg-[#020617] text-red-400">데이터 불러오기 실패</main>
+  if (isError)
+    return (
+      <div className="min-h-screen bg-[#020617]">
+        <main className="p-20 text-red-400">데이터 불러오기 실패</main>
+      </div>
+    )
 
   return (
-    <>
+    <div className="min-h-screen bg-[#020617]">
       <FirstPrize />
-      <main className="bg-[#020617] rounded-b-[16px] space-y-12 py-10 px-20 md:px-40">
+      <main className="rounded-b-[16px] space-y-12 py-10 px-20 md:px-40">
         <div className="flex items-center gap-10 px-10 py-10 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
           <LayoutGrid size={22} className="text-blue-500" />
           <h1 className="text-sm md:text-base font-black uppercase tracking-[0.4em] text-white">
@@ -98,6 +103,6 @@ export default function PlayersPage() {
           )
         })}
       </main>
-    </>
+    </div>
   )
 }
