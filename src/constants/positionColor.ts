@@ -20,3 +20,10 @@ export const POSITION_BADGE_BG: Record<Position, string> = {
   DF: 'bg-emerald-500/10',
   GK: 'bg-yellow-500/10',
 }
+
+export const POSITION_BORDER: Record<Position, string> = {
+  FW: 'border-l-red-500',
+  MF: 'border-l-blue-500',
+  DF: 'border-l-emerald-500',
+  GK: 'border-l-amber-400',
+}

@@ -114,7 +114,7 @@ export default function FirstPrize() {
   ]
 
   return (
-    <section className="bg-[#020617] py-20 px-6 relative overflow-hidden font-sans">
+    <section className="bg-[#020617] py-20 px-20 md:px-40 relative overflow-hidden font-sans">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-blue-600/5 blur-[120px] rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
