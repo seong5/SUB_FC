@@ -9,8 +9,8 @@ export default function Modal<P extends ModalProps>(props: P) {
   if (!Content) return null
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="relative rounded-2xl bg-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-y-auto p-10">
+      <div className="relative rounded-2xl my-auto">
         <Content {...props} />
       </div>
     </div>,
