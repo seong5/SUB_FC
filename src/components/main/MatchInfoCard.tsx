@@ -28,7 +28,7 @@ export default function MatchInfoCard({ match }: MatchInfoCardProps) {
   return (
     <Link href={`/matches/${match.id}`} className="block group">
       <div
-        className={`relative overflow-hidden rounded-[32px] border backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl cursor-pointer ${themeClass}`}
+        className={`relative overflow-hidden rounded-[32px] border backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl cursor-pointer min-h-[165px] md:min-h-[173px] ${themeClass}`}
       >
         <div
           className={`absolute -right-20 -top-20 h-40 w-40 blur-[80px] opacity-20 transition-opacity group-hover:opacity-40 ${isWin ? 'bg-blue-500' : isLoss ? 'bg-red-500' : 'bg-emerald-500'}`}

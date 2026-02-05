@@ -12,7 +12,7 @@ export default function WinRate() {
 
   if (error) {
     return (
-      <section className="relative overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 mb-16">
+      <section className="relative overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 mb-16 min-h-[260px] md:min-h-[280px]">
         <p className="text-center text-red-400 text-sm">
           데이터를 불러오는 중 오류가 발생했습니다.
         </p>
@@ -32,7 +32,7 @@ export default function WinRate() {
   const clampedWinRate = Math.max(0, Math.min(100, stats.winRate))
 
   return (
-    <section className="relative overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 mb-16">
+    <section className="relative overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 mb-16 min-h-[260px] md:min-h-[280px]">
       <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14 relative z-10">
         <div className="flex-shrink-0">
           <div className="relative w-200 h-200 md:w-200 md:h-200">
