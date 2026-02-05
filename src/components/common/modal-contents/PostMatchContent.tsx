@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState, ChangeEvent } from 'react'
-import { Trophy, ChevronRight, X } from 'lucide-react'
+import { Trophy, ChevronRight } from 'lucide-react'
 import type { PostMatchProps } from '@/constants/modal'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
@@ -87,16 +87,6 @@ export function PostMatchContent({ mode = 'create', initial, onClose, onSubmit }
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[400px] border border-white/20 rounded-[100%] scale-110" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-full bg-white/20" />
         </div>
-
-        {/* Close Button (Mobile Top Right) */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-10 right-15 p-2.5 min-w-[40px] min-h-[40px] flex items-center justify-center bg-white/5 rounded-full text-slate-400 md:hidden touch-manipulation"
-          aria-label="닫기"
-        >
-          <X size={20} />
-        </button>
 
         <div className="relative z-10 flex flex-col flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-10">
           {/* Header */}

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import {
   ChevronRight,
   ChevronLeft,
-  X,
   Trophy,
   Plus,
   Trash2,
@@ -73,7 +72,7 @@ export default function PostScoresContent({
 
         <div className="relative z-10 flex flex-col flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-10">
           {/* Header */}
-          <div className="px-0 sm:pr-14 flex justify-between items-center mb-6 md:mb-8">
+          <div className="px-0 sm:pr-14 flex items-center justify-between mb-6 md:mb-8">
             <Button
               type="button"
               variant="ghost"
@@ -82,7 +81,7 @@ export default function PostScoresContent({
             >
               <ChevronLeft size={24} />
             </Button>
-            <div className="text-center">
+            <div className="flex-1 text-center">
               <p className="text-amber-500 text-[12px] font-black uppercase tracking-[0.3em] mb-1">
                 Match Analytics
               </p>
@@ -90,14 +89,6 @@ export default function PostScoresContent({
                 Goal & Assist
               </h2>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onClose}
-              className="p-2 hover:bg-white/5 rounded-full text-slate-400 transition-colors min-w-0"
-            >
-              <X size={20} />
-            </Button>
           </div>
 
           {/* Content */}

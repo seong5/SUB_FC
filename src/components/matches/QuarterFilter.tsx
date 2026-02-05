@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import Modal from '../common/Modal'
@@ -8,7 +8,8 @@ import { patchMatch, patchRoster, patchQuarters, patchScores } from '@/libs/matc
 import { useDeleteMatchMutation } from '@/hooks/useMatches'
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
 import { useIsLoggedIn } from '@/store/useAuthStore'
-import { Settings2, Trash2, Edit3, LayoutGrid, ShieldCheck, AlertCircle } from 'lucide-react'
+import { useClickOutside } from '@/hooks/useClickOutside'
+import { EllipsisVertical, LayoutGrid, ShieldCheck, AlertCircle } from 'lucide-react'
 
 interface TypeFilterProps {
   selectedType: QuarterLabel | ''
@@ -41,9 +42,14 @@ export default function QuarterFilter({
   const [openDelete, setOpenDelete] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [flow, setFlow] = useState<FlowState>(null)
+  const menuRef = useRef<HTMLDivElement | null>(null)
   const isLoggedIn = useIsLoggedIn()
   const router = useRouter()
   const deleteMatchMutation = useDeleteMatchMutation()
+
+  useClickOutside(menuRef, () => {
+    if (showMenu) setShowMenu(false)
+  })
 
   // 삭제
   const handleDelete = async () => {
@@ -89,7 +95,7 @@ export default function QuarterFilter({
   return (
     <section className="space-y-8">
       {/* 상단: 헤더 및 관리자 액션 */}
-      <div className="flex justify-between items-end px-2 mb-4">
+      <div className="flex justify-between items-end mb-10 px-2 mb-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2"></div>
           <h2 className="text-2xl md:text-4xl font-black text-white italic tracking-tighter uppercase">
@@ -98,7 +104,7 @@ export default function QuarterFilter({
         </div>
 
         {isLoggedIn && (
-          <div className="relative">
+          <div className="relative" ref={menuRef}>
             <button
               type="button"
               onClick={() => setShowMenu((prev) => !prev)}
@@ -108,12 +114,12 @@ export default function QuarterFilter({
                   : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
               }`}
             >
-              <Settings2 size={20} className={showMenu ? 'animate-spin-slow' : ''} />
+              <EllipsisVertical size={20} />
             </button>
 
             {/* 드롭다운 메뉴 (수정/삭제) */}
             {showMenu && (
-              <div className="absolute right-0 mt-4 w-52 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden z-[100]">
+              <div className="absolute right-0 mt-4 w-80 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-[14px] shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden z-[100]">
                 <div className="p-2">
                   <button
                     type="button"
@@ -121,10 +127,9 @@ export default function QuarterFilter({
                       setFlow({ mode: 'edit', step: 'match' })
                       setShowMenu(false)
                     }}
-                    className="w-full flex items-center justify-between px-5 py-4 text-[11px] font-black text-slate-300 hover:bg-emerald-500 hover:text-slate-950 rounded-2xl transition-all"
+                    className="w-full flex items-center justify-center p-6 text-[12px] font-black text-slate-300 hover:bg-emerald-500 hover:text-slate-950 rounded-2xl transition-all"
                   >
                     <span className="uppercase tracking-widest text-left">수정하기</span>
-                    <Edit3 size={16} />
                   </button>
                   <div className="h-px bg-white/5 my-1 mx-2" />
                   <button
@@ -133,10 +138,9 @@ export default function QuarterFilter({
                       setOpenDelete(true)
                       setShowMenu(false)
                     }}
-                    className="w-full flex items-center justify-between px-5 py-4 text-[11px] font-black text-rose-500 hover:bg-rose-500 hover:text-white rounded-2xl transition-all"
+                    className="w-full flex items-center justify-center p-6 text-[12px] font-black text-rose-500 hover:bg-rose-500 hover:text-white rounded-2xl transition-all"
                   >
                     <span className="uppercase tracking-widest text-left">삭제하기</span>
-                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
@@ -146,7 +150,7 @@ export default function QuarterFilter({
       </div>
 
       {/* 쿼터 선택 인터랙티브 버튼 그리드 */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 mb-15 gap-4">
         {TYPES.map((type) => {
           const isActive = selectedType === type
           return (

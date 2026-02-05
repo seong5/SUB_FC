@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ChevronRight, ChevronLeft, X, Target, ShieldAlert, Activity } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Target, ShieldAlert, Activity } from 'lucide-react'
 import Button from '@/components/common/Button'
 import type { PostQuartersContentProps } from '@/constants/modal'
 import type { QuarterData } from '@/types/match'
@@ -58,7 +58,7 @@ export default function PostQuartersContent({
 
         <div className="relative z-10 flex flex-col flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-10">
           {/* Header */}
-          <div className="px-0 sm:pr-14 flex justify-between items-center mb-15">
+          <div className="px-0 sm:pr-14 flex items-center justify-between mb-15">
             <Button
               type="button"
               variant="ghost"
@@ -67,7 +67,7 @@ export default function PostQuartersContent({
             >
               <ChevronLeft size={24} />
             </Button>
-            <div className="text-center">
+            <div className="flex-1 text-center">
               <p className="text-emerald-500 text-[13px] font-black uppercase tracking-[0.3em] mb-1">
                 Step 03
               </p>
@@ -75,14 +75,6 @@ export default function PostQuartersContent({
                 QUARTER ANALYTICS
               </h2>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onClose}
-              className="p-2 hover:bg-white/5 rounded-full text-slate-400 transition-colors min-w-0"
-            >
-              <X size={20} />
-            </Button>
           </div>
 
           {/* Content */}

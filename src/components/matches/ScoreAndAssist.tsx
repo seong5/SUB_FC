@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { Trophy, Target, Zap, ShieldAlert, Activity, Star, Flame, Award, Sword } from 'lucide-react'
 
 /** 서버에서 올 수 있는 goal의 가능한 형태 */
 type GoalLike =
@@ -32,6 +32,13 @@ type MatchSummary = {
 type Props = {
   matchId: number | string
   selectedLabel: QuarterScore['label'] | '' // ''이면 안내만 표시
+}
+
+function formatQuarterScoreDisplay(score: string): string {
+  const trimmed = score.trim()
+  if (!trimmed) return ''
+  // "1-1", "1 - 1" 등을 "1:1" 형태로 통일
+  return trimmed.replace(/\s*-\s*/g, ':')
 }
 
 /** 응답을 화면용 구조로 정규화 */
@@ -107,97 +114,231 @@ export default function ScoreAndAssist({ matchId, selectedLabel }: Props) {
     }
   }, [matchId])
 
-  if (loading) return <section className="text-gray-500">불러오는 중…</section>
+  if (loading)
+    return (
+      <section className="space-y-6">
+        <div className="w-full h-64 flex flex-col items-center justify-center space-y-4 bg-white/5 rounded-[2.5rem] border border-white/10 animate-pulse">
+          <Activity className="text-emerald-500 animate-spin" size={32} />
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+            Analyzing Match Data...
+          </p>
+        </div>
+      </section>
+    )
+
   if (error || !data)
-    return <section className="text-red-500">불러오지 못했어요. {error ?? ''}</section>
+    return (
+      <section className="space-y-6">
+        <div className="w-full p-10 bg-rose-500/5 rounded-[2.5rem] border border-rose-500/20 text-center">
+          <ShieldAlert className="mx-auto text-rose-500 mb-4" size={32} />
+          <p className="text-sm font-bold text-rose-400">데이터를 불러오지 못했습니다.</p>
+          {error && <p className="mt-2 text-[11px] text-rose-300">{error}</p>}
+        </div>
+      </section>
+    )
 
   const quarter = selectedLabel ? data.quarters.find((q) => q.label === selectedLabel) : undefined
   const goals = quarter?.goals ?? []
   const assists = quarter?.assists ?? []
   const conceded = quarter?.conceded ?? 0
-  const scoreAfter = quarter?.scoreAfter ?? ''
+  const rawScoreAfter = quarter?.scoreAfter ?? '0 - 0'
+  const scoreAfter = formatQuarterScoreDisplay(rawScoreAfter)
 
   return (
-    <section className="my-10">
-      <h1 className="txt-28_M md:txt-32_M text-gray-800 my-20">Score</h1>
-      <div className="bg-white rounded-[16px] py-5">
-        <h1 className="txt-30_M md:text-[28px] font-semibold text-center text-gray-800 mt-30">
-          전체 스코어 <div>{data.finalScore}</div>
-        </h1>
+    <section className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+      {/* 섹션 타이틀 */}
+      <div className="flex items-center justify-between px-2">
+        <div className="flex items-center gap-3">
+          <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">
+            Score & Assist
+          </h3>
+        </div>
+      </div>
 
-        <h2 className="text-center text-[18px] md:text-[24px] font-bold my-20">
-          SubFC : {data.opponent}
-        </h2>
+      {/* 메인 스코어보드 카드 */}
+      <div className="relative group">
+        {/* 배경 조명 효과 */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-transparent to-indigo-500/20 rounded-[3rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000" />
 
-        <h1 className="text-center text-[28px] md:txt-32_B">{scoreAfter}</h1>
+        <div className="relative bg-[#020617]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 overflow-hidden shadow-2xl">
+          {/* 상단: 전체 스코어 써머리 */}
+          <div className="flex flex-col items-center justify-center mb-12 relative">
+            <div className="absolute top-0 opacity-[0.03] scale-[2] pointer-events-none group-hover:rotate-12 transition-transform duration-[2000ms]">
+              <Trophy size={180} />
+            </div>
 
-        <div className="py-30 px-20 grid grid-cols-3 gap-4 text-center txt-12_M">
-          {/* 득점 */}
-          <div>
-            <Image
-              src="/score-icon.png"
-              alt="득점"
-              width={40}
-              height={40}
-              className="w-30 h-30 md:w-40 md:h-40 mx-auto"
-            />
-            <div className="mt-2 font-semibold">득점</div>
-            <div className="mt-10 space-y-1 text-primary-500 txt-16_B md:txt-20_M min-h-[24px]">
-              {selectedLabel ? (
-                goals.length ? (
-                  goals.map((n, i) => <p key={`g-${i}`}>{n}</p>)
-                ) : (
-                  <p className="text-gray-400">-</p>
-                )
-              ) : (
-                <p className="text-gray-400">쿼터를 선택하세요</p>
-              )}
+            <p className="mb-3 text-[11px] font-black text-slate-400 uppercase tracking-[0.4em]">
+              전체 스코어
+            </p>
+
+            <div className="flex items-center justify-center gap-6 md:gap-12 w-full">
+              <div className="flex-1 text-right">
+                <h4 className="text-xs md:text-sm font-black text-white uppercase tracking-tighter mb-1">
+                  SUB FC
+                </h4>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="text-4xl md:text-5xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                  {data.finalScore.split('-')[0]}
+                </span>
+                <span className="text-4xl md:text-5xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                  {data.finalScore.split('-')[1]}
+                </span>
+              </div>
+
+              <div className="flex-1 text-left">
+                <h4 className="text-xs md:text-sm font-black text-white uppercase tracking-tighter mb-1">
+                  {data.opponent}
+                </h4>
+              </div>
             </div>
           </div>
 
-          {/* 도움 */}
-          <div>
-            <Image
-              src="/assist-icon.png"
-              alt="도움"
-              width={40}
-              height={40}
-              className="w-30 h-30 md:w-40 md:h-40 mx-auto"
-            />
-            <div className="mt-2 font-semibold">도움</div>
-            <div className="mt-10 space-y-1 text-green-500 txt-16_B md:txt-20_M min-h-[24px]">
-              {selectedLabel ? (
-                assists.length ? (
-                  assists.map((n, i) => <p key={`a-${i}`}>{n}</p>)
-                ) : (
-                  <p className="text-gray-400">-</p>
-                )
-              ) : (
-                <p className="text-gray-400">쿼터를 선택하세요</p>
+          {/* 중단: 쿼터별 상태 바 */}
+          <div className="flex flex-col items-center gap-4 mb-10">
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div className="flex flex-col items-center gap-3">
+              <div
+                className={`px-6 py-2 rounded-full text-[12px] font-black uppercase tracking-[0.25em] transition-all duration-500 ${
+                  selectedLabel
+                    ? 'bg-emerald-500 text-slate-950 shadow-[0_0_18px_rgba(16,185,129,0.5)]'
+                    : 'bg-white/10 text-slate-500'
+                }`}
+              >
+                {selectedLabel || 'Select Quarter'}
+              </div>
+              {selectedLabel && (
+                <p className="text-[40px] font-black text-white uppercase tracking-tight">
+                  {scoreAfter}
+                </p>
               )}
             </div>
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
 
-          {/* 실점 */}
-          <div>
-            <Image
-              src="/lost-score-icon.png"
-              alt="실점"
-              width={40}
-              height={40}
-              className="w-30 h-30 md:w-40 md:h-40 mx-auto"
-            />
-            <div className="mt-2 font-semibold">실점</div>
-            <div className="mt-10 space-y-1 text-red-500 txt-16_B md:txt-20_M min-h-[24px]">
-              {selectedLabel ? (
-                conceded > 0 ? (
-                  Array.from({ length: conceded }).map((_, i) => <p key={`c-${i}`}>실점</p>)
+          {/* 하단: 데이터 그리드 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            {!selectedLabel && (
+              <div className="absolute inset-0 z-20 bg-slate-950/60 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center border border-white/5 space-y-4">
+                <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                  <Target className="text-emerald-500 animate-bounce" size={24} />
+                </div>
+                <p className="text-[11px] font-black text-white uppercase tracking-[0.2em] italic text-center px-6">
+                  쿼터를 선택하여 정보를 확인하세요.
+                </p>
+              </div>
+            )}
+
+            {/* 득점 카드 */}
+            <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 hover:bg-white/[0.04] transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-500">
+                  <Flame size={18} fill="currentColor" />
+                </div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  득점
+                </span>
+              </div>
+              <div className="space-y-2 min-h-[40px]">
+                {selectedLabel ? (
+                  goals.length > 0 ? (
+                    goals.map((n, i) => (
+                      <div
+                        key={`g-${i}`}
+                        className="flex items-center justify-between bg-emerald-500/5 border border-emerald-500/10 px-4 py-3 rounded-2xl"
+                      >
+                        <span className="text-xs font-black text-emerald-400 italic uppercase">
+                          {n}
+                        </span>
+                        <Award size={14} className="text-emerald-500/40" />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-[10px] font-bold text-slate-700 italic uppercase py-2">
+                      득점이 없습니다.
+                    </p>
+                  )
                 ) : (
-                  <p className="text-gray-400">-</p>
-                )
-              ) : (
-                <p className="text-gray-400">쿼터를 선택하세요</p>
-              )}
+                  <p className="text-[10px] font-bold text-slate-700 italic uppercase py-2">
+                    쿼터를 선택하세요
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* 도움 카드 */}
+            <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 hover:bg-white/[0.04] transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2.5 bg-indigo-500/10 rounded-xl text-indigo-500">
+                  <Star size={18} fill="currentColor" />
+                </div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  도움
+                </span>
+              </div>
+              <div className="space-y-2 min-h-[40px]">
+                {selectedLabel ? (
+                  assists.length > 0 ? (
+                    assists.map((n, i) => (
+                      <div
+                        key={`a-${i}`}
+                        className="flex items-center justify-between bg-indigo-500/5 border border-indigo-500/10 px-4 py-3 rounded-2xl"
+                      >
+                        <span className="text-xs font-black text-indigo-400 italic uppercase">
+                          {n}
+                        </span>
+                        <Zap size={14} className="text-indigo-500/40" />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-[10px] font-bold text-slate-700 italic uppercase py-2">
+                      도움이 없습니다.
+                    </p>
+                  )
+                ) : (
+                  <p className="text-[10px] font-bold text-slate-700 italic uppercase py-2">
+                    쿼터를 선택하세요
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* 실점 카드 */}
+            <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 hover:bg-white/[0.04] transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-500">
+                  <ShieldAlert size={18} fill="currentColor" />
+                </div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  실점
+                </span>
+              </div>
+              <div className="space-y-2 min-h-[40px]">
+                {selectedLabel ? (
+                  conceded > 0 ? (
+                    Array.from({ length: conceded }).map((_, i) => (
+                      <div
+                        key={`c-${i}`}
+                        className="flex items-center justify-between bg-rose-500/5 border border-rose-500/10 px-4 py-3 rounded-2xl"
+                      >
+                        <span className="text-xs font-black text-rose-400 italic uppercase">
+                          Lost Goal
+                        </span>
+                        <Sword size={14} className="text-rose-500/40" />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-[10px] font-bold text-slate-700 italic uppercase py-2">
+                      Clean Sheet
+                    </p>
+                  )
+                ) : (
+                  <p className="text-[10px] font-bold text-slate-700 italic uppercase py-2">
+                    쿼터를 선택하세요
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>

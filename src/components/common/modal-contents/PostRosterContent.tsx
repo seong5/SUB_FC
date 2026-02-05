@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Users, ChevronRight, ChevronLeft, X, LayoutGrid, Shield, UserCheck } from 'lucide-react'
+import { Users, ChevronRight, ChevronLeft, LayoutGrid, Shield, UserCheck } from 'lucide-react'
 import Button from '@/components/common/Button'
 import type { PostRosterContentProps } from '@/constants/modal'
 import type { Position } from '@/constants/modal'
@@ -74,7 +74,7 @@ export default function PostRosterContent({
 
         <div className="relative z-10 flex flex-col flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-10">
           {/* Header */}
-          <div className="px-0 sm:pr-14 flex justify-between items-center mb-6 md:mb-8">
+          <div className="px-0 sm:pr-14 flex items-center justify-between mb-6 md:mb-8">
             <Button
               type="button"
               variant="ghost"
@@ -84,7 +84,7 @@ export default function PostRosterContent({
             >
               <ChevronLeft size={24} />
             </Button>
-            <div className="text-center">
+            <div className="flex-1 text-center">
               <p className="text-emerald-500 text-[13px] font-black uppercase tracking-[0.3em] mb-1">
                 Step 02
               </p>
@@ -92,15 +92,6 @@ export default function PostRosterContent({
                 {mode === 'edit' ? '포메이션 & 참가 선수 수정' : '포메이션 & 참가 선수 등록'}
               </h2>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onClose}
-              className="p-2 hover:bg-white/5 rounded-full text-slate-400 transition-colors min-w-0"
-              aria-label="닫기"
-            >
-              <X size={20} />
-            </Button>
           </div>
 
           {/* Content */}

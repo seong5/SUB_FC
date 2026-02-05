@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { ChevronRight, ChevronLeft, X, Crown, CheckCircle2, Users, Star, Zap } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Crown, CheckCircle2, Users, Star, Zap } from 'lucide-react'
 import Button from '@/components/common/Button'
 
 const EXCLUDED_PLAYERS = ['제갈진석', '차우현', '윤동관', '유동엽', '현신우', 'Guest']
@@ -71,7 +71,7 @@ export default function PostMomContent({
 
         <div className="relative z-10 flex flex-col flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-10">
           {/* Header Section */}
-          <div className="px-0 sm:pr-14 flex justify-between items-center mb-6 md:mb-8">
+          <div className="px-0 sm:pr-14 flex items-center justify-between mb-6 md:mb-8">
             <Button
               type="button"
               variant="ghost"
@@ -80,7 +80,7 @@ export default function PostMomContent({
             >
               <ChevronLeft size={24} />
             </Button>
-            <div className="text-center">
+            <div className="flex-1 text-center">
               <p className="text-amber-500 text-[10px] font-black uppercase tracking-[0.3em] mb-1">
                 Honor of the Match
               </p>
@@ -89,14 +89,6 @@ export default function PostMomContent({
                 MOM Selection
               </h2>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onClose}
-              className="p-2.5 hover:bg-white/5 rounded-full text-slate-400 transition-colors min-w-0"
-            >
-              <X size={20} />
-            </Button>
           </div>
 
           {/* Content Area */}
