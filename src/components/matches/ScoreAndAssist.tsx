@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Trophy, Target, Zap, ShieldAlert, Activity, Star, Flame, Award, Sword } from 'lucide-react'
+import { Trophy, Target, Zap, ShieldAlert, Star, Flame, Award, Sword } from 'lucide-react'
+import ScoreAndAssistSkeleton from './ScoreAndAssistSkeleton'
 
 /** 서버에서 올 수 있는 goal의 가능한 형태 */
 type GoalLike =
@@ -114,17 +115,7 @@ export default function ScoreAndAssist({ matchId, selectedLabel }: Props) {
     }
   }, [matchId])
 
-  if (loading)
-    return (
-      <section className="space-y-6">
-        <div className="w-full h-64 flex flex-col items-center justify-center space-y-4 bg-white/5 rounded-[2.5rem] border border-white/10 animate-pulse">
-          <Activity className="text-emerald-500 animate-spin" size={32} />
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
-            Analyzing Match Data...
-          </p>
-        </div>
-      </section>
-    )
+  if (loading) return <ScoreAndAssistSkeleton />
 
   if (error || !data)
     return (

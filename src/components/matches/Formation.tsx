@@ -6,6 +6,7 @@ import Uniform from '@/components/matches/Uniform'
 import { playersRoster } from '@/mocks/playersRoster'
 import { FORMATIONS, FormationKey } from '@/constants/formation'
 import QuarterFilter from './QuarterFilter'
+import QuarterFilterSkeleton from './QuarterFilterSkeleton'
 import ScoreAndAssist from './ScoreAndAssist'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import { useParams } from 'next/navigation'
@@ -49,7 +50,26 @@ export default function FormationPage() {
     queryFn: () => getMatchDetail(matchId),
   })
 
-  if (isLoading || !detail) return <div className="p-6">로딩 중…</div>
+  if (isLoading || !detail) {
+    return (
+      <main className="grid grid-cols-1 md:grid-cols-[400px_640px] md:px-30 md:py-20">
+        <aside>
+          <QuarterFilterSkeleton />
+        </aside>
+        <div className="flex justify-center items-center w-full">
+          <div className="relative aspect-square w-[100vw] max-w-[640px]">
+            <Image
+              src="/pitch.svg"
+              alt="pitch"
+              fill
+              className="object-contain rotate-90 "
+              priority
+            />
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   // input[type="date"]에 맞게 yyyy-MM-dd (ISO면 앞 10자리)
   const dateForInput = (detail.date ?? '').slice(0, 10)
