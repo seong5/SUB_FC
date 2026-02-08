@@ -227,10 +227,10 @@ export default function Home() {
             onClick={isLoggedIn ? openStep1 : undefined}
             disabled={authLoading || !isLoggedIn || isPlayersLoading || Boolean(playersError)}
           >
-            {isPlayersLoading
-              ? '선수 불러오는 중…'
-              : !isLoggedIn
-                ? '로그인이 필요합니다.'
+            {!isLoggedIn
+              ? '로그인이 필요합니다.'
+              : isPlayersLoading
+                ? '선수 불러오는 중…'
                 : '경기 등록하기'}
           </Button>
         </div>

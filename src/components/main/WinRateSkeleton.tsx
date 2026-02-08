@@ -4,12 +4,9 @@ export default function WinRateSkeleton() {
   return (
     <section className="relative overflow-hidden bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 mb-16 min-h-[260px] md:min-h-[280px]">
       <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14 relative z-10">
-        {/* 좌측: 승률 링 영역 스켈레톤 */}
         <div className="flex-shrink-0">
           <div className="relative w-200 h-200 md:w-200 md:h-200 flex items-center justify-center">
-            {/* 원형 링 전체 영역 */}
             <Skeleton className="w-[180px] h-[180px] rounded-full" />
-            {/* 가운데 텍스트 자리 */}
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
               <Skeleton className="h-3 w-16" />
               <Skeleton className="h-6 w-20" />
@@ -17,9 +14,7 @@ export default function WinRateSkeleton() {
           </div>
         </div>
 
-        {/* 우측: 시즌 타이틀 + 통계 카드 그리드 */}
         <div className="flex-1 w-full space-y-8">
-          {/* 시즌 타이틀 영역 (실제 텍스트 그대로 노출) */}
           <div className="flex flex-col justify-center items-center md:flex-row gap-6">
             <div>
               <div className="flex items-center justify-center gap-3 mb-3">

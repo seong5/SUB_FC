@@ -41,4 +41,3 @@ export function useDeleteScheduleEventMutation() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['teams', 'schedule'] }),
   })
 }
-

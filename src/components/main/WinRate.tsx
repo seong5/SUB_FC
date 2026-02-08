@@ -4,9 +4,9 @@ import { useTeamStatsQuery } from '@/hooks/useTeams'
 import WinRateSkeleton from './WinRateSkeleton'
 
 export default function WinRate() {
-  const { data: statsData, isLoading, error } = useTeamStatsQuery()
+  const { data: statsData, isPending, error } = useTeamStatsQuery()
 
-  if (isLoading) {
+  if (isPending) {
     return <WinRateSkeleton />
   }
 
