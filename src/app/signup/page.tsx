@@ -1,15 +1,17 @@
 'use client'
+
 import Image from 'next/image'
 import subfc from '../../../public/subfc.png'
 import Input from '@/components/common/Input'
 import Button from '@/components/common/Button'
+import Icon from '@/components/common/Icon'
 import Link from 'next/link'
+import { Mail, Lock, ChevronRight, User } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createClient } from '@/libs/supabase/client'
 
-// zod 스키마 검증
 const SignupSchema = z
   .object({
     email: z.string().min(1, '이메일을 입력해주세요.').email('이메일이 올바르지 않습니다.'),
@@ -30,6 +32,9 @@ const SignupSchema = z
 
 type SignupForm = z.infer<typeof SignupSchema>
 
+const INPUT_DARK =
+  '!bg-slate-950/50 !border-slate-800 !text-slate-200 focus:!border-cyan-500/50 focus:!ring-4 focus:!ring-cyan-500/10 placeholder:!text-slate-600'
+
 export default function Signup() {
   const {
     register,
@@ -42,93 +47,182 @@ export default function Signup() {
 
   const onSubmit = async (data: SignupForm) => {
     const supabase = createClient()
-
     const { error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
         data: {
-          full_name: data.nickname, // Supabase 대시보드 Display Name으로 저장됨
+          full_name: data.nickname,
         },
       },
     })
-
     if (error) {
       alert(`회원가입 실패: ${error.message}`)
       return
     }
-
-    // 원한다면 자동 로그인 → 홈으로 이동
     window.location.href = '/login'
   }
 
+  const handleKakaoLogin = async () => {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'kakao',
+      options: {
+        redirectTo: `${location.origin}/`,
+        queryParams: {
+          scope: 'profile_nickname profile_image account_email',
+          prompt: 'login',
+        },
+      },
+    })
+  }
+
   return (
-    <div className="min-h-screen bg-[#020617] flex flex-col justify-center items-center">
-      <main className="flex flex-col justify-center items-center px-20 py-20 w-full">
-        <Image
-          src={subfc}
-          alt="로고"
-          width={200}
-          height={200}
-          className="w-150 h-150 md:w-200 md:h-200"
-        />
-        <form onSubmit={handleSubmit(onSubmit)} className="md:w-640 w-328 flex flex-col gap-10">
-          <Input
-            id="email"
-            variant="input"
-            type="email"
-            label="이메일"
-            placeholder="subfc@subfc.com"
-            errorMessage={errors.email?.message}
-            {...register('email')}
-            autoComplete="email"
-          />
-          <Input
-            id="nickname"
-            variant="input"
-            label="닉네임"
-            placeholder="닉네임을 입력해주세요."
-            errorMessage={errors.nickname?.message}
-            {...register('nickname')}
-            autoComplete="nickname"
-          />
-          <Input
-            id="password"
-            variant="input"
-            type="password"
-            label="비밀번호"
-            placeholder="비밀번호는 8자리 이상 입력해주세요."
-            errorMessage={errors.password?.message}
-            {...register('password')}
-            autoComplete="new-password"
-          />
-          <Input
-            id="confirm"
-            variant="input"
-            type="password"
-            label="비밀번호 확인"
-            placeholder="비밀번호를 확인해주세요."
-            errorMessage={errors.confirm?.message}
-            {...register('confirm')}
-            autoComplete="new-password"
-          />
-          <Button
-            type="submit"
-            variant="primary"
-            size="xl"
-            disabled={!isValid || isSubmitting}
-            className="mt-10"
-          >
-            회원가입
-          </Button>
-        </form>
-        <div className="flex gap-5 items-center justify-center text-white/70 txt-16_M mt-20">
-          <Link href={'/login'}>
-            <div className="underline">로그인</div>
-          </Link>
-          <h1>하러 가시겠어요?</h1>
+    <div className="bg-[#020617] text-slate-200 font-sans selection:bg-cyan-500/30 overflow-hidden relative flex items-center justify-center p-20">
+      <div className="relative z-10 w-full max-w-md mx-auto">
+        <div className="flex flex-col items-center text-center my-20">
+          <div>
+            <Image
+              src={subfc}
+              alt="SUB FC"
+              width={200}
+              height={200}
+              className="relative z-10 w-[200px] h-[200px] rounded-full"
+            />
+          </div>
+          <h1 className="text-4xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500 my-10">
+            SUB FC
+          </h1>
         </div>
-      </main>
+
+        {/* 폼 카드 */}
+        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 p-10 rounded-3xl shadow-2xl relative">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-2">
+              <label
+                className="text-xs font-bold text-slate-400 ml-1 uppercase tracking-widest flex mb-10 items-center gap-4"
+                htmlFor="email"
+              >
+                <Mail className="w-15 h-15" /> Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                variant="input"
+                label=""
+                placeholder="email@email.com"
+                autoComplete="email"
+                errorMessage={errors.email?.message}
+                className="!gap-2"
+                inputClassName={INPUT_DARK}
+                {...register('email')}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label
+                className="text-xs font-bold text-slate-400 ml-1 uppercase tracking-widest flex mb-10 items-center gap-4"
+                htmlFor="nickname"
+              >
+                <User className="w-15 h-15" /> Nickname
+              </label>
+              <Input
+                id="nickname"
+                variant="input"
+                label=""
+                placeholder="닉네임을 입력해주세요."
+                autoComplete="nickname"
+                errorMessage={errors.nickname?.message}
+                className="!gap-2"
+                inputClassName={INPUT_DARK}
+                {...register('nickname')}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label
+                className="text-xs font-bold text-slate-400 uppercase tracking-widest flex mb-10 items-center gap-4"
+                htmlFor="password"
+              >
+                <Lock className="w-15 h-15" /> Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                variant="input"
+                label=""
+                placeholder="8자 이상, 영문/숫자/특수문자 포함"
+                autoComplete="new-password"
+                errorMessage={errors.password?.message}
+                className="!gap-2"
+                inputClassName={INPUT_DARK}
+                {...register('password')}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label
+                className="text-xs font-bold text-slate-400 uppercase tracking-widest flex mb-10 items-center gap-4"
+                htmlFor="confirm"
+              >
+                <Lock className="w-15 h-15" /> Password Confirm
+              </label>
+              <Input
+                id="confirm"
+                type="password"
+                variant="input"
+                label=""
+                placeholder="비밀번호를 한 번 더 입력해주세요."
+                autoComplete="new-password"
+                errorMessage={errors.confirm?.message}
+                className="!gap-2"
+                inputClassName={INPUT_DARK}
+                {...register('confirm')}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              size="xl"
+              disabled={!isValid || isSubmitting}
+              className="w-full !bg-cyan-600 hover:!bg-cyan-500 !text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group relative overflow-hidden mt-8"
+            >
+              <span className="relative z-10">
+                {isSubmitting ? '처리 중…' : '회원가입하기'}
+              </span>
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
+            </Button>
+          </form>
+
+          <div className="flex items-center my-8">
+            <div className="h-[1px] flex-grow bg-gradient-to-r from-transparent to-slate-700" />
+            <span className="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em]">
+              소셜 로그인
+            </span>
+            <div className="h-[1px] flex-grow bg-gradient-to-l from-transparent to-slate-700" />
+          </div>
+
+          <Button
+            type="button"
+            onClick={handleKakaoLogin}
+            size="xl"
+            icon={<Icon icon="Kakao" className="w-20 h-20" />}
+            variant="kakao"
+            className="w-full !bg-[#FEE500] hover:!bg-[#FEE500]/90 !text-[#3C1E1E] py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98]"
+          >
+            카카오 로그인
+          </Button>
+
+          <div className="mt-8 pt-6 border-t border-white/5 flex flex-col items-center gap-4">
+            <div className="flex gap-2 text-xs text-slate-500">
+              <span>이미 계정이 있으시다면?</span>
+              <Link href="/login" className="text-cyan-500 font-bold hover:underline">
+                로그인하기
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
