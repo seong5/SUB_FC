@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { playersRoster } from '@/mocks/playersRoster'
 import QuarterFilter from './QuarterFilter'
 import QuarterFilterSkeleton from './QuarterFilterSkeleton'
-import ScoreAndAssist from './ScoreAndAssist'
+import ScoreAndAssist, { normalizeSummary } from './ScoreAndAssist'
+import ScoreAndAssistSkeleton from './ScoreAndAssistSkeleton'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import { useParams } from 'next/navigation'
-import { getMatchDetail } from '@/libs/matchesApi'
+import { getMatchDetailFull } from '@/libs/matchesApi'
 import { useQuery } from '@tanstack/react-query'
 import type { PlayerLite } from '@/types/match'
 
@@ -22,25 +23,24 @@ export default function FormationPage() {
     position: p.position, // 'GK' | 'DF' | 'MF' | 'FW'
   }))
 
-  const {
-    data: detail,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: detailFull, isPending, refetch } = useQuery({
     queryKey: ['match', matchId],
-    queryFn: () => getMatchDetail(matchId),
+    queryFn: () => getMatchDetailFull(matchId),
+    staleTime: 0,
+    refetchOnMount: true,
   })
 
-  if (isLoading || !detail) {
+  if (isPending || !detailFull) {
     return (
       <main className="md:px-30 md:py-20 max-w-[400px] mx-auto">
         <QuarterFilterSkeleton />
+        <ScoreAndAssistSkeleton />
       </main>
     )
   }
 
-  // input[type="date"]에 맞게 yyyy-MM-dd (ISO면 앞 10자리)
-  const dateForInput = (detail.date ?? '').slice(0, 10)
+  const dateForInput = (detailFull.date ?? '').slice(0, 10)
+  const matchSummary = normalizeSummary(detailFull)
 
   return (
     <main className="md:px-30 md:py-20 max-w-[400px] mx-auto">
@@ -50,14 +50,14 @@ export default function FormationPage() {
         matchId={matchId}
         initialMatch={{
           date: dateForInput,
-          place: detail.place,
-          score: detail.score,
-          opponent: detail.opponent,
+          place: detailFull.place,
+          score: detailFull.finalScore,
+          opponent: detailFull.opponent,
         }}
         players={eligiblePlayers}
         onRefetch={() => refetch()}
       />
-      <ScoreAndAssist matchId={matchId} selectedLabel={selectedQuarterLabel} />
+      <ScoreAndAssist data={matchSummary} selectedLabel={selectedQuarterLabel} />
     </main>
   )
 }

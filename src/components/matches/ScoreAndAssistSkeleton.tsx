@@ -5,7 +5,7 @@ import Skeleton from '@/components/common/skeleton/Skeleton'
 
 export default function ScoreAndAssistSkeleton() {
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 min-h-[520px] md:min-h-[560px]">
       {/* 섹션 타이틀 */}
       <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-3">
@@ -15,13 +15,13 @@ export default function ScoreAndAssistSkeleton() {
         </div>
       </div>
 
-      {/* 메인 카드 스켈레톤 */}
+      {/* 메인 카드 스켈레톤 - 실제 ScoreAndAssist와 동일한 mb-12, mb-10 적용 */}
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-transparent to-indigo-500/20 rounded-[3rem] blur-xl opacity-50" />
 
-        <div className="relative bg-[#020617]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 overflow-hidden shadow-2xl space-y-10">
-          {/* 상단: 전체 스코어 써머리 스켈레톤 */}
-          <div className="flex flex-col items-center justify-center mb-6 relative">
+        <div className="relative bg-[#020617]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 overflow-hidden shadow-2xl">
+          {/* 상단: 전체 스코어 써머리 스켈레톤 (실제: mb-12) */}
+          <div className="flex flex-col items-center justify-center mb-12 relative">
             <div className="absolute top-0 opacity-[0.03] scale-[2] pointer-events-none">
               <Trophy size={180} />
             </div>
@@ -34,8 +34,8 @@ export default function ScoreAndAssistSkeleton() {
               </div>
 
               <div className="flex items-center gap-4">
-                <Skeleton variant="bar" className="h-10 w-8 bg-slate-700/60" />
-                <Skeleton variant="bar" className="h-10 w-8 bg-slate-700/60" />
+                <Skeleton variant="bar" className="h-12 w-10 md:h-14 md:w-12 bg-slate-700/60" />
+                <Skeleton variant="bar" className="h-12 w-10 md:h-14 md:w-12 bg-slate-700/60" />
               </div>
 
               <div className="flex-1 text-left">
@@ -44,8 +44,8 @@ export default function ScoreAndAssistSkeleton() {
             </div>
           </div>
 
-          {/* 중단: 쿼터 선택/스코어 스켈레톤 */}
-          <div className="flex flex-col items-center gap-4">
+          {/* 중단: 쿼터 선택/스코어 스켈레톤 (실제: mb-10) */}
+          <div className="flex flex-col items-center gap-4 mb-10">
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             <div className="flex flex-col items-center gap-3">
               <Skeleton variant="bar" className="h-8 w-40 rounded-full bg-slate-700/80" />

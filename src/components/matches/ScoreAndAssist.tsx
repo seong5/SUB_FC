@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Trophy, Target, Zap, ShieldAlert, Star, Flame, Award, Sword } from 'lucide-react'
 import ScoreAndAssistSkeleton from './ScoreAndAssistSkeleton'
 
@@ -21,7 +20,7 @@ type QuarterScore = {
   conceded: number // 실점 수
   scoreAfter: string // "2 - 1"
 }
-type MatchSummary = {
+export type MatchSummary = {
   matchId: number
   date: string
   opponent: string
@@ -30,8 +29,8 @@ type MatchSummary = {
   place?: string
 }
 
-type Props = {
-  matchId: number | string
+export type Props = {
+  data: MatchSummary | null
   selectedLabel: QuarterScore['label'] | '' // ''이면 안내만 표시
 }
 
@@ -42,8 +41,8 @@ function formatQuarterScoreDisplay(score: string): string {
   return trimmed.replace(/\s*-\s*/g, ':')
 }
 
-/** 응답을 화면용 구조로 정규화 */
-function normalizeSummary(raw: unknown): MatchSummary {
+/** 응답을 화면용 구조로 정규화 (Formation에서 한 번만 fetch 후 공유용으로 export) */
+export function normalizeSummary(raw: unknown): MatchSummary {
   const r = (raw ?? {}) as Record<string, unknown>
 
   const quartersRaw = Array.isArray(r.quarters) ? (r.quarters as Record<string, unknown>[]) : []
@@ -85,48 +84,8 @@ function normalizeSummary(raw: unknown): MatchSummary {
   }
 }
 
-export default function ScoreAndAssist({ matchId, selectedLabel }: Props) {
-  const [data, setData] = useState<MatchSummary | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let alive = true
-    ;(async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const res = await fetch(`/api/matches/${matchId}`, { cache: 'no-store' })
-        if (!res.ok) throw new Error('상세 데이터를 불러오지 못했습니다.')
-        const json = await res.json()
-        const normalized = normalizeSummary(json)
-
-        if (alive) setData(normalized)
-      } catch (e) {
-        if (!alive) return
-        setError(e instanceof Error ? e.message : '알 수 없는 오류')
-      } finally {
-        if (alive) setLoading(false)
-      }
-    })()
-    return () => {
-      alive = false
-    }
-  }, [matchId])
-
-  if (loading) return <ScoreAndAssistSkeleton />
-
-  if (error || !data)
-    return (
-      <section className="space-y-6">
-        <div className="w-full p-10 bg-rose-500/5 rounded-[2.5rem] border border-rose-500/20 text-center">
-          <ShieldAlert className="mx-auto text-rose-500 mb-4" size={32} />
-          <p className="text-sm font-bold text-rose-400">데이터를 불러오지 못했습니다.</p>
-          {error && <p className="mt-2 text-[11px] text-rose-300">{error}</p>}
-        </div>
-      </section>
-    )
+export default function ScoreAndAssist({ data, selectedLabel }: Props) {
+  if (!data) return <ScoreAndAssistSkeleton />
 
   const quarter = selectedLabel ? data.quarters.find((q) => q.label === selectedLabel) : undefined
   const goals = quarter?.goals ?? []

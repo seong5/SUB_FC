@@ -32,7 +32,9 @@ export default async function MatchesPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-[#020617]">
       <main className="rounded-b-[16px] px-20 py-10 space-y-6 md:px-40">
-        <Formation />
+        <div className="min-h-[487.7px]">
+          <Formation />
+        </div>
         <div className="my-5 space-y-2">
           <div className="flex items-center justify-between px-2">
             <div className="flex items-center gap-3">
