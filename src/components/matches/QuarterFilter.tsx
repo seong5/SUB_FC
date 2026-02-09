@@ -9,7 +9,7 @@ import { useDeleteMatchMutation } from '@/hooks/useMatches'
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
 import { useIsLoggedIn } from '@/store/useAuthStore'
 import { useClickOutside } from '@/hooks/useClickOutside'
-import { EllipsisVertical, LayoutGrid, ShieldCheck, AlertCircle } from 'lucide-react'
+import { EllipsisVertical, LayoutGrid, AlertCircle } from 'lucide-react'
 
 interface TypeFilterProps {
   selectedType: QuarterLabel | ''
@@ -201,12 +201,6 @@ export default function QuarterFilter({
                 </div>
               </div>
 
-              {/* 활성화 체크 표시 */}
-              {isActive && (
-                <div className="absolute top-4 right-4 text-slate-950/40">
-                  <ShieldCheck size={20} />
-                </div>
-              )}
             </button>
           )
         })}

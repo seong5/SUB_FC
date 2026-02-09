@@ -46,8 +46,8 @@ export default function QuarterFilterSkeleton() {
                 <LayoutGrid size={20} />
               </div>
               <div className="space-y-1 text-left">
-                <Skeleton className="h-[13.5px] w-[47.48px] bg-slate-700/60" variant="bar" />
-                <Skeleton className="h-[16.5px] w-[32.61px] bg-slate-700/60" variant="bar" />
+                <Skeleton className="h-[17.5px] w-[47.48px] bg-slate-700/60" variant="bar" />
+                <Skeleton className="h-[20.5px] w-[32.61px] bg-slate-700/60" variant="bar" />
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import RenderKakaoMap from '@/components/matches/KakaoMap'
+import MapSkeleton from '@/components/matches/MapSkeleton'
 
 type Props = { address: string; lat?: number; lng?: number }
 
@@ -27,6 +28,6 @@ export default function LoadKakaoMap({ address, lat, lng }: Props) {
   }, [])
 
   if (error) return <p className="text-red-500">{error}</p>
-  if (!loaded) return <p>지도를 불러오는 중…</p>
+  if (!loaded) return <MapSkeleton />
   return <RenderKakaoMap address={address} lat={lat} lng={lng} />
 }

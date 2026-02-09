@@ -26,20 +26,20 @@ export default function ScoreAndAssistSkeleton() {
               <Trophy size={180} />
             </div>
 
-            <Skeleton variant="bar" className="h-3 w-40 bg-slate-700/60 mb-4" />
+            <Skeleton variant="bar" className="h-[16.5px] w-[76.88px] bg-slate-700/60 mb-4" />
 
             <div className="flex items-center justify-center gap-6 md:gap-12 w-full">
               <div className="flex-1 text-right">
-                <Skeleton variant="bar" className="h-4 w-16 ml-auto bg-slate-700/60" />
+                <Skeleton variant="bar" className="h-[12px] w-[50px] ml-auto bg-slate-700/60" />
               </div>
 
               <div className="flex items-center gap-4">
-                <Skeleton variant="bar" className="h-12 w-10 md:h-14 md:w-12 bg-slate-700/60" />
-                <Skeleton variant="bar" className="h-12 w-10 md:h-14 md:w-12 bg-slate-700/60" />
+                <Skeleton variant="bar" className="h-[36px] w-[22px] bg-slate-700/60" />
+                <Skeleton variant="bar" className="h-[36px] w-[22px] bg-slate-700/60" />
               </div>
 
               <div className="flex-1 text-left">
-                <Skeleton variant="bar" className="h-4 w-16 mr-auto bg-slate-700/60" />
+                <Skeleton variant="bar" className="h-[12px] w-[50px] mr-auto bg-slate-700/60" />
               </div>
             </div>
           </div>
@@ -48,8 +48,11 @@ export default function ScoreAndAssistSkeleton() {
           <div className="flex flex-col items-center gap-4 mb-10">
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             <div className="flex flex-col items-center gap-3">
-              <Skeleton variant="bar" className="h-8 w-40 rounded-full bg-slate-700/80" />
-              <Skeleton variant="bar" className="h-10 w-32 bg-slate-700/60" />
+              <Skeleton
+                variant="bar"
+                className="h-[22px] w-[52.42px] rounded-full bg-slate-700/80"
+              />
+              <Skeleton variant="bar" className="h-[40px] w-[36.56px] bg-slate-700/60" />
             </div>
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
@@ -67,8 +70,8 @@ export default function ScoreAndAssistSkeleton() {
                 </span>
               </div>
               <div className="space-y-2 min-h-[40px]">
-                <Skeleton variant="box" className="h-10 w-full rounded-2xl bg-emerald-500/10" />
-                <Skeleton variant="box" className="h-10 w-full rounded-2xl bg-emerald-500/10" />
+                <Skeleton variant="box" className="h-[24px] w-full rounded-2xl bg-emerald-500/10" />
+                <Skeleton variant="box" className="h-[24px] w-full rounded-2xl bg-emerald-500/10" />
               </div>
             </div>
 
@@ -83,8 +86,8 @@ export default function ScoreAndAssistSkeleton() {
                 </span>
               </div>
               <div className="space-y-2 min-h-[40px]">
-                <Skeleton variant="box" className="h-10 w-full rounded-2xl bg-indigo-500/10" />
-                <Skeleton variant="box" className="h-10 w-full rounded-2xl bg-indigo-500/10" />
+                <Skeleton variant="box" className="h-[24px] w-full rounded-2xl bg-indigo-500/10" />
+                <Skeleton variant="box" className="h-[24px] w-full rounded-2xl bg-indigo-500/10" />
               </div>
             </div>
 
@@ -99,8 +102,8 @@ export default function ScoreAndAssistSkeleton() {
                 </span>
               </div>
               <div className="space-y-2 min-h-[40px]">
-                <Skeleton variant="box" className="h-10 w-full rounded-2xl bg-rose-500/10" />
-                <Skeleton variant="box" className="h-10 w-full rounded-2xl bg-rose-500/10" />
+                <Skeleton variant="box" className="h-[24px] w-full rounded-2xl bg-rose-500/10" />
+                <Skeleton variant="box" className="h-[24px] w-full rounded-2xl bg-rose-500/10" />
               </div>
             </div>
           </div>
