@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import CalendarHeader from '@/components/teams/calender/CalenderHeader'
-import CalendarGrid from '@/components/teams/calender/CalenderGrid'
-import CalendarSkeleton from '@/components/teams/calender/CalendarSkeleton'
+import { useMemo, useRef, useState } from 'react'
 import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/utils/calenderUtils'
 import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/hooks/useTeams'
+import CalendarSkeleton from '@/components/teams/calender/CalendarSkeleton'
+import CalenderHeader from '@/components/teams/calender/CalenderHeader'
+import CalenderGrid from '@/components/teams/calender/CalenderGrid'
+import DayEventsPopover from '@/components/teams/calender/DayEventsPopover'
 import type { CalendarEvent } from '@/components/teams/calender/CalenderGrid'
 
 type Props = {
@@ -17,16 +18,17 @@ type Props = {
 export default function Calendar({ value, onChange, className }: Props) {
   const today = useMemo(() => new Date(), [])
   const [viewDate, setViewDate] = useState<Date>(value ?? today)
+  const [openPopover, setOpenPopover] = useState<{ date: string; rect: DOMRect } | null>(null)
+  const gridContainerRef = useRef<HTMLDivElement>(null)
   const { data: scheduleEvents = [], isLoading } = useScheduleEventsQuery()
   const deleteMutation = useDeleteScheduleEventMutation()
 
   const dates = useMemo(() => getCalendarDates(viewDate), [viewDate])
 
-  // ScheduleEvent를 CalendarEvent 형식으로 변환
   const calendarEvents: CalendarEvent[] = useMemo(() => {
     return scheduleEvents.map((event) => ({
       id: event.id,
-      date: event.date,
+      date: event.date.includes('T') ? event.date.slice(0, 10) : event.date,
       type: event.type,
       title: event.title,
       place: event.place,
@@ -37,8 +39,6 @@ export default function Calendar({ value, onChange, className }: Props) {
     setViewDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
   const goNextMonth = () =>
     setViewDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))
-
-  const selected = value
 
   const handleDeleteEvent = (id?: string) => {
     if (id) {
@@ -52,37 +52,48 @@ export default function Calendar({ value, onChange, className }: Props) {
   }
 
   if (isLoading) {
-    return (
-      <CalendarSkeleton
-        viewDate={viewDate}
-        onPrev={goPrevMonth}
-        onNext={goNextMonth}
-      />
-    )
+    return <CalendarSkeleton viewDate={viewDate} onPrev={goPrevMonth} onNext={goNextMonth} />
   }
 
   return (
     <section
-      className={`p-20 my-20 w-full border border-gray-100 rounded-[20px] bg-white card-shadow ${className ?? ''}`}
+      className={`relative overflow-hidden rounded-[40px] border border-white/5 bg-slate-900/40 p-10 shadow-2xl backdrop-blur-3xl md:p-12 lg:p-16 ${className ?? ''}`}
       aria-label="달력"
     >
-      <CalendarHeader
-        title={getMonthName(viewDate)}
-        subtitle={formatDateKorean(viewDate)}
-        onPrev={goPrevMonth}
-        onNext={goNextMonth}
-      />
+      {/* Background Decorative Glow */}
+      <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-blue-600/10 blur-[100px]" />
 
-      <CalendarGrid
-        viewDate={viewDate}
-        dates={dates}
-        today={today}
-        selected={selected}
-        onSelect={(d) => onChange?.(d)}
-        isSameDate={isSameDate}
-        events={calendarEvents}
-        onDeleteEvent={handleDeleteEvent}
-      />
+      <div ref={gridContainerRef} className="relative z-10 w-full min-w-0">
+        <CalenderHeader
+          title={getMonthName(viewDate)}
+          subtitle={formatDateKorean(viewDate)}
+          onPrev={goPrevMonth}
+          onNext={goNextMonth}
+        />
+
+        <CalenderGrid
+          viewDate={viewDate}
+          dates={dates}
+          today={today}
+          selected={value}
+          onSelect={(d) => onChange?.(d)}
+          onDayClick={(dateStr, rect) => setOpenPopover({ date: dateStr, rect })}
+          isSameDate={isSameDate}
+          events={calendarEvents}
+          onDeleteEvent={handleDeleteEvent}
+        />
+
+        {openPopover && (
+          <DayEventsPopover
+            date={openPopover.date}
+            rect={openPopover.rect}
+            containerRef={gridContainerRef}
+            events={calendarEvents.filter((ev) => ev.date === openPopover.date)}
+            onClose={() => setOpenPopover(null)}
+            onDelete={handleDeleteEvent}
+          />
+        )}
+      </div>
     </section>
   )
 }

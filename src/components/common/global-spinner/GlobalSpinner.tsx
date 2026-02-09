@@ -15,13 +15,14 @@ export default function GlobalSpinner() {
   const isHomePage = pathname === '/'
   const isTeamsPage = pathname?.startsWith('/teams')
   const isPlayersPage = pathname?.startsWith('/players')
+  const isMatchDetailPage = pathname?.startsWith('/matches/')
 
   const visible = useControlledSpinner(active, {
     delayBeforeShow: 50,
     minVisibleMs: 500,
   })
 
-  if (!visible || isHomePage || isTeamsPage || isPlayersPage) return null
+  if (!visible || isHomePage || isTeamsPage || isPlayersPage || isMatchDetailPage) return null
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60">

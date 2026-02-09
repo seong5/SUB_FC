@@ -1,13 +1,13 @@
 import Calender from '@/components/teams/calender/Calender'
 import Schedule from '@/components/teams/Schedule'
-import WinRate from '@/components/teams/WinRate'
 
 export default function TeamPage() {
   return (
-    <main className="bg-sub-gray p-20">
-      <WinRate />
-      <Schedule />
-      <Calender />
-    </main>
+    <div className="min-h-screen bg-[#020617]">
+      <main className="rounded-b-[16px] p-20 md:px-40">
+        <Schedule />
+        <Calender />
+      </main>
+    </div>
   )
 }

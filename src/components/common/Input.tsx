@@ -47,6 +47,8 @@ interface CommonProps {
   label?: string
   errorMessage?: string
   className?: string
+  /** input/textarea 등 실제 입력 요소에 적용할 추가 클래스 (variant가 input/textarea 등일 때) */
+  inputClassName?: string
 }
 
 /** 일반 input 전용 props (HTML type 사용 가능) */
@@ -96,7 +98,13 @@ const SCROLLBAR_STYLE = cn(
 
 /* ------------------------ main ------------------------ */
 
-export default function Input({ className = '', label, errorMessage, ...props }: Props) {
+export default function Input({
+  className = '',
+  label,
+  errorMessage,
+  inputClassName,
+  ...props
+}: Props) {
   const insideInput = () => {
     const base = cn(
       'text-gray-950',
@@ -109,15 +117,14 @@ export default function Input({ className = '', label, errorMessage, ...props }:
       case 'dropdown':
         return <DropdownInput className={cn(COMMON_STYLE, FOCUS_STYLE)} {...props} />
       case 'textarea':
-        return <TextareaInput className={base} {...props} />
+        return <TextareaInput className={cn(base, inputClassName)} {...props} />
       case 'date-custom':
-        return <DateCustomInput className={base} {...props} />
+        return <DateCustomInput className={cn(base, inputClassName)} {...props} />
       case 'input': {
-        // input 변형 중 password만 별도 처리
         if (props.type === 'password') {
-          return <PasswordInput className={base} {...props} />
+          return <PasswordInput className={base} inputClassName={inputClassName} {...props} />
         }
-        return <input className={base} {...props} />
+        return <input className={cn(base, inputClassName)} {...props} />
       }
     }
   }
@@ -261,8 +268,9 @@ function TextareaInput({ className, height, ...props }: TextareaProps & { classN
 
 function PasswordInput({
   className,
+  inputClassName,
   ...props
-}: Omit<InputProps, 'variant'> & { className?: string }) {
+}: Omit<InputProps, 'variant'> & { className?: string; inputClassName?: string }) {
   const [isPassword, setIsPassword] = useState(true)
 
   return (
@@ -270,7 +278,7 @@ function PasswordInput({
       <input
         {...props}
         type={isPassword ? 'password' : 'text'}
-        className={cn(className, 'pr-40')}
+        className={cn(className, 'pr-40', inputClassName)}
       />
       <button
         className="absolute top-15 right-20 text-gray-400"

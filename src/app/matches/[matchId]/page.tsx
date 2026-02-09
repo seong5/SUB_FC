@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
+import { MapPin } from 'lucide-react'
 import Formation from '@/components/matches/Formation'
 import LoadKakaoMap from '@/components/matches/LoadKakaoMap'
 
@@ -29,16 +30,32 @@ export default async function MatchesPage({ params }: PageProps) {
   }
 
   return (
-    <div className="bg-gray-100 px-20 py-10 space-y-6">
-      <Formation />
-      <p className="my-5 text-[16px] font-bold text-gray-800">
-        구장 주소 : <span>{match.place_address ?? match.place}</span>
-      </p>
-      <LoadKakaoMap
-        address={match.place_address ?? match.place}
-        lat={match.place_lat ?? undefined}
-        lng={match.place_lng ?? undefined}
-      />
+    <div className="min-h-screen bg-[#020617]">
+      <main className="rounded-b-[16px] px-20 py-10 space-y-6 md:px-40">
+        <div className="min-h-[487.7px]">
+          <Formation />
+        </div>
+        <div className="my-5 space-y-2">
+          <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-3">
+              <h3 className="text-2xl mt-15 font-black italic text-white uppercase tracking-tighter">
+                Location
+              </h3>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 text-[16px] font-bold text-white">
+            <div className="flex items-center justify-center w-30 h-30 text-emerald-400">
+              <MapPin size={22} />
+            </div>
+            <span className="text-white truncate">{match.place_address ?? match.place}</span>
+          </div>
+        </div>
+        <LoadKakaoMap
+          address={match.place_address ?? match.place}
+          lat={match.place_lat ?? undefined}
+          lng={match.place_lng ?? undefined}
+        />
+      </main>
     </div>
   )
 }

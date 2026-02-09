@@ -7,12 +7,14 @@ import DropDown from '@/components/common/DropDown'
 import Icon from '@/components/common/Icon'
 import MatchInfoCard from '@/components/main/MatchInfoCard'
 import MatchInfoCardSkeleton from '@/components/main/MatchInfoCardSkeleton'
+import WinRate from '@/components/main/WinRate'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
 import { useQuery } from '@tanstack/react-query'
 import { useMatchesQuery, useCreateMatchMutation } from '@/hooks/useMatches'
 import api from '@/libs/axios'
 import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
+import { Plus } from 'lucide-react'
 
 import type { ModalVariant } from '@/constants/modal'
 import type {
@@ -87,7 +89,7 @@ export default function Home() {
   const [page, setPage] = useState<number>(1)
   const [query, setQuery] = useState<string>('')
   const [sortOrder, setSortOrder] = useState<SortOrder>('latest')
-  const PAGE_SIZE = 5
+  const PAGE_SIZE = 6
   const handleSubmitSearch = () => setPage(1)
 
   const items: UIMatchSummary[] = matchesData
@@ -215,11 +217,26 @@ export default function Home() {
   }, [step2, players])
 
   return (
-    <main className="bg-sub-gray rounded-[16px] p-20">
-      <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
-
-      <div className="mt-20 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-[#020617]">
+      <main className="rounded-b-[16px] p-20 space-y-16 md:px-40">
+        <div className="flex justify-end">
+          <Button
+            variant="primary"
+            className="rounded-[20px] txt-16_B w-170 md:w-300 h-47 px-12 py-4 flex items-center justify-center gap-2"
+            icon={isLoggedIn ? <Plus size={20} className="shrink-0" /> : undefined}
+            onClick={isLoggedIn ? openStep1 : undefined}
+            disabled={authLoading || !isLoggedIn || isPlayersLoading || Boolean(playersError)}
+          >
+            {!isLoggedIn
+              ? '로그인이 필요합니다.'
+              : isPlayersLoading
+                ? '선수 불러오는 중…'
+                : '경기 등록하기'}
+          </Button>
+        </div>
+        <WinRate />
+        <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
+        <div className="mt-20 flex items-center gap-3">
           <DropDown
             trigger={
               <div className="flex items-center gap-2 min-w-90 min-h-47 justify-center border-2 border-sub-red bg-white rounded-full px-8 py-4 text-black cursor-pointer">
@@ -235,103 +252,96 @@ export default function Home() {
           />
         </div>
 
-        <Button
-          variant="primary"
-          className="rounded-[20px] txt-16_B w-250 md:w-500 h-47 px-12 py-4"
-          onClick={isLoggedIn ? openStep1 : undefined}
-          disabled={authLoading || !isLoggedIn || isPlayersLoading || Boolean(playersError)}
-        >
-          {isPlayersLoading
-            ? '선수 불러오는 중…'
-            : !isLoggedIn
-              ? '로그인 후 이용 가능합니다.'
-              : '경기 등록'}
-        </Button>
-      </div>
+        <ul className="mt-6 grid grid-cols-2 gap-4">
+          {isMatchesLoading ? (
+            Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <li key={`skeleton-${index}`}>
+                <MatchInfoCardSkeleton />
+              </li>
+            ))
+          ) : current.length > 0 ? (
+            current.map((m) => (
+              <li key={m.id}>
+                <MatchInfoCard match={m} />
+              </li>
+            ))
+          ) : matchesError ? (
+            <li className="col-span-2 rounded-md p-6 text-center text-red-500">
+              목록을 불러오지 못했어요.
+            </li>
+          ) : (
+            <li className="col-span-2 rounded-md p-6 text-center text-gray-500">
+              검색 결과를 찾을 수 없습니다.
+            </li>
+          )}
+        </ul>
 
-      <ul className="space-y-3 mt-6">
-        {isMatchesLoading ? (
-          Array.from({ length: PAGE_SIZE }).map((_, index) => (
-            <li key={`skeleton-${index}`}>
-              <MatchInfoCardSkeleton />
-            </li>
-          ))
-        ) : current.length > 0 ? (
-          current.map((m) => (
-            <li key={m.id}>
-              <MatchInfoCard match={m} />
-            </li>
-          ))
-        ) : matchesError ? (
-          <li className="rounded-md p-6 text-red-500 text-center">목록을 불러오지 못했어요.</li>
-        ) : (
-          <li className="rounded-md p-6 text-gray-500 text-center">
-            검색 결과를 찾을 수 없습니다.
-          </li>
+        <div className="flex items-center justify-center mt-6">
+          <Pagination
+            currentPage={safePage}
+            pageSize={6}
+            totalCount={totalCount}
+            onPageChange={setPage}
+          />
+        </div>
+
+        {/* Step1 */}
+        {variant === 'postMatch' && (
+          <Modal
+            variant="postMatch"
+            onClose={() => setVariant(null)}
+            onSubmit={handleStep1Submit}
+          />
         )}
-      </ul>
 
-      <div className="flex items-center justify-center mt-6">
-        <Pagination
-          currentPage={safePage}
-          pageSize={5}
-          totalCount={totalCount}
-          onPageChange={setPage}
-        />
-      </div>
+        {/* Step2 */}
+        {variant === 'postRoster' && (
+          <Modal
+            variant="postRoster"
+            onBack={() => setVariant('postMatch')}
+            onClose={() => setVariant(null)}
+            onSubmit={handleStep2Submit}
+            players={players}
+            initial={step2 ?? undefined}
+          />
+        )}
 
-      {/* Step1 */}
-      {variant === 'postMatch' && (
-        <Modal variant="postMatch" onClose={() => setVariant(null)} onSubmit={handleStep1Submit} />
-      )}
+        {/* Step3 */}
+        {variant === 'postQuarters' && (
+          <Modal
+            variant="postQuarters"
+            onBack={() => setVariant('postRoster')}
+            onClose={() => setVariant(null)}
+            onSubmit={handleStep3Submit}
+            eligiblePlayers={eligiblePlayers}
+            initial={step3 ?? undefined}
+          />
+        )}
 
-      {/* Step2 */}
-      {variant === 'postRoster' && (
-        <Modal
-          variant="postRoster"
-          onBack={() => setVariant('postMatch')}
-          onClose={() => setVariant(null)}
-          onSubmit={handleStep2Submit}
-          players={players}
-          initial={step2 ?? undefined}
-        />
-      )}
+        {/* Step4 */}
+        {variant === 'postScores' && (
+          <Modal
+            variant="postScores"
+            onBack={() => setVariant('postQuarters')}
+            onClose={() => setVariant(null)}
+            onSubmit={handleStep4Submit}
+            eligiblePlayers={eligiblePlayers}
+            initial={step3 ?? undefined}
+          />
+        )}
 
-      {/* Step3 */}
-      {variant === 'postQuarters' && (
-        <Modal
-          variant="postQuarters"
-          onBack={() => setVariant('postRoster')}
-          onClose={() => setVariant(null)}
-          onSubmit={handleStep3Submit}
-          eligiblePlayers={eligiblePlayers}
-          initial={step3 ?? undefined}
-        />
-      )}
-
-      {/* Step4 */}
-      {variant === 'postScores' && (
-        <Modal
-          variant="postScores"
-          onBack={() => setVariant('postQuarters')}
-          onClose={() => setVariant(null)}
-          onSubmit={handleStep4Submit}
-          eligiblePlayers={eligiblePlayers}
-          initial={step3 ?? undefined}
-        />
-      )}
-
-      {/* Step5 */}
-      {variant === 'postMom' && (
-        <Modal
-          variant="postMom"
-          onBack={() => setVariant('postScores')}
-          onClose={() => setVariant(null)}
-          onSubmit={handleStep5Submit}
-          eligiblePlayers={eligiblePlayers}
-          initial={step5 ?? undefined}
-        />
-      )}
-    </main>
+        {/* Step5 */}
+        {variant === 'postMom' && (
+          <Modal
+            variant="postMom"
+            onBack={() => setVariant('postScores')}
+            onClose={() => setVariant(null)}
+            onSubmit={handleStep5Submit}
+            eligiblePlayers={eligiblePlayers}
+            initial={step5 ?? undefined}
+          />
+        )}
+      </main>
+    </div>
   )
 }

@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { Beer, MoreHorizontal, Trophy } from 'lucide-react'
 import { formatDate } from '@/utils/calenderUtils'
-import DayEventsPopover from './DayEventsPopover'
 
 const weekdays = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -16,10 +16,31 @@ export type CalendarEvent = {
   id?: string
 }
 
-const EVENT_COLORS: Record<EventsType, string> = {
-  매치: 'bg-orange-300',
-  회식: 'bg-purple-300',
-  기타: 'bg-gray-300',
+const EVENT_BADGE_THEMES: Record<
+  EventsType,
+  { label: string; color: string; bg: string; border: string; icon: typeof Trophy }
+> = {
+  매치: {
+    label: '매치',
+    color: 'text-orange-400',
+    bg: 'bg-orange-400/10',
+    border: 'border-orange-400/20',
+    icon: Trophy,
+  },
+  회식: {
+    label: '회식',
+    color: 'text-purple-400',
+    bg: 'bg-purple-400/10',
+    border: 'border-purple-400/20',
+    icon: Beer,
+  },
+  기타: {
+    label: '기타',
+    color: 'text-slate-400',
+    bg: 'bg-slate-400/10',
+    border: 'border-slate-400/20',
+    icon: MoreHorizontal,
+  },
 }
 
 type GridProps = {
@@ -28,9 +49,10 @@ type GridProps = {
   today: Date
   selected?: Date
   onSelect: (date: Date) => void
+  onDayClick?: (dateStr: string, rect: DOMRect) => void
   isSameDate: (a: Date, b: Date) => boolean
   events?: CalendarEvent[]
-  onDeleteEvent?: (id?: string) => void // 삭제가 필요하면 넘기기(선택)
+  onDeleteEvent?: (id?: string) => void
 }
 
 export default function CalendarGrid({
@@ -39,20 +61,19 @@ export default function CalendarGrid({
   today,
   selected,
   onSelect,
+  onDayClick,
   isSameDate,
   events = [],
-  onDeleteEvent,
 }: GridProps) {
   const isSameMonth = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
-  const [open, setOpen] = useState<{ date: string; rect: DOMRect } | null>(null)
   const weekdayHeader = useMemo(
     () => (
-      <div className="grid grid-cols-7 py-2 text-center text-xs md:text-sm text-gray-500">
+      <div className="grid grid-cols-7 py-4 text-center text-sm text-slate-400 md:py-5 md:text-base">
         {weekdays.map((w, i) => (
           <div
             key={w}
-            className={`py-1 ${i === 0 ? 'text-red-500' : i === 6 ? 'text-blue-600' : ''}`}
+            className={`py-1 ${i === 0 ? 'text-red-500' : i === 6 ? 'text-blue-500' : ''}`}
           >
             {w}
           </div>
@@ -62,27 +83,34 @@ export default function CalendarGrid({
     []
   )
   return (
-    <div>
+    <div className="w-full min-w-0">
       {weekdayHeader}
 
-      <div className="grid grid-cols-7 gap-1">
+      <div
+        className="grid w-full min-w-0 gap-2 md:gap-3"
+        style={{ gridTemplateColumns: 'repeat(7, minmax(0, 1fr))' }}
+      >
         {dates.map((d) => {
           const inThisMonth = isSameMonth(viewDate, d)
           const isToday = isSameDate(d, today)
           const isSelected = selected ? isSameDate(d, selected) : false
           const dateStr = formatDate(d)
-          const dayEvents = events.filter((ev) => ev.date === dateStr)
+          const dayEvents = events.filter((ev) => {
+            const evDate = ev.date.includes('T') ? ev.date.slice(0, 10) : ev.date
+            return evDate === dateStr
+          })
 
           return (
             <button
               key={d.toISOString()}
+              type="button"
               onClick={(e) => {
                 onSelect(d)
-                setOpen({ date: dateStr, rect: e.currentTarget.getBoundingClientRect() })
+                onDayClick?.(dateStr, e.currentTarget.getBoundingClientRect())
               }}
               className={[
-                'aspect-square rounded-xl text-sm md:text-base flex flex-col items-center select-none',
-                'transition-colors relative',
+                'flex min-h-[110px] min-w-0 flex-col items-stretch justify-start overflow-hidden rounded-xl px-2 py-2.5 text-base select-none transition-colors md:min-h-[140px] md:px-2.5 md:py-3 md:text-lg',
+                'relative w-full box-border',
                 inThisMonth ? 'text-gray-900' : 'text-gray-400',
                 isSelected
                   ? 'bg-gray-900 text-white hover:bg-gray-800'
@@ -92,32 +120,38 @@ export default function CalendarGrid({
               ].join(' ')}
               aria-label={`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`}
               aria-haspopup="dialog"
-              aria-expanded={open?.date === dateStr}
             >
-              <span>{d.getDate()}</span>
+              <span className="shrink-0 text-center">{d.getDate()}</span>
 
-              <div className="flex flex-col gap-1 mt-1">
-                {dayEvents.map((ev, idx) => (
-                  <span
-                    key={ev.id ?? idx}
-                    className={`w-30 h-10 rounded-full ${EVENT_COLORS[ev.type]}`}
-                  />
-                ))}
+              <div className="mt-2.5 flex min-w-0 flex-1 flex-col gap-1.5">
+                {dayEvents.map((ev, idx) => {
+                  const theme = EVENT_BADGE_THEMES[ev.type] ?? EVENT_BADGE_THEMES.기타
+                  const IconComponent = theme.icon
+                  return (
+                    <div
+                      key={ev.id ?? idx}
+                      className={`flex min-w-0 w-full items-center gap-2 rounded-lg border px-2 py-1.5 shadow md:gap-2.5 md:rounded-xl md:px-2.5 md:py-2 ${theme.bg} ${theme.border}`}
+                      title={`${ev.type}${ev.title ? `: ${ev.title}` : ''}`}
+                    >
+                      <div
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded border border-white/5 bg-slate-900/50 md:h-7 md:w-7 ${theme.color}`}
+                      >
+                        <IconComponent size={12} className="shrink-0" />
+                      </div>
+                      <span className="min-w-0 flex-1 truncate text-[10px] font-black italic uppercase leading-none tracking-tight text-white md:text-xs">
+                        {theme.label}
+                      </span>
+                      <div
+                        className={`h-5 w-1 shrink-0 rounded-full opacity-20 md:h-6 ${theme.color.replace('text', 'bg')}`}
+                      />
+                    </div>
+                  )
+                })}
               </div>
             </button>
           )
         })}
       </div>
-      {/* 팝오버 */}
-      {open && (
-        <DayEventsPopover
-          date={open.date}
-          rect={open.rect}
-          events={events.filter((ev) => ev.date === open.date)}
-          onClose={() => setOpen(null)}
-          onDelete={onDeleteEvent}
-        />
-      )}
     </div>
   )
 }

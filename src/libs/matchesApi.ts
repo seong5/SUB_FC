@@ -31,6 +31,30 @@ export async function getMatchDetail(id: number): Promise<UIMatchSummary> {
   return mapToUIMatchSummary(data)
 }
 
+/** GET /api/matches/:id 전체 응답 (쿼터/득점 포함) - 한 번만 호출해 Formation에서 공유용 */
+export type MatchDetailFull = {
+  matchId: number
+  date: string
+  opponent: string
+  finalScore: string
+  place: string
+  quarters: Array<{
+    label: string
+    goals: Array<{ minute?: number | null; scorer?: string; assist?: string }>
+    conceded: number
+    scoreAfter: string
+  }>
+  place_name?: string | null
+  place_address?: string | null
+  place_lat?: number | null
+  place_lng?: number | null
+}
+
+export async function getMatchDetailFull(id: number): Promise<MatchDetailFull> {
+  const { data } = await api.get<MatchDetailFull>(`/matches/${id}`)
+  return data
+}
+
 export async function deleteMatch(id: number): Promise<void> {
   await api.delete(`/matches/${id}`)
 }

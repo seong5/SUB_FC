@@ -1,51 +1,22 @@
-import { cn } from '@/utils/cn'
+'use client'
 
-type SkeletonProps = {
+export type SkeletonVariant = 'bar' | 'circle' | 'box'
+
+export interface SkeletonProps {
+  variant?: SkeletonVariant
   className?: string
-  variant?: 'text' | 'circular' | 'rectangular'
-  width?: string | number
-  height?: string | number
-  animation?: 'pulse' | 'wave' | 'none'
 }
 
-export default function Skeleton({
-  className,
-  variant = 'rectangular',
-  width,
-  height,
-  animation = 'pulse',
-}: SkeletonProps) {
-  const baseClasses = 'bg-gray-200'
-  
-  const variantClasses = {
-    text: 'rounded',
-    circular: 'rounded-full',
-    rectangular: 'rounded',
-  }
-
-  const animationClasses = {
-    pulse: 'animate-pulse',
-    wave: 'animate-[shimmer_2s_infinite]',
-    none: '',
-  }
-
-  const style: React.CSSProperties = {
-    minHeight: height ? (typeof height === 'number' ? `${height}px` : height) : undefined,
-  }
-  if (width) style.width = typeof width === 'number' ? `${width}px` : width
-  if (height) style.height = typeof height === 'number' ? `${height}px` : height
-
-  return (
-    <div
-      className={cn(
-        baseClasses,
-        variantClasses[variant],
-        animationClasses[animation],
-        className
-      )}
-      style={style}
-      aria-hidden="true"
-    />
-  )
+const variantStyles: Record<SkeletonVariant, string> = {
+  bar: 'rounded',
+  circle: 'rounded-full shrink-0',
+  box: 'rounded-lg',
 }
 
+export default function Skeleton({ variant, className = '' }: SkeletonProps) {
+  const base = 'animate-pulse bg-gray-200 dark:bg-gray-700'
+  const variantClass = variant ? variantStyles[variant] : ''
+  const combined = [base, variantClass, className].filter(Boolean).join(' ')
+
+  return <div className={combined} aria-hidden />
+}

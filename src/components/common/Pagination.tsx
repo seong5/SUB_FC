@@ -38,7 +38,7 @@ export default function Pagination({
   return (
     <div className="flex gap-4">
       <button
-        className="flex size-40 items-center justify-center p-8 text-gray-950 disabled:text-gray-300"
+        className="flex size-40 items-center justify-center p-8 text-white hover:text-white/90 disabled:text-white/40"
         disabled={currentPage === 0}
         onClick={handlePrevPage}
       >
@@ -51,8 +51,8 @@ export default function Pagination({
           className={cn(
             'txt-14_M size-40 p-8 leading-24 transition-colors duration-150',
             page === currentPage
-              ? 'border-sub-red border-b-2 text-gray-950'
-              : 'text-gray-300 hover:text-gray-500'
+              ? 'border-sub-red border-b-2 text-white'
+              : 'text-white/80 hover:text-white'
           )}
           onClick={() => onPageChange(page)}
         >
@@ -61,7 +61,7 @@ export default function Pagination({
       ))}
 
       <button
-        className="flex size-40 items-center justify-center p-8 text-gray-950 disabled:text-gray-300"
+        className="flex size-40 items-center justify-center p-8 text-white hover:text-white/90 disabled:text-white/40"
         disabled={currentPage === totalPages}
         onClick={handleNextPage}
       >
