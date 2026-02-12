@@ -11,12 +11,7 @@ import { useIsLoggedIn, useAuthLoading } from '@/shared/lib/store'
 import { Plus } from 'lucide-react'
 
 import type { ModalVariant } from '@/shared/config/modal'
-import type {
-  CreateMatchPayload,
-  PostMatchData,
-  RosterData,
-  QuarterData,
-} from '@/entities/match'
+import type { CreateMatchPayload, PostMatchData, RosterData, QuarterData } from '@/entities/match'
 
 /** 서버가 /api/players 에서 내려주는 타입 */
 type ServerPlayer = {
@@ -76,7 +71,6 @@ export default function Home() {
   const [step4, setStep4] = useState<QuarterData[] | null>(null)
   const [step5, setStep5] = useState<string[] | null>(null)
 
-
   // Step handlers
   const handleStep1Submit = (data: PostMatchData) => {
     setStep1(data)
@@ -90,7 +84,6 @@ export default function Home() {
     setStep3(quarters)
     setVariant('postScores')
   }
-
   const handleStep4Submit = (final: QuarterData[]) => {
     setStep4(final)
     setVariant('postMom')

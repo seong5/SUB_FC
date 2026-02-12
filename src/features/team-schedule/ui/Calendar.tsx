@@ -40,6 +40,19 @@ export default function Calendar({ value, onChange, className }: Props) {
     }))
   }, [scheduleEvents])
 
+  // 이벤트를 날짜별로 그룹화 (성능 최적화: O(N) → O(1) 조회)
+  const eventsByDate = useMemo(() => {
+    const grouped: Record<string, CalendarEvent[]> = {}
+    calendarEvents.forEach((event) => {
+      const dateKey = event.date.includes('T') ? event.date.slice(0, 10) : event.date
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = []
+      }
+      grouped[dateKey].push(event)
+    })
+    return grouped
+  }, [calendarEvents])
+
   const goPrevMonth = () =>
     setViewDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
   const goNextMonth = () =>
@@ -84,7 +97,7 @@ export default function Calendar({ value, onChange, className }: Props) {
           onSelect={(d) => onChange?.(d)}
           onDayClick={(dateStr, rect) => setOpenPopover({ date: dateStr, rect })}
           isSameDate={isSameDate}
-          events={calendarEvents}
+          eventsByDate={eventsByDate}
           onDeleteEvent={handleDeleteEvent}
         />
 

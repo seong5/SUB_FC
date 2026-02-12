@@ -6,6 +6,9 @@ import { formatDate } from '@/shared/utils/calenderUtils'
 
 const weekdays = ['일', '월', '화', '수', '목', '금', '토']
 
+// 빈 배열 상수화 (참조 안정성)
+const EMPTY_EVENTS: CalendarEvent[] = []
+
 export type EventsType = '매치' | '회식' | '기타'
 
 export type CalendarEvent = {
@@ -51,7 +54,7 @@ type GridProps = {
   onSelect: (date: Date) => void
   onDayClick?: (dateStr: string, rect: DOMRect) => void
   isSameDate: (a: Date, b: Date) => boolean
-  events?: CalendarEvent[]
+  eventsByDate: Record<string, CalendarEvent[]>
   onDeleteEvent?: (id?: string) => void
 }
 
@@ -63,7 +66,7 @@ export default function CalendarGrid({
   onSelect,
   onDayClick,
   isSameDate,
-  events = [],
+  eventsByDate,
 }: GridProps) {
   const isSameMonth = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
@@ -80,7 +83,7 @@ export default function CalendarGrid({
         ))}
       </div>
     ),
-    []
+    [],
   )
   return (
     <div className="w-full min-w-0">
@@ -95,10 +98,8 @@ export default function CalendarGrid({
           const isToday = isSameDate(d, today)
           const isSelected = selected ? isSameDate(d, selected) : false
           const dateStr = formatDate(d)
-          const dayEvents = events.filter((ev) => {
-            const evDate = ev.date.includes('T') ? ev.date.slice(0, 10) : ev.date
-            return evDate === dateStr
-          })
+          // O(1) 조회로 변경 (이전: O(N) filter)
+          const dayEvents = eventsByDate[dateStr] ?? EMPTY_EVENTS
 
           return (
             <button

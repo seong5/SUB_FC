@@ -14,6 +14,8 @@ interface MatchListProps {
   error?: Error | null
 }
 
+// MatchList는 이미 props로 데이터를 받고 있으므로 변경 불필요
+
 const PAGE_SIZE = 6
 
 export default function MatchList({ matches, isLoading = false, error = null }: MatchListProps) {
@@ -29,7 +31,7 @@ export default function MatchList({ matches, isLoading = false, error = null }: 
       q
         ? matches.filter((m) => [m.opponent, m.place].some((v) => v.toLowerCase().includes(q)))
         : matches,
-    [matches, q]
+    [matches, q],
   )
 
   const sorted = useMemo<UIMatchSummary[]>(() => {
@@ -37,7 +39,7 @@ export default function MatchList({ matches, isLoading = false, error = null }: 
     copy.sort((a, b) =>
       sortOrder === 'latest'
         ? new Date(b.date).getTime() - new Date(a.date).getTime()
-        : new Date(a.date).getTime() - new Date(b.date).getTime()
+        : new Date(a.date).getTime() - new Date(b.date).getTime(),
     )
     return copy
   }, [filtered, sortOrder])
