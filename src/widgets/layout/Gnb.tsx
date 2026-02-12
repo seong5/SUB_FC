@@ -8,7 +8,7 @@ import { Calendar, Users } from 'lucide-react'
 import { createClient } from '@/shared/api/supabase'
 import type { User } from '@supabase/supabase-js'
 import { Icon, Button, Notification } from '@/shared'
-import { useNotifications } from '@/store/useNotificationStore'
+import { useNotifications } from '@/shared/lib/store'
 import { useClickOutside } from '@/shared/hooks'
 
 export default function Gnb() {

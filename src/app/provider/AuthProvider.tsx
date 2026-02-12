@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/shared/api/supabase'
-import { useAuthStore } from '@/store/useAuthStore'
+import { useAuthStore } from '@/shared/lib/store'
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = createClient()

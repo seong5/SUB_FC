@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/shared/api/supabase'
-import { useAuthUser } from '@/store/useAuthStore'
-import { useAddNotification } from '@/store/useNotificationStore'
+import { useAuthUser, useAddNotification } from '@/shared/lib/store'
 
 export default function NotificationProvider({ children }: { children: React.ReactNode }) {
   const supabase = createClient()

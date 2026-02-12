@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Beer, Calendar, MoreHorizontal, Trophy } from 'lucide-react'
 import { Button, Modal } from '@/shared'
 import { useCreateScheduleEventMutation } from '@/entities/team'
-import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
+import { useIsLoggedIn, useAuthLoading } from '@/shared/lib/store'
 
 export default function Schedule() {
   const [isOpen, setIsOpen] = useState(false)

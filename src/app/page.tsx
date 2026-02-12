@@ -8,7 +8,7 @@ import { WinRate } from '@/features/team-stats'
 import { useQuery } from '@tanstack/react-query'
 import { useMatchesQuery, useCreateMatchMutation } from '@/entities/match'
 import { api } from '@/shared/api'
-import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
+import { useIsLoggedIn, useAuthLoading } from '@/shared/lib/store'
 import { Plus } from 'lucide-react'
 
 import type { ModalVariant } from '@/shared/config/modal'

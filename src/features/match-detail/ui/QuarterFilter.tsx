@@ -2,11 +2,11 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { QuarterLabel } from '@/mocks/QuarterScores'
+import type { QuarterLabel } from '@/shared/types'
 import { Modal } from '@/shared'
 import { patchMatch, patchRoster, patchQuarters, patchScores, useDeleteMatchMutation } from '@/entities/match'
 import type { PostMatchData, RosterData, QuarterData } from '@/entities/match'
-import { useIsLoggedIn } from '@/store/useAuthStore'
+import { useIsLoggedIn } from '@/shared/lib/store'
 import { useClickOutside } from '@/shared/hooks'
 import { EllipsisVertical, LayoutGrid, AlertCircle } from 'lucide-react'
 

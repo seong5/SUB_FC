@@ -5,7 +5,7 @@ import { generateId } from '@/shared/utils/uuid'
 
 export type NotificationType = 'match' | 'schedule'
 
-export type Notification = {
+export type NotificationItem = {
   id: string
   type: NotificationType
   message: string
@@ -17,8 +17,8 @@ export type Notification = {
 }
 
 type NotificationState = {
-  notifications: Notification[]
-  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void
+  notifications: NotificationItem[]
+  addNotification: (notification: Omit<NotificationItem, 'id' | 'timestamp'>) => void
   removeNotification: (id: string) => void
   clearAll: () => void
 }

@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { playersRoster } from '@/mocks/playersRoster'
 import QuarterFilter from './QuarterFilter'
 import QuarterFilterSkeleton from './QuarterFilterSkeleton'
 import ScoreAndAssist, { normalizeSummary } from './ScoreAndAssist'
 import ScoreAndAssistSkeleton from './ScoreAndAssistSkeleton'
-import { QuarterLabel } from '@/mocks/QuarterScores'
+import type { QuarterLabel } from '@/shared/types'
+import { usePlayersQuery } from '@/entities/player'
 import { useParams } from 'next/navigation'
 import { getMatchDetailFull } from '@/entities/match'
 import { useQuery } from '@tanstack/react-query'
@@ -17,7 +17,8 @@ export default function FormationPage() {
   const matchId = Number(params.matchId)
   const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<QuarterLabel | ''>('1 쿼터')
 
-  const eligiblePlayers: PlayerLite[] = playersRoster.map((p) => ({
+  const { data: players = [] } = usePlayersQuery()
+  const eligiblePlayers: PlayerLite[] = players.map((p) => ({
     id: String(p.id),
     name: p.name,
     position: p.position, // 'GK' | 'DF' | 'MF' | 'FW'

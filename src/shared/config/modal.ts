@@ -3,7 +3,7 @@ import { PostMatchContent, PostRosterContent, PostQuartersContent, PostScoresCon
 import { ScheduleContent } from '@/features/team-schedule'
 
 import type { PostMatchData, RosterData, QuarterData } from '@/entities/match'
-import type { EventsType } from '@/mocks/calenderEvents'
+import type { EventsType } from '@/features/team-schedule'
 import type { FC } from 'react'
 import type { Position } from './positionColor'
 

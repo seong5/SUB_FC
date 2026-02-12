@@ -1,6 +1,6 @@
 'use client'
 
-import { useNotifications, useRemoveNotification } from '@/store/useNotificationStore'
+import { useNotifications, useRemoveNotification } from '@/shared/lib/store'
 import { cn } from '@/shared/utils/cn'
 
 export default function Notification() {
