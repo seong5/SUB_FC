@@ -1,7 +1,7 @@
 'use client'
 import { useState, ChangeEvent } from 'react'
 import { Button, Input } from '@/shared'
-import { ScheduleContentProps } from '@/shared/config/modal'
+import type { ScheduleContentProps } from '@/features/team-schedule'
 
 type EventsType = '매치' | '회식' | '기타'
 

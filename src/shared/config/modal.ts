@@ -1,9 +1,8 @@
 import { OnlyTextContent, WarningContent } from '@/shared/ui/modal-contents'
 import { PostMatchContent, PostRosterContent, PostQuartersContent, PostScoresContent, PostMomContent } from '@/features/match-creation'
-import { ScheduleContent } from '@/features/team-schedule'
+import { ScheduleContent, type ScheduleContentProps } from '@/features/team-schedule'
 
 import type { PostMatchData, RosterData, QuarterData } from '@/entities/match'
-import type { EventsType } from '@/features/team-schedule'
 import type { FC } from 'react'
 import type { Position } from './positionColor'
 
@@ -49,11 +48,6 @@ export interface PostMatchProps {
   }
 }
 
-export interface ScheduleContentProps {
-  variant: 'scheduleEvent'
-  onClose: () => void
-  onSubmit: (data: { date: string; type: EventsType; title?: string; place?: string }) => void
-}
 
 export interface PostRosterContentProps {
   variant: 'postRoster'
