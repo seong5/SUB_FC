@@ -1,21 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import subfc from '../../../../public/subfc.png'
 import { Input, Button, Icon } from '@/shared'
 import Link from 'next/link'
 import { Mail, Lock, ChevronRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createClient } from '@/shared/api/supabase'
-
-const LoginSchema = z.object({
-  email: z.string().min(1, '이메일을 입력해주세요.').email('이메일 형식이 올바르지 않습니다.'),
-  password: z.string().min(1, '비밀번호를 입력해주세요.'),
-})
-
-type LoginForm = z.infer<typeof LoginSchema>
+import { LoginSchema, type LoginFormData } from '../model/schemas'
 
 const INPUT_DARK =
   '!bg-slate-950/50 !border-slate-800 !text-slate-200 focus:!border-cyan-500/50 focus:!ring-4 focus:!ring-cyan-500/10 placeholder:!text-slate-600'
@@ -26,12 +18,12 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     setError,
-  } = useForm<LoginForm>({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
     mode: 'onChange',
   })
 
-  const onSubmit = async ({ email, password }: LoginForm) => {
+  const onSubmit = async ({ email, password }: LoginFormData) => {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
@@ -66,10 +58,11 @@ export default function LoginForm() {
         <div className="flex flex-col items-center text-center my-20">
           <div>
             <Image
-              src={subfc}
+              src="/subfc.png"
               alt="SUB FC"
               width={200}
               height={200}
+              priority={false}
               className="relative z-10 w-[200px] h-[200px] rounded-full"
             />
           </div>

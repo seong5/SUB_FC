@@ -1,34 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import subfc from '../../../../public/subfc.png'
 import { Input, Button, Icon } from '@/shared'
 import Link from 'next/link'
 import { Mail, Lock, ChevronRight, User } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createClient } from '@/shared/api/supabase'
-
-const SignupSchema = z
-  .object({
-    email: z.string().min(1, '이메일을 입력해주세요.').email('이메일이 올바르지 않습니다.'),
-    nickname: z
-      .string()
-      .min(2, '닉네임은 2자 이상 입력해주세요.')
-      .max(20, '닉네임을 20자 이하로 입력해주세요.'),
-    password: z
-      .string()
-      .min(8, '비밀번호는 8자 이상 입력해주세요.')
-      .regex(/(?=.*[A-Za-z])(?=.*\d)(?=.*[^\w\s])/, '영문/숫자/특수문자를 포함해야 해요.'),
-    confirm: z.string().min(1, '비밀번호를 한 번 더 입력해주세요.'),
-  })
-  .refine((data) => data.password === data.confirm, {
-    path: ['confirm'],
-    message: '비밀번호가 일치하지 않습니다.',
-  })
-
-type SignupForm = z.infer<typeof SignupSchema>
+import { SignupSchema, type SignupFormData } from '../model/schemas'
 
 const INPUT_DARK =
   '!bg-slate-950/50 !border-slate-800 !text-slate-200 focus:!border-cyan-500/50 focus:!ring-4 focus:!ring-cyan-500/10 placeholder:!text-slate-600'
@@ -38,12 +17,12 @@ export default function SignupForm() {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<SignupForm>({
+  } = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: SignupForm) => {
+  const onSubmit = async (data: SignupFormData) => {
     const supabase = createClient()
     const { error } = await supabase.auth.signUp({
       email: data.email,
@@ -81,10 +60,11 @@ export default function SignupForm() {
         <div className="flex flex-col items-center text-center my-20">
           <div>
             <Image
-              src={subfc}
+              src="/subfc.png"
               alt="SUB FC"
               width={200}
               height={200}
+              priority={false}
               className="relative z-10 w-[200px] h-[200px] rounded-full"
             />
           </div>
