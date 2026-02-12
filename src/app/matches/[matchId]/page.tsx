@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import { MapPin } from 'lucide-react'
-import Formation from '@/components/matches/Formation'
-import LoadKakaoMap from '@/components/matches/LoadKakaoMap'
+import { Formation, LoadKakaoMap } from '@/features/match-detail'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

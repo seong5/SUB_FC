@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createServerClientForRoute } from '@/libs/supabase/server-route'
-import type { CreateMatchPayload, MatchCreatedResponse, MatchListItem } from '@/types/match'
+import { createServerClientForRoute } from '@/shared/api/supabase'
+import type { CreateMatchPayload, MatchCreatedResponse, MatchListItem } from '@/entities/match'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

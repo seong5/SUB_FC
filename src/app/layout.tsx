@@ -1,8 +1,7 @@
-import Gnb from '@/components/common/Gnb'
+import { Gnb, Footer } from '@/widgets'
 import './globals.css'
-import Footer from '@/components/common/Footer'
 import QueryProvider from './provider/QueryProvider'
-import GlobalSpinner from '@/components/common/global-spinner/GlobalSpinner'
+import { GlobalSpinner } from '@/shared'
 import AuthProvider from './provider/AuthProvider'
 import NotificationProvider from './provider/NotificationProvider'
 
