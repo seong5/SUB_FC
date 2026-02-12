@@ -8,7 +8,7 @@ import { Mail, Lock, ChevronRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createClient } from '@/libs/supabase/client'
+import { createClient } from '@/shared/api/supabase'
 
 const LoginSchema = z.object({
   email: z.string().min(1, '이메일을 입력해주세요.').email('이메일 형식이 올바르지 않습니다.'),

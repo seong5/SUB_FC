@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClientForRoute } from '@/libs/supabase/server-route'
-import type { PostMatchData, RosterData, QuarterData, PlayerLite } from '@/types/match'
+import { createServerClientForRoute } from '@/shared/api/supabase'
+import type { PostMatchData, RosterData, QuarterData, PlayerLite } from '@/entities/match'
 
 type MatchRow = { date: string; opponent: string; place: string; score: string }
 type RosterRow = { formation: string; GK: string[]; DF: string[]; MF: string[]; FW: string[] }

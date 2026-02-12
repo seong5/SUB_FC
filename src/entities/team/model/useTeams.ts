@@ -5,10 +5,8 @@ import {
   getScheduleEvents,
   createScheduleEvent,
   deleteScheduleEvent,
-  type TeamStats,
-  type ScheduleEvent,
-  type CreateScheduleEventDto,
-} from '@/libs/teamsApi'
+} from './api'
+import type { TeamStats, ScheduleEvent, CreateScheduleEventDto } from './types'
 
 export function useTeamStatsQuery() {
   return useQuery<TeamStats>({

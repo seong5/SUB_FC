@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/shared/utils/calenderUtils'
-import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/hooks/useTeams'
+import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/entities/team'
 import CalendarSkeleton from '@/components/teams/calender/CalendarSkeleton'
 import CalenderHeader from '@/components/teams/calender/CalenderHeader'
 import CalenderGrid from '@/components/teams/calender/CalenderGrid'

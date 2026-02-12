@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/shared'
 import type { PostScoresContentProps } from '@/shared/config/modal'
-import type { QuarterData, QuarterGoal } from '@/types/match'
+import type { QuarterData, QuarterGoal } from '@/entities/match'
 
 export default function PostScoresContent({
   onBack,

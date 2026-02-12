@@ -1,6 +1,6 @@
 'use client'
 
-import { useTeamStatsQuery } from '@/hooks/useTeams'
+import { useTeamStatsQuery } from '@/entities/team'
 import WinRateSkeleton from './WinRateSkeleton'
 
 export default function WinRate() {

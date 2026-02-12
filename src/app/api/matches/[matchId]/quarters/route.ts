@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClientForRoute } from '@/libs/supabase/server-route'
-import type { QuarterData } from '@/types/match'
+import { createServerClientForRoute } from '@/shared/api/supabase'
+import type { QuarterData } from '@/entities/match'
 
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ matchId: string }> }) {
   const { matchId } = await ctx.params

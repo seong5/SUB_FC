@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createClient } from '@/libs/supabase/client'
+import { createClient } from '@/shared/api/supabase'
 import { useAuthUser } from '@/store/useAuthStore'
 import { useAddNotification } from '@/store/useNotificationStore'
 

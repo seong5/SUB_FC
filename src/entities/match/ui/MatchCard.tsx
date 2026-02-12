@@ -10,11 +10,11 @@ export type MatchCardData = {
   place: string
   score: string
 }
-type MatchInfoCardProps = {
+type MatchCardProps = {
   match: MatchCardData
 }
 
-export default function MatchInfoCard({ match }: MatchInfoCardProps) {
+export default function MatchCard({ match }: MatchCardProps) {
   const result = getResultFromFinalScore(match.score)
   const isWin = result === '승'
   const isLoss = result === '패'

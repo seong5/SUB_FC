@@ -1,6 +1,6 @@
 import { Skeleton } from '@/shared'
 
-export default function MatchInfoCardSkeleton() {
+export default function MatchCardSkeleton() {
   return (
     <div className="block group">
       <div className="relative overflow-hidden rounded-[32px] border border-slate-700/60 bg-slate-900/80 backdrop-blur-xl transition-all duration-500 min-h-[165px] md:min-h-[173px]">
@@ -8,7 +8,7 @@ export default function MatchInfoCardSkeleton() {
         <div className="absolute -right-20 -top-20 h-40 w-40 bg-slate-500 blur-[80px] opacity-20" />
 
         <div className="relative z-10 p-6 md:p-8">
-          {/* 날짜 / 장소 영역 (MatchInfoCard와 동일 레이아웃) */}
+          {/* 날짜 / 장소 영역 (MatchCard와 동일 레이아웃) */}
           <div className="mb-4 p-10 flex flex-col gap-4">
             {/* 날짜 라인: Calendar(14x14) + 날짜 텍스트(90.38x20) */}
             <div className="flex items-center gap-2">

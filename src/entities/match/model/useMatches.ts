@@ -1,7 +1,7 @@
 'use client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createMatch, deleteMatch, getMatches } from '@/libs/matchesApi'
-import type { CreateMatchPayload, MatchCreatedResponse, UIMatchSummary } from '@/types/match'
+import { createMatch, deleteMatch, getMatches } from './api'
+import type { CreateMatchPayload, MatchCreatedResponse, UIMatchSummary } from './types'
 
 export function useMatchesQuery() {
   return useQuery<UIMatchSummary[]>({

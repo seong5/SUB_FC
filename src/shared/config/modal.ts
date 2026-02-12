@@ -7,7 +7,7 @@ import PostQuartersContent from '@/components/common/modal-contents/PostQuarters
 import PostScoresContent from '@/components/common/modal-contents/PostScoresContent'
 import PostMomContent from '@/components/common/modal-contents/PostMomContent'
 
-import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
+import type { PostMatchData, RosterData, QuarterData } from '@/entities/match'
 import type { EventsType } from '@/mocks/calenderEvents'
 import type { FC } from 'react'
 import type { Position } from './positionColor'

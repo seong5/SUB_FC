@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Beer, Calendar, MoreHorizontal, Trophy } from 'lucide-react'
 import { Button, Modal } from '@/shared'
-import { useCreateScheduleEventMutation } from '@/hooks/useTeams'
+import { useCreateScheduleEventMutation } from '@/entities/team'
 import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
 
 export default function Schedule() {

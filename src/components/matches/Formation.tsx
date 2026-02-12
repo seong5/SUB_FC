@@ -8,9 +8,9 @@ import ScoreAndAssist, { normalizeSummary } from './ScoreAndAssist'
 import ScoreAndAssistSkeleton from './ScoreAndAssistSkeleton'
 import { QuarterLabel } from '@/mocks/QuarterScores'
 import { useParams } from 'next/navigation'
-import { getMatchDetailFull } from '@/libs/matchesApi'
+import { getMatchDetailFull } from '@/entities/match'
 import { useQuery } from '@tanstack/react-query'
-import type { PlayerLite } from '@/types/match'
+import type { PlayerLite } from '@/entities/match'
 
 export default function FormationPage() {
   const params = useParams<{ matchId: string }>()

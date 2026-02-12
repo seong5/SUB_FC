@@ -8,7 +8,7 @@ import { Mail, Lock, ChevronRight, User } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createClient } from '@/libs/supabase/client'
+import { createClient } from '@/shared/api/supabase'
 
 const SignupSchema = z
   .object({

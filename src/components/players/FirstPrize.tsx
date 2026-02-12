@@ -3,7 +3,7 @@
 import React from 'react'
 import { Trophy, Target, Star, Award, TrendingUp } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
-import { getPlayers, type Player } from '@/libs/playersApi'
+import { getPlayers, type Player } from '@/entities/player'
 import FirstPrizeSkeleton from './FirstPrizeSkeleton'
 
 const EXCLUDED_PLAYERS = ['제갈진석', '차우현', '윤동관', '유동엽', '현신우']

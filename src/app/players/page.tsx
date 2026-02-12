@@ -1,11 +1,8 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { LayoutGrid } from 'lucide-react'
-import { getPlayers } from '@/libs/playersApi'
-import type { Player } from '@/libs/playersApi'
-import PlayerCard from '@/components/players/PlayerCard'
-import PlayerCardSkeleton from '@/components/players/PlayerCardSkeleton'
+import { usePlayersQuery, type Player } from '@/entities/player'
+import { PlayerCard, PlayerCardSkeleton } from '@/entities/player'
 import { Position, POSITION_BORDER } from '@/shared/config/positionColor'
 import FirstPrize from '@/components/players/FirstPrize'
 
@@ -17,12 +14,7 @@ const POSITION_LABEL: Record<Position, string> = {
 }
 
 export default function PlayersPage() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['players'],
-    queryFn: getPlayers,
-    refetchOnMount: true,
-    staleTime: 0,
-  })
+  const { data, isLoading, isError } = usePlayersQuery()
 
   const positions: Position[] = ['FW', 'MF', 'DF', 'GK']
 

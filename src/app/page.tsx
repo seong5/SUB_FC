@@ -3,12 +3,11 @@
 import { useMemo, useState, useEffect } from 'react'
 import { Pagination, DropDown, Icon, Modal, Button } from '@/shared'
 import SearchBar from '@/components/main/SearchBar'
-import MatchInfoCard from '@/components/main/MatchInfoCard'
-import MatchInfoCardSkeleton from '@/components/main/MatchInfoCardSkeleton'
+import { MatchCard, MatchCardSkeleton } from '@/entities/match'
 import WinRate from '@/components/main/WinRate'
 import { useQuery } from '@tanstack/react-query'
-import { useMatchesQuery, useCreateMatchMutation } from '@/hooks/useMatches'
-import api from '@/libs/axios'
+import { useMatchesQuery, useCreateMatchMutation } from '@/entities/match'
+import { api } from '@/shared/api'
 import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
 import { Plus } from 'lucide-react'
 
@@ -19,7 +18,7 @@ import type {
   PostMatchData,
   RosterData,
   QuarterData,
-} from '@/types/match'
+} from '@/entities/match'
 
 type SortOrder = 'latest' | 'oldest'
 
@@ -252,13 +251,13 @@ export default function Home() {
           {isMatchesLoading ? (
             Array.from({ length: PAGE_SIZE }).map((_, index) => (
               <li key={`skeleton-${index}`}>
-                <MatchInfoCardSkeleton />
+                <MatchCardSkeleton />
               </li>
             ))
           ) : current.length > 0 ? (
             current.map((m) => (
               <li key={m.id}>
-                <MatchInfoCard match={m} />
+                <MatchCard match={m} />
               </li>
             ))
           ) : matchesError ? (

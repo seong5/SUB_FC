@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createServerClientForRoute } from '@/libs/supabase/server-route'
+import { createServerClientForRoute } from '@/shared/api/supabase'
 import { parseScoreString } from '@/shared/utils/scoreCalculator'
 
 export const dynamic = 'force-dynamic'

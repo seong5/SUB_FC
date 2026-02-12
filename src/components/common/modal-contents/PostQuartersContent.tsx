@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { ChevronRight, ChevronLeft, Target, ShieldAlert, Activity } from 'lucide-react'
 import { Button } from '@/shared'
 import type { PostQuartersContentProps } from '@/shared/config/modal'
-import type { QuarterData } from '@/types/match'
+import type { QuarterData } from '@/entities/match'
 
 export default function PostQuartersContent({
   onBack,
