@@ -1,9 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
-import { Pagination, DropDown, Icon, Modal, Button } from '@/shared'
-import { SearchBar } from '@/features/match-search'
-import { MatchCard, MatchCardSkeleton } from '@/entities/match'
+import { useMemo, useState } from 'react'
+import { Modal, Button } from '@/shared'
+import { MatchList } from '@/widgets/match-list'
 import { WinRate } from '@/features/team-stats'
 import { useQuery } from '@tanstack/react-query'
 import { useMatchesQuery, useCreateMatchMutation } from '@/entities/match'
@@ -13,14 +12,11 @@ import { Plus } from 'lucide-react'
 
 import type { ModalVariant } from '@/shared/config/modal'
 import type {
-  UIMatchSummary,
   CreateMatchPayload,
   PostMatchData,
   RosterData,
   QuarterData,
 } from '@/entities/match'
-
-type SortOrder = 'latest' | 'oldest'
 
 /** 서버가 /api/players 에서 내려주는 타입 */
 type ServerPlayer = {
@@ -80,43 +76,6 @@ export default function Home() {
   const [step4, setStep4] = useState<QuarterData[] | null>(null)
   const [step5, setStep5] = useState<string[] | null>(null)
 
-  // 검색/정렬/페이지네이션
-  const [page, setPage] = useState<number>(1)
-  const [query, setQuery] = useState<string>('')
-  const [sortOrder, setSortOrder] = useState<SortOrder>('latest')
-  const PAGE_SIZE = 6
-  const handleSubmitSearch = () => setPage(1)
-
-  const items: UIMatchSummary[] = matchesData
-
-  const q = query.trim().toLowerCase()
-  const filtered = useMemo<UIMatchSummary[]>(
-    () =>
-      q
-        ? items.filter((m) => [m.opponent, m.place].some((v) => v.toLowerCase().includes(q)))
-        : items,
-    [items, q]
-  )
-
-  const sorted = useMemo<UIMatchSummary[]>(() => {
-    const copy = [...filtered]
-    copy.sort((a, b) =>
-      sortOrder === 'latest'
-        ? new Date(b.date).getTime() - new Date(a.date).getTime()
-        : new Date(a.date).getTime() - new Date(b.date).getTime()
-    )
-    return copy
-  }, [filtered, sortOrder])
-
-  const totalCount = sorted.length
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
-  const safePage = Math.min(page, totalPages)
-  const start = (safePage - 1) * PAGE_SIZE
-  const current = sorted.slice(start, start + PAGE_SIZE)
-
-  useEffect(() => {
-    setPage(1)
-  }, [query, sortOrder])
 
   // Step handlers
   const handleStep1Submit = (data: PostMatchData) => {
@@ -230,55 +189,7 @@ export default function Home() {
           </Button>
         </div>
         <WinRate />
-        <SearchBar value={query} onChange={setQuery} onSubmit={handleSubmitSearch} />
-        <div className="mt-20 flex items-center gap-3">
-          <DropDown
-            trigger={
-              <div className="flex items-center gap-2 min-w-90 min-h-47 justify-center border-2 border-sub-red bg-white rounded-full px-8 py-4 text-black cursor-pointer">
-                <span className="txt-16_M">{sortOrder === 'latest' ? '최근순' : '오래된순'}</span>
-                <Icon icon="ChevDown" />
-              </div>
-            }
-            position="bottom"
-            items={[
-              { text: '최근순', onClick: () => setSortOrder('latest') },
-              { text: '오래된순', onClick: () => setSortOrder('oldest') },
-            ]}
-          />
-        </div>
-
-        <ul className="mt-6 grid grid-cols-2 gap-4">
-          {isMatchesLoading ? (
-            Array.from({ length: PAGE_SIZE }).map((_, index) => (
-              <li key={`skeleton-${index}`}>
-                <MatchCardSkeleton />
-              </li>
-            ))
-          ) : current.length > 0 ? (
-            current.map((m) => (
-              <li key={m.id}>
-                <MatchCard match={m} />
-              </li>
-            ))
-          ) : matchesError ? (
-            <li className="col-span-2 rounded-md p-6 text-center text-red-500">
-              목록을 불러오지 못했어요.
-            </li>
-          ) : (
-            <li className="col-span-2 rounded-md p-6 text-center text-gray-500">
-              검색 결과를 찾을 수 없습니다.
-            </li>
-          )}
-        </ul>
-
-        <div className="flex items-center justify-center mt-6">
-          <Pagination
-            currentPage={safePage}
-            pageSize={6}
-            totalCount={totalCount}
-            onPageChange={setPage}
-          />
-        </div>
+        <MatchList matches={matchesData} isLoading={isMatchesLoading} error={matchesError} />
 
         {/* Step1 */}
         {variant === 'postMatch' && (
