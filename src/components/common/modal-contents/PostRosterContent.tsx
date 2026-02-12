@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { Users, ChevronRight, ChevronLeft, LayoutGrid, Shield, UserCheck } from 'lucide-react'
-import Button from '@/components/common/Button'
-import type { PostRosterContentProps } from '@/constants/modal'
-import type { Position } from '@/constants/modal'
-import type { Formation } from '@/constants/modal'
+import { Button } from '@/shared'
+import type { PostRosterContentProps } from '@/shared/config/modal'
+import type { Formation } from '@/shared/config/modal'
+import type { Position } from '@/shared/config/positionColor'
 
 const POSITIONS: Position[] = ['GK', 'DF', 'MF', 'FW']
 const FORMATIONS: Formation[] = ['4-4-2', '4-2-3-1']

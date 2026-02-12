@@ -6,7 +6,7 @@ import { getPlayers } from '@/libs/playersApi'
 import type { Player } from '@/libs/playersApi'
 import PlayerCard from '@/components/players/PlayerCard'
 import PlayerCardSkeleton from '@/components/players/PlayerCardSkeleton'
-import { Position, POSITION_BORDER } from '@/constants/positionColor'
+import { Position, POSITION_BORDER } from '@/shared/config/positionColor'
 import FirstPrize from '@/components/players/FirstPrize'
 
 const POSITION_LABEL: Record<Position, string> = {

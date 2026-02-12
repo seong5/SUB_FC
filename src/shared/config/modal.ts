@@ -10,6 +10,7 @@ import PostMomContent from '@/components/common/modal-contents/PostMomContent'
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
 import type { EventsType } from '@/mocks/calenderEvents'
 import type { FC } from 'react'
+import type { Position } from './positionColor'
 
 /** UI 전용 타입들 */
 export type ModalVariant =
@@ -22,7 +23,6 @@ export type ModalVariant =
   | 'postScores'
   | 'postMom'
 
-export type Position = 'GK' | 'DF' | 'MF' | 'FW'
 export type Formation = '4-4-2' | '4-2-3-1'
 
 /** 각 모달 콘텐츠 컴포넌트가 받을 Props */

@@ -1,6 +1,6 @@
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 import CalendarHeader from './CalenderHeader'
-import { getMonthName, formatDateKorean } from '@/utils/calenderUtils'
+import { getMonthName, formatDateKorean } from '@/shared/utils/calenderUtils'
 
 type CalendarSkeletonProps = {
   viewDate: Date

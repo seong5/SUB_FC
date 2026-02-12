@@ -1,8 +1,8 @@
 'use client'
 
 import { ReactNode, useRef, useState } from 'react'
-import { cn } from '@/utils/cn'
-import { useClickOutside } from '@/hooks/useClickOutside'
+import { cn } from '@/shared/utils/cn'
+import { useClickOutside } from '@/shared/hooks/useClickOutside'
 
 type DropDownItem = {
   text: string

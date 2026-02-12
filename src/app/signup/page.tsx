@@ -2,9 +2,7 @@
 
 import Image from 'next/image'
 import subfc from '../../../public/subfc.png'
-import Input from '@/components/common/Input'
-import Button from '@/components/common/Button'
-import Icon from '@/components/common/Icon'
+import { Input, Button, Icon } from '@/shared'
 import Link from 'next/link'
 import { Mail, Lock, ChevronRight, User } from 'lucide-react'
 import { useForm } from 'react-hook-form'

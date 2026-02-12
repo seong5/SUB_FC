@@ -1,5 +1,5 @@
-import Button from '@/components/common/Button'
-import type { WarningModalProps } from '@/constants/modal'
+import { Button } from '@/shared'
+import type { WarningModalProps } from '@/shared/config/modal'
 
 export function WarningContent({
   message,

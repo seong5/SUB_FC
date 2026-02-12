@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useRef, useState } from 'react'
-import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/utils/calenderUtils'
+import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/shared/utils/calenderUtils'
 import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/hooks/useTeams'
 import CalendarSkeleton from '@/components/teams/calender/CalendarSkeleton'
 import CalenderHeader from '@/components/teams/calender/CalenderHeader'

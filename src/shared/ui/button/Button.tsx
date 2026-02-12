@@ -10,8 +10,8 @@ import {
   buttonSize,
   buttonVariants,
   DEFAULT_BUTTON_ROUNDED,
-} from '../../constants/buttonStyles'
-import { cn } from '@/utils/cn'
+} from '@/shared/config/buttonStyles'
+import { cn } from '@/shared/utils/cn'
 
 export interface ButtonProps {
   children: ReactNode

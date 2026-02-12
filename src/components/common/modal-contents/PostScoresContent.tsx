@@ -11,8 +11,8 @@ import {
   Star,
   UserCheck,
 } from 'lucide-react'
-import Button from '@/components/common/Button'
-import type { PostScoresContentProps } from '@/constants/modal'
+import { Button } from '@/shared'
+import type { PostScoresContentProps } from '@/shared/config/modal'
 import type { QuarterData, QuarterGoal } from '@/types/match'
 
 export default function PostScoresContent({

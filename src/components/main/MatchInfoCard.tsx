@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { formatKoreanDate } from '@/utils/dateUtils'
-import { getResultFromFinalScore } from '@/utils/scoreCalculator'
+import { formatKoreanDate } from '@/shared/utils/dateUtils'
+import { getResultFromFinalScore } from '@/shared/utils/scoreCalculator'
 import { Calendar, MapPin } from 'lucide-react'
 
 export type MatchCardData = {

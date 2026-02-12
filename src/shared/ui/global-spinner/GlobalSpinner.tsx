@@ -2,8 +2,8 @@
 
 import { useIsFetching, useIsMutating } from '@tanstack/react-query'
 import { usePathname } from 'next/navigation'
-import Spinner from '@/components/common/spinner/Spinner'
-import { useControlledSpinner } from '@/hooks/useControllSpinner'
+import { Spinner } from '@/shared/ui/spinner'
+import { useControlledSpinner } from '@/shared/hooks/useControllSpinner'
 
 export default function GlobalSpinner() {
   const pathname = usePathname()

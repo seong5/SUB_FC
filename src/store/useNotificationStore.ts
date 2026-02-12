@@ -1,7 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
-import { generateId } from '@/utils/uuid'
+import { generateId } from '@/shared/utils/uuid'
 
 export type NotificationType = 'match' | 'schedule'
 

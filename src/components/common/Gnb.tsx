@@ -7,11 +7,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Calendar, Users } from 'lucide-react'
 import { createClient } from '@/libs/supabase/client'
 import type { User } from '@supabase/supabase-js'
-import Icon from './Icon'
-import Button from './Button'
+import { Icon, Button, Notification } from '@/shared'
 import { useNotifications } from '@/store/useNotificationStore'
-import Notification from './Notification'
-import { useClickOutside } from '@/hooks/useClickOutside'
+import { useClickOutside } from '@/shared/hooks'
 
 export default function Gnb() {
   const [user, setUser] = useState<User | null>(null)

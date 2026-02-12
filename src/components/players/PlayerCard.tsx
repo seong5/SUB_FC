@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { type Position, POSITION_GRADIENT, POSITION_BADGE_BG } from '@/constants/positionColor'
+import { type Position, POSITION_GRADIENT, POSITION_BADGE_BG } from '@/shared/config/positionColor'
 
 type PlayerCardProps = {
   name: string

@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
-import { generateId } from '@/utils/uuid'
+import { generateId } from '@/shared/utils/uuid'
 
 export type EventsType = '매치' | '회식' | '기타'
 

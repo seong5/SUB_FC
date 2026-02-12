@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import { Beer, Calendar, MoreHorizontal, Trophy } from 'lucide-react'
-import Button from '../common/Button'
-import Modal from '../common/Modal'
+import { Button, Modal } from '@/shared'
 import { useCreateScheduleEventMutation } from '@/hooks/useTeams'
 import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
 

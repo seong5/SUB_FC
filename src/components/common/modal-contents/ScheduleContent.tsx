@@ -1,8 +1,7 @@
 'use client'
 import { useState, ChangeEvent } from 'react'
-import Button from '../Button'
-import Input from '../Input'
-import { ScheduleContentProps } from '@/constants/modal'
+import { Button, Input } from '@/shared'
+import { ScheduleContentProps } from '@/shared/config/modal'
 
 type EventsType = '매치' | '회식' | '기타'
 

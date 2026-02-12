@@ -3,8 +3,8 @@
 import ReactDOM from 'react-dom'
 import { useRef } from 'react'
 
-import { ContentMap, ModalProps } from '@/constants/modal'
-import { useClickOutside } from '@/hooks/useClickOutside'
+import { ContentMap, ModalProps } from '@/shared/config/modal'
+import { useClickOutside } from '@/shared/hooks/useClickOutside'
 
 function hasOnClose(p: ModalProps | (ModalProps & { onClose?: () => void })): p is ModalProps & {
   onClose: () => void
@@ -30,6 +30,6 @@ export default function Modal<P extends ModalProps>(props: P) {
         <Content {...props} />
       </div>
     </div>,
-    document.body
+    document.body,
   )
 }

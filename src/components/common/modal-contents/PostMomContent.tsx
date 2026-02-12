@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { ChevronRight, ChevronLeft, Crown, CheckCircle2, Users, Star, Zap } from 'lucide-react'
-import Button from '@/components/common/Button'
+import { Button } from '@/shared'
 
 const EXCLUDED_PLAYERS = ['제갈진석', '차우현', '윤동관', '유동엽', '현신우', 'Guest']
 

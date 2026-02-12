@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Trophy } from 'lucide-react'
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 
 export default function FirstPrizeSkeleton() {
   return (

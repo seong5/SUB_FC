@@ -1,7 +1,7 @@
 'use client'
 
 import { Trophy, ShieldAlert, Star, Flame } from 'lucide-react'
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 
 export default function ScoreAndAssistSkeleton() {
   return (

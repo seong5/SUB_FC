@@ -6,4 +6,3 @@ export function generateId(): string {
   // 폴백: 간단한 UUID 생성
   return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${Math.random().toString(36).substring(2, 15)}`
 }
-

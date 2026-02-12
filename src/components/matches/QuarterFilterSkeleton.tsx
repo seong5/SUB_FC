@@ -1,7 +1,7 @@
 'use client'
 
 import { EllipsisVertical, LayoutGrid } from 'lucide-react'
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 
 const TYPES = ['1 쿼터', '2 쿼터', '3 쿼터', '4 쿼터'] as const
 

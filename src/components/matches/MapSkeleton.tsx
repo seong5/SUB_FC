@@ -1,6 +1,6 @@
 'use client'
 
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 
 export default function MapSkeleton() {
   return (

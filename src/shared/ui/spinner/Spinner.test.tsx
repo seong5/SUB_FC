@@ -1,9 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import Spinner from './Spinner'
+import { Spinner } from '@/shared/ui/spinner'
 
-jest.mock('../Icon', () => ({
+jest.mock('@/shared/ui/icon', () => ({
   __esModule: true,
+  Icon: (props: { icon: string; className?: string }) => (
+    <div data-testid="icon" data-icon={props.icon} className={props.className}>
+      {props.icon}
+    </div>
+  ),
   default: (props: { icon: string; className?: string }) => (
     <div data-testid="icon" data-icon={props.icon} className={props.className}>
       {props.icon}

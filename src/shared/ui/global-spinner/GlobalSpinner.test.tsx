@@ -1,6 +1,6 @@
 import { render, screen, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import GlobalSpinner from './GlobalSpinner'
+import { GlobalSpinner } from '@/shared/ui/global-spinner'
 import { useIsFetching, useIsMutating } from '@tanstack/react-query'
 
 jest.mock('@tanstack/react-query', () => ({
@@ -8,8 +8,9 @@ jest.mock('@tanstack/react-query', () => ({
   useIsMutating: jest.fn(),
 }))
 
-jest.mock('@/components/common/spinner/Spinner', () => ({
+jest.mock('@/shared/ui/spinner', () => ({
   __esModule: true,
+  Spinner: () => <div data-testid="spinner" />,
   default: () => <div data-testid="spinner" />,
 }))
 

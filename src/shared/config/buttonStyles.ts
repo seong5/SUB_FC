@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 export type buttonRoundedPixel = '16' | '14' | '12' | '8'
 

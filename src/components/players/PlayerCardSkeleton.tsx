@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 
 export default function PlayerCardSkeleton() {
   return (

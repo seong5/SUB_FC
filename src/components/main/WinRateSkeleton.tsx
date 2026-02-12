@@ -1,4 +1,4 @@
-import Skeleton from '@/components/common/skeleton/Skeleton'
+import { Skeleton } from '@/shared'
 
 export default function WinRateSkeleton() {
   return (

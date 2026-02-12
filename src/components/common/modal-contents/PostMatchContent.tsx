@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { Trophy, ChevronRight } from 'lucide-react'
-import type { PostMatchProps } from '@/constants/modal'
-import Button from '@/components/common/Button'
-import Input from '@/components/common/Input'
+import type { PostMatchProps } from '@/shared/config/modal'
+import { Button, Input } from '@/shared'
 
 type Touched = {
   date: boolean

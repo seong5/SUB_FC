@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { CalendarEvent, EventsType } from './CalenderGrid'
-import { useClickOutside } from '@/hooks/useClickOutside'
+import { useClickOutside } from '@/shared/hooks'
 
 type DayEventsPopoverProps = {
   date: string

@@ -1,4 +1,4 @@
-import { Formation } from '@/constants/modal'
+import { Formation } from '@/shared/config/modal'
 
 export interface PostMatchData {
   date: string

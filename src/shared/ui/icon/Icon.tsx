@@ -1,6 +1,6 @@
 import { lazy, Suspense, useMemo } from 'react'
 
-import ICON_MAP from '@/constants/iconMap'
+import ICON_MAP from '@/shared/config/iconMap'
 
 type IconProps = {
   icon: keyof typeof ICON_MAP

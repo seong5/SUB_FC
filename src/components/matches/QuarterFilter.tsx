@@ -3,12 +3,12 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuarterLabel } from '@/mocks/QuarterScores'
-import Modal from '../common/Modal'
+import { Modal } from '@/shared'
 import { patchMatch, patchRoster, patchQuarters, patchScores } from '@/libs/matchesApi'
 import { useDeleteMatchMutation } from '@/hooks/useMatches'
 import type { PostMatchData, RosterData, QuarterData } from '@/types/match'
 import { useIsLoggedIn } from '@/store/useAuthStore'
-import { useClickOutside } from '@/hooks/useClickOutside'
+import { useClickOutside } from '@/shared/hooks'
 import { EllipsisVertical, LayoutGrid, AlertCircle } from 'lucide-react'
 
 interface TypeFilterProps {

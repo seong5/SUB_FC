@@ -1,6 +1,6 @@
 'use client'
 import { useId } from 'react'
-import Button from '../common/Button'
+import { Button } from '@/shared'
 
 type Props = {
   value: string

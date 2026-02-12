@@ -10,9 +10,9 @@ import {
   useState,
 } from 'react'
 
-import { useClickOutside } from '@/hooks/useClickOutside'
-import { cn } from '@/utils/cn'
-import { generateId } from '@/utils/uuid'
+import { useClickOutside } from '@/shared/hooks/useClickOutside'
+import { cn } from '@/shared/utils/cn'
+import { generateId } from '@/shared/utils/uuid'
 import CloseEye from '@/assets/close-eye.svg'
 import OpenEye from '@/assets/open-eye.svg'
 import InputCalender from '@/assets/input-calender.svg'
@@ -82,18 +82,18 @@ type Props = InputProps | TextareaProps | DropdownProps | DateCustomProps
 
 const COMMON_STYLE = cn(
   'h-54 w-full rounded-2xl bg-white border border-gray-100 px-19 py-15 outline-none',
-  'txt-16_M leading-19 placeholder:text-gray-400 text-start'
+  'txt-16_M leading-19 placeholder:text-gray-400 text-start',
 )
 
 const FOCUS_STYLE = cn(
   'focus:border-primary-500 focus:border-[1.5px]',
-  'focus:px-18.5 focus:py-14.5'
+  'focus:px-18.5 focus:py-14.5',
 )
 
 const SCROLLBAR_STYLE = cn(
   '[&::-webkit-scrollbar]:w-3',
   '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200',
-  '[&::-webkit-scrollbar-button]:hidden'
+  '[&::-webkit-scrollbar-button]:hidden',
 )
 
 /* ------------------------ main ------------------------ */
@@ -110,7 +110,7 @@ export default function Input({
       'text-gray-950',
       COMMON_STYLE,
       FOCUS_STYLE,
-      errorMessage ? 'border-red-500' : ''
+      errorMessage ? 'border-red-500' : '',
     )
 
     switch (props.variant) {
@@ -149,7 +149,7 @@ export default function Input({
             className={cn(
               'txt-12_M leading-14 transition-opacity duration-150',
               'min-h-14',
-              showError ? 'text-red-500 opacity-100' : 'opacity-0'
+              showError ? 'text-red-500 opacity-100' : 'opacity-0',
             )}
           >
             {errorMessage ?? ''} {/* 내용이 없어도 높이는 유지 */}
@@ -192,7 +192,7 @@ function DropdownInput({
         className={cn(
           className,
           value.item || defaultValue ? 'text-gray-950' : 'text-gray-400',
-          'truncate pr-43 focus:pr-42.5'
+          'truncate pr-43 focus:pr-42.5',
         )}
         type="button"
         value={value.item || (defaultValue ?? placeholder ?? '')}
@@ -210,7 +210,7 @@ function DropdownInput({
         <div
           className={cn(
             'absolute top-64 z-10 w-full rounded-2xl border border-gray-100 bg-white px-8 py-11',
-            'shadow-[0_2px_6px_rgba(0,0,0,0.02)]'
+            'shadow-[0_2px_6px_rgba(0,0,0,0.02)]',
           )}
         >
           <div
@@ -225,7 +225,7 @@ function DropdownInput({
                 key={element.key}
                 className={cn(
                   'txt-16_M rounded-xl px-20 py-16 text-start leading-none wrap-break-word text-gray-900',
-                  element.key === value.key && 'bg-primary-100'
+                  element.key === value.key && 'bg-primary-100',
                 )}
                 type="button"
                 onClick={() => {
@@ -251,7 +251,7 @@ function TextareaInput({ className, height, ...props }: TextareaProps & { classN
     <label
       className={cn(
         className,
-        isFocused ? 'border-primary-500 border-[1.5px] px-[15.5px] py-[14.5px]' : 'px-[16px]'
+        isFocused ? 'border-primary-500 border-[1.5px] px-[15.5px] py-[14.5px]' : 'px-[16px]',
       )}
       style={{ height }}
     >

@@ -1,22 +1,18 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import Pagination from '@/components/common/Pagination'
+import { Pagination, DropDown, Icon, Modal, Button } from '@/shared'
 import SearchBar from '@/components/main/SearchBar'
-import DropDown from '@/components/common/DropDown'
-import Icon from '@/components/common/Icon'
 import MatchInfoCard from '@/components/main/MatchInfoCard'
 import MatchInfoCardSkeleton from '@/components/main/MatchInfoCardSkeleton'
 import WinRate from '@/components/main/WinRate'
-import Modal from '@/components/common/Modal'
-import Button from '@/components/common/Button'
 import { useQuery } from '@tanstack/react-query'
 import { useMatchesQuery, useCreateMatchMutation } from '@/hooks/useMatches'
 import api from '@/libs/axios'
 import { useIsLoggedIn, useAuthLoading } from '@/store/useAuthStore'
 import { Plus } from 'lucide-react'
 
-import type { ModalVariant } from '@/constants/modal'
+import type { ModalVariant } from '@/shared/config/modal'
 import type {
   UIMatchSummary,
   CreateMatchPayload,

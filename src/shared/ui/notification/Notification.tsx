@@ -1,7 +1,7 @@
 'use client'
 
 import { useNotifications, useRemoveNotification } from '@/store/useNotificationStore'
-import { cn } from '@/utils/cn'
+import { cn } from '@/shared/utils/cn'
 
 export default function Notification() {
   const notifications = useNotifications()
