@@ -1,11 +1,7 @@
 import { OnlyTextContent } from '@/components/common/modal-contents/OnlyTextContent'
-import { PostMatchContent } from '@/components/common/modal-contents/PostMatchContent'
-import ScheduleContent from '@/components/common/modal-contents/ScheduleContent'
+import { PostMatchContent, PostRosterContent, PostQuartersContent, PostScoresContent, PostMomContent } from '@/features/match-creation'
+import { ScheduleContent } from '@/features/team-schedule'
 import { WarningContent } from '@/components/common/modal-contents/WarningContent'
-import PostRosterContent from '@/components/common/modal-contents/PostRosterContent'
-import PostQuartersContent from '@/components/common/modal-contents/PostQuartersContent'
-import PostScoresContent from '@/components/common/modal-contents/PostScoresContent'
-import PostMomContent from '@/components/common/modal-contents/PostMomContent'
 
 import type { PostMatchData, RosterData, QuarterData } from '@/entities/match'
 import type { EventsType } from '@/mocks/calenderEvents'

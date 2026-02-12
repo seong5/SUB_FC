@@ -2,9 +2,9 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import { Pagination, DropDown, Icon, Modal, Button } from '@/shared'
-import SearchBar from '@/components/main/SearchBar'
+import { SearchBar } from '@/features/match-search'
 import { MatchCard, MatchCardSkeleton } from '@/entities/match'
-import WinRate from '@/components/main/WinRate'
+import { WinRate } from '@/features/team-stats'
 import { useQuery } from '@tanstack/react-query'
 import { useMatchesQuery, useCreateMatchMutation } from '@/entities/match'
 import { api } from '@/shared/api'

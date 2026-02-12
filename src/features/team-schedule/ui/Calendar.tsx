@@ -1,13 +1,18 @@
 'use client'
 
 import { useMemo, useRef, useState } from 'react'
-import { getCalendarDates, getMonthName, formatDateKorean, isSameDate } from '@/shared/utils/calenderUtils'
+import {
+  getCalendarDates,
+  getMonthName,
+  formatDateKorean,
+  isSameDate,
+} from '@/shared/utils/calenderUtils'
 import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/entities/team'
-import CalendarSkeleton from '@/components/teams/calender/CalendarSkeleton'
-import CalenderHeader from '@/components/teams/calender/CalenderHeader'
-import CalenderGrid from '@/components/teams/calender/CalenderGrid'
-import DayEventsPopover from '@/components/teams/calender/DayEventsPopover'
-import type { CalendarEvent } from '@/components/teams/calender/CalenderGrid'
+import CalendarSkeleton from './CalendarSkeleton'
+import CalendarHeader from './CalendarHeader'
+import CalendarGrid from './CalendarGrid'
+import DayEventsPopover from './DayEventsPopover'
+import type { CalendarEvent } from './CalendarGrid'
 
 type Props = {
   value?: Date
@@ -64,14 +69,14 @@ export default function Calendar({ value, onChange, className }: Props) {
       <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-blue-600/10 blur-[100px]" />
 
       <div ref={gridContainerRef} className="relative z-10 w-full min-w-0">
-        <CalenderHeader
+        <CalendarHeader
           title={getMonthName(viewDate)}
           subtitle={formatDateKorean(viewDate)}
           onPrev={goPrevMonth}
           onNext={goNextMonth}
         />
 
-        <CalenderGrid
+        <CalendarGrid
           viewDate={viewDate}
           dates={dates}
           today={today}

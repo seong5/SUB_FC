@@ -23,7 +23,11 @@ export default function FormationPage() {
     position: p.position, // 'GK' | 'DF' | 'MF' | 'FW'
   }))
 
-  const { data: detailFull, isPending, refetch } = useQuery({
+  const {
+    data: detailFull,
+    isPending,
+    refetch,
+  } = useQuery({
     queryKey: ['match', matchId],
     queryFn: () => getMatchDetailFull(matchId),
     staleTime: 0,

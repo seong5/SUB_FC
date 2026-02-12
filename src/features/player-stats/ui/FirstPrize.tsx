@@ -12,7 +12,7 @@ function getTopPlayers(
   players: Player[],
   field: keyof Player,
   excludePlayers: boolean = false,
-  minValue: number = 0
+  minValue: number = 0,
 ): Player[] {
   if (!players.length) return []
 

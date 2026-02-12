@@ -1,5 +1,5 @@
 import { Skeleton } from '@/shared'
-import CalendarHeader from './CalenderHeader'
+import CalendarHeader from './CalendarHeader'
 import { getMonthName, formatDateKorean } from '@/shared/utils/calenderUtils'
 
 type CalendarSkeletonProps = {

@@ -4,7 +4,7 @@ import { LayoutGrid } from 'lucide-react'
 import { usePlayersQuery, type Player } from '@/entities/player'
 import { PlayerCard, PlayerCardSkeleton } from '@/entities/player'
 import { Position, POSITION_BORDER } from '@/shared/config/positionColor'
-import FirstPrize from '@/components/players/FirstPrize'
+import { FirstPrize } from '@/features/player-stats'
 
 const POSITION_LABEL: Record<Position, string> = {
   GK: 'GOALKEEPER',
