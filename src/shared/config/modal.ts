@@ -1,7 +1,6 @@
-import { OnlyTextContent } from '@/components/common/modal-contents/OnlyTextContent'
+import { OnlyTextContent, WarningContent } from '@/shared/ui/modal-contents'
 import { PostMatchContent, PostRosterContent, PostQuartersContent, PostScoresContent, PostMomContent } from '@/features/match-creation'
 import { ScheduleContent } from '@/features/team-schedule'
-import { WarningContent } from '@/components/common/modal-contents/WarningContent'
 
 import type { PostMatchData, RosterData, QuarterData } from '@/entities/match'
 import type { EventsType } from '@/mocks/calenderEvents'
