@@ -8,6 +8,7 @@ import {
   isSameDate,
 } from '@/shared/utils/calenderUtils'
 import { useScheduleEventsQuery, useDeleteScheduleEventMutation } from '@/entities/team'
+import type { ScheduleEvent } from '@/entities/team'
 import CalendarSkeleton from './CalendarSkeleton'
 import CalendarHeader from './CalendarHeader'
 import CalendarGrid from './CalendarGrid'
@@ -18,15 +19,19 @@ type Props = {
   value?: Date
   onChange?: (date: Date) => void
   className?: string
+  /** 서버에서 미리 가져온 일정 목록 (서버 컴포넌트에서 전달 시 LCP 개선) */
+  initialScheduleEvents?: ScheduleEvent[] | null
 }
 
-export default function Calendar({ value, onChange, className }: Props) {
+export default function Calendar({ value, onChange, className, initialScheduleEvents }: Props) {
   const today = useMemo(() => new Date(), [])
   const [viewDate, setViewDate] = useState<Date>(value ?? today)
   const [openPopover, setOpenPopover] = useState<{ date: string; rect: DOMRect } | null>(null)
   const gridContainerRef = useRef<HTMLDivElement>(null)
-  const { data: scheduleEvents = [], isLoading } = useScheduleEventsQuery()
+  const { data: scheduleEventsFromQuery = [], isLoading } = useScheduleEventsQuery()
   const deleteMutation = useDeleteScheduleEventMutation()
+
+  const scheduleEvents = initialScheduleEvents ?? scheduleEventsFromQuery
 
   const dates = useMemo(() => getCalendarDates(viewDate), [viewDate])
 
@@ -69,7 +74,7 @@ export default function Calendar({ value, onChange, className }: Props) {
     }
   }
 
-  if (isLoading) {
+  if (initialScheduleEvents == null && isLoading) {
     return <CalendarSkeleton viewDate={viewDate} onPrev={goPrevMonth} onNext={goNextMonth} />
   }
 
