@@ -68,7 +68,12 @@ const SECTION_CONFIG = [
   },
 ] as const
 
-export default function FirstPrize() {
+type FirstPrizeProps = {
+  /** 서버에서 미리 가져온 선수 목록 (서버 컴포넌트에서 전달 시 LCP 개선) */
+  initialPlayers?: Player[] | null
+}
+
+export default function FirstPrize({ initialPlayers }: FirstPrizeProps) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
@@ -76,16 +81,19 @@ export default function FirstPrize() {
     staleTime: 0,
   })
 
-  if (isLoading) return <FirstPrizeSkeleton />
-  if (isError || !data)
+  const players = initialPlayers ?? data
+
+  if (players == null && isLoading) return <FirstPrizeSkeleton />
+  if (players == null && (isError || !data))
     return (
       <p className="text-center py-20 text-red-400 bg-[#020617]">데이터를 불러오지 못했습니다.</p>
     )
 
-  const topGoalPlayers = getTopPlayers(data, 'goals', true)
-  const topAssistPlayers = getTopPlayers(data, 'assists', true)
-  const topAttendancePlayers = getTopPlayers(data, 'attendance_percent', false)
-  const topMomPlayers = getTopPlayers(data, 'mom', false, 0)
+  const list = players ?? []
+  const topGoalPlayers = getTopPlayers(list, 'goals', true)
+  const topAssistPlayers = getTopPlayers(list, 'assists', true)
+  const topAttendancePlayers = getTopPlayers(list, 'attendance_percent', false)
+  const topMomPlayers = getTopPlayers(list, 'mom', false, 0)
 
   const topGoal = topGoalPlayers[0]
   const topAssist = topAssistPlayers[0]
