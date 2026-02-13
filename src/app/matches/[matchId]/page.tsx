@@ -30,6 +30,7 @@ export default async function MatchesPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-[#020617]">
+      <h1 className="sr-only">경기 상세</h1>
       <main className="rounded-b-[16px] px-20 py-10 space-y-6 md:px-40">
         <div className="min-h-[487.7px]">
           <Formation />
@@ -37,9 +38,9 @@ export default async function MatchesPage({ params }: PageProps) {
         <div className="my-5 space-y-2">
           <div className="flex items-center justify-between px-2">
             <div className="flex items-center gap-3">
-              <h3 className="text-2xl mt-15 font-black italic text-white uppercase tracking-tighter">
+              <h2 className="text-2xl mt-15 font-black italic text-white uppercase tracking-tighter">
                 Location
-              </h3>
+              </h2>
             </div>
           </div>
           <div className="flex items-center gap-3 text-[16px] font-bold text-white">

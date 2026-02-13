@@ -131,7 +131,7 @@ export default function FirstPrize() {
               명예의 전당
             </span>
           </h1>
-          <p className="mt-6 text-slate-500 font-bold text-xs uppercase tracking-[0.5em] opacity-80">
+          <p className="mt-6 text-slate-400 font-bold text-xs uppercase tracking-[0.5em] opacity-90">
             부문별 최우수 선수 리스트
           </p>
         </div>
@@ -152,28 +152,28 @@ export default function FirstPrize() {
                       >
                         <Icon size={24} className="text-white" />
                       </div>
-                      <span className="text-[13px] font-bold text-slate-600 uppercase tracking-widest">
+                      <span className="text-[13px] font-bold text-slate-500 uppercase tracking-widest">
                         {section.title}
                       </span>
                     </div>
 
-                    <h3 className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4">
+                    <h2 className="text-slate-300 font-bold text-xs uppercase tracking-widest mb-4">
                       {section.label}
-                    </h3>
+                    </h2>
 
                     <div className="space-y-1">
                       {section.players.length === 0 ? (
-                        <h2 className="text-3xl font-bold text-white tracking-tight italic uppercase">
+                        <p className="text-3xl font-bold text-white tracking-tight italic uppercase">
                           -
-                        </h2>
+                        </p>
                       ) : (
                         section.players.map((player) => (
-                          <h2
+                          <h3
                             key={player.id}
                             className="text-3xl font-bold text-white tracking-tight italic uppercase"
                           >
                             {player.name}
-                          </h2>
+                          </h3>
                         ))
                       )}
                     </div>
