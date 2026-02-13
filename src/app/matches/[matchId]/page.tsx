@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
-import { MapPin } from 'lucide-react'
-import { Formation, LoadKakaoMap } from '@/features/match-detail'
+import { MatchDetailClient } from '@/widgets/match-detail'
+import type { MatchDetailFull } from '@/entities/match'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -18,44 +18,13 @@ export default async function MatchesPage({ params }: PageProps) {
   const proto = h.get('x-forwarded-proto') ?? 'http'
   const origin = `${proto}://${host}`
 
-  const res = await fetch(`${origin}/api/matches/${id}`, { cache: 'no-store' })
+  const res = await fetch(`${origin}/api/matches/${id}`, {
+    cache: 'no-store',
+    headers: { cookie: h.get('cookie') ?? '' },
+  })
   if (res.status === 404) return notFound()
   if (!res.ok) throw new Error('Failed to load match')
-  const match = (await res.json()) as {
-    place: string
-    place_address: string | null
-    place_lat: number | null
-    place_lng: number | null
-  }
+  const initialDetail = (await res.json()) as MatchDetailFull
 
-  return (
-    <div className="min-h-screen bg-[#020617]">
-      <h1 className="sr-only">경기 상세</h1>
-      <main className="rounded-b-[16px] px-20 py-10 space-y-6 md:px-40">
-        <div className="min-h-[487.7px]">
-          <Formation />
-        </div>
-        <div className="my-5 space-y-2">
-          <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl mt-15 font-black italic text-white uppercase tracking-tighter">
-                Location
-              </h2>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-[16px] font-bold text-white">
-            <div className="flex items-center justify-center w-30 h-30 text-emerald-400">
-              <MapPin size={22} />
-            </div>
-            <span className="text-white truncate">{match.place_address ?? match.place}</span>
-          </div>
-        </div>
-        <LoadKakaoMap
-          address={match.place_address ?? match.place}
-          lat={match.place_lat ?? undefined}
-          lng={match.place_lng ?? undefined}
-        />
-      </main>
-    </div>
-  )
+  return <MatchDetailClient initialDetail={initialDetail} />
 }

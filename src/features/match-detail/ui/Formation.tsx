@@ -10,9 +10,11 @@ import { usePlayersQuery } from '@/entities/player'
 import { useParams } from 'next/navigation'
 import { getMatchDetailFull } from '@/entities/match'
 import { useQuery } from '@tanstack/react-query'
-import type { PlayerLite } from '@/entities/match'
+import type { PlayerLite, MatchDetailFull } from '@/entities/match'
 
-export default function FormationPage() {
+type Props = { initialData?: MatchDetailFull }
+
+export default function FormationPage({ initialData }: Props) {
   const params = useParams<{ matchId: string }>()
   const matchId = Number(params.matchId)
   const [selectedQuarterLabel, setSelectedQuarterLabel] = useState<QuarterLabel | ''>('1 쿼터')
@@ -31,6 +33,7 @@ export default function FormationPage() {
   } = useQuery({
     queryKey: ['match', matchId],
     queryFn: () => getMatchDetailFull(matchId),
+    initialData: initialData ?? undefined,
     staleTime: 0,
     refetchOnMount: true,
   })
