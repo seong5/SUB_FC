@@ -41,6 +41,7 @@ export default function Pagination({
         className="flex size-40 items-center justify-center p-8 text-white hover:text-white/90 disabled:text-white/40"
         disabled={currentPage === 0}
         onClick={handlePrevPage}
+        aria-label="이전 페이지"
       >
         <Icon className="size-20" icon="ChevLeft" />
       </button>
@@ -55,6 +56,7 @@ export default function Pagination({
               : 'text-white/80 hover:text-white'
           )}
           onClick={() => onPageChange(page)}
+          aria-label={`${page}페이지로 이동`}
         >
           {page}
         </button>
@@ -64,6 +66,7 @@ export default function Pagination({
         className="flex size-40 items-center justify-center p-8 text-white hover:text-white/90 disabled:text-white/40"
         disabled={currentPage === totalPages}
         onClick={handleNextPage}
+        aria-label="다음 페이지"
       >
         <Icon className="size-20" icon="ChevRight" />
       </button>

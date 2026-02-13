@@ -23,6 +23,8 @@ export interface ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'button' | 'submit' | 'reset'
   icon?: ReactNode
+  /** 스크린리더용 접근 가능 이름 (아이콘만 있는 버튼 등) */
+  'aria-label'?: string
 }
 
 export default function Button({
@@ -35,6 +37,7 @@ export default function Button({
   onClick,
   type = 'button',
   icon,
+  'aria-label': ariaLabel,
 }: ButtonProps) {
   const resolvedRounded = rounded ?? (size ? DEFAULT_BUTTON_ROUNDED[size] : '12')
   const isGhost = variant === 'ghost'
@@ -52,6 +55,7 @@ export default function Button({
       disabled={disabled}
       type={type}
       onClick={onClick}
+      aria-label={ariaLabel}
     >
       {icon && icon}
       {children}

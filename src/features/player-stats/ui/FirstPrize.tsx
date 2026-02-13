@@ -68,7 +68,12 @@ const SECTION_CONFIG = [
   },
 ] as const
 
-export default function FirstPrize() {
+type FirstPrizeProps = {
+  /** 서버에서 미리 가져온 선수 목록 (서버 컴포넌트에서 전달 시 LCP 개선) */
+  initialPlayers?: Player[] | null
+}
+
+export default function FirstPrize({ initialPlayers }: FirstPrizeProps) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
@@ -76,16 +81,19 @@ export default function FirstPrize() {
     staleTime: 0,
   })
 
-  if (isLoading) return <FirstPrizeSkeleton />
-  if (isError || !data)
+  const players = initialPlayers ?? data
+
+  if (players == null && isLoading) return <FirstPrizeSkeleton />
+  if (players == null && (isError || !data))
     return (
       <p className="text-center py-20 text-red-400 bg-[#020617]">데이터를 불러오지 못했습니다.</p>
     )
 
-  const topGoalPlayers = getTopPlayers(data, 'goals', true)
-  const topAssistPlayers = getTopPlayers(data, 'assists', true)
-  const topAttendancePlayers = getTopPlayers(data, 'attendance_percent', false)
-  const topMomPlayers = getTopPlayers(data, 'mom', false, 0)
+  const list = players ?? []
+  const topGoalPlayers = getTopPlayers(list, 'goals', true)
+  const topAssistPlayers = getTopPlayers(list, 'assists', true)
+  const topAttendancePlayers = getTopPlayers(list, 'attendance_percent', false)
+  const topMomPlayers = getTopPlayers(list, 'mom', false, 0)
 
   const topGoal = topGoalPlayers[0]
   const topAssist = topAssistPlayers[0]
@@ -131,7 +139,7 @@ export default function FirstPrize() {
               명예의 전당
             </span>
           </h1>
-          <p className="mt-6 text-slate-500 font-bold text-xs uppercase tracking-[0.5em] opacity-80">
+          <p className="mt-6 text-slate-400 font-bold text-xs uppercase tracking-[0.5em] opacity-90">
             부문별 최우수 선수 리스트
           </p>
         </div>
@@ -152,28 +160,28 @@ export default function FirstPrize() {
                       >
                         <Icon size={24} className="text-white" />
                       </div>
-                      <span className="text-[13px] font-bold text-slate-600 uppercase tracking-widest">
+                      <span className="text-[13px] font-bold text-slate-400 uppercase tracking-widest">
                         {section.title}
                       </span>
                     </div>
 
-                    <h3 className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4">
+                    <h2 className="text-slate-300 font-bold text-xs uppercase tracking-widest mb-4">
                       {section.label}
-                    </h3>
+                    </h2>
 
                     <div className="space-y-1">
                       {section.players.length === 0 ? (
-                        <h2 className="text-3xl font-bold text-white tracking-tight italic uppercase">
+                        <p className="text-3xl font-bold text-white tracking-tight italic uppercase">
                           -
-                        </h2>
+                        </p>
                       ) : (
                         section.players.map((player) => (
-                          <h2
+                          <h3
                             key={player.id}
                             className="text-3xl font-bold text-white tracking-tight italic uppercase"
                           >
                             {player.name}
-                          </h2>
+                          </h3>
                         ))
                       )}
                     </div>
@@ -181,7 +189,7 @@ export default function FirstPrize() {
 
                   <div className="mt-10 pt-6 border-t border-white/5 flex items-baseline gap-1.5">
                     <span className="text-4xl font-black text-white italic">{section.value}</span>
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                       {section.unit}
                     </span>
                   </div>

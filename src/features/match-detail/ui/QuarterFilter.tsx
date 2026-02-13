@@ -112,6 +112,7 @@ export default function QuarterFilter({
                   ? 'bg-emerald-500 border-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                   : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
               }`}
+              aria-label="더보기 메뉴"
             >
               <EllipsisVertical size={20} />
             </button>

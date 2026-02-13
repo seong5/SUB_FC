@@ -204,7 +204,7 @@ function DropdownInput({
         type="button"
         className="absolute top-15 right-20 h-24 w-24"
         onClick={() => setIsOpen((v) => !v)}
-        aria-label="열기"
+        aria-label="목록 열기"
       />
       {isOpen && (
         <div

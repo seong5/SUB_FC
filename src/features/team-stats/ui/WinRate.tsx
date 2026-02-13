@@ -1,10 +1,37 @@
 'use client'
 
 import { useTeamStatsQuery } from '@/entities/team'
+import type { TeamStats } from '@/entities/team'
 import WinRateSkeleton from './WinRateSkeleton'
 
-export default function WinRate() {
+type WinRateProps = {
+  /** 서버에서 미리 가져온 통계 (서버 컴포넌트에서 전달 시 LCP 개선) */
+  initialStats?: TeamStats | null
+}
+
+export default function WinRate({ initialStats }: WinRateProps) {
   const { data: statsData, isPending, error } = useTeamStatsQuery()
+
+  const resolved: {
+    totalMatches: number
+    wins: number
+    draws: number
+    losses: number
+    winRate: number
+  } | undefined =
+    initialStats != null
+      ? {
+          totalMatches: initialStats.totalMatches,
+          wins: initialStats.wins,
+          draws: initialStats.draws,
+          losses: initialStats.losses,
+          winRate: initialStats.winRate,
+        }
+      : undefined
+
+  if (resolved) {
+    return <WinRateContent stats={resolved} />
+  }
 
   if (isPending) {
     return <WinRateSkeleton />
@@ -28,7 +55,20 @@ export default function WinRate() {
     winRate: statsData?.winRate ?? 0,
   }
 
-  // 0~100 사이로 보정된 승률 (프로그레스 링에서 사용)
+  return <WinRateContent stats={stats} />
+}
+
+function WinRateContent({
+  stats,
+}: {
+  stats: {
+    totalMatches: number
+    wins: number
+    draws: number
+    losses: number
+    winRate: number
+  }
+}) {
   const clampedWinRate = Math.max(0, Math.min(100, stats.winRate))
 
   return (
