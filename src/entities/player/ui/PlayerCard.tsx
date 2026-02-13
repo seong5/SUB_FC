@@ -61,25 +61,25 @@ export default function PlayerCard({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
-              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
                 득점
               </span>
               <span className="text-sm font-black text-white">{goals}</span>
             </div>
             <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
-              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
                 도움
               </span>
               <span className="text-sm font-black text-white">{assists}</span>
             </div>
             <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
-              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
                 MOTM
               </span>
               <span className="text-sm font-black text-white">{mom}</span>
             </div>
             <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center gap-0.5 group/stat hover:bg-white/10 transition-colors">
-              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
                 참석률
               </span>
               <span className="text-sm font-black text-white">{attendancePercent}%</span>

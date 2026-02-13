@@ -152,7 +152,7 @@ export default function FirstPrize() {
                       >
                         <Icon size={24} className="text-white" />
                       </div>
-                      <span className="text-[13px] font-bold text-slate-500 uppercase tracking-widest">
+                      <span className="text-[13px] font-bold text-slate-400 uppercase tracking-widest">
                         {section.title}
                       </span>
                     </div>
@@ -181,7 +181,7 @@ export default function FirstPrize() {
 
                   <div className="mt-10 pt-6 border-t border-white/5 flex items-baseline gap-1.5">
                     <span className="text-4xl font-black text-white italic">{section.value}</span>
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                       {section.unit}
                     </span>
                   </div>
