@@ -63,15 +63,9 @@ export default function MatchCard({ match }: MatchCardProps) {
                   <p className="mb-1 text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
                     최종 스코어
                   </p>
-                  <div className="flex items-center gap-3">
-                    <span className="text-4xl font-black leading-none tracking-tighter text-white md:text-5xl">
-                      {match.score.split(':')[0]}
-                    </span>
-                    <span className="text-xl font-black text-white">:</span>
-                    <span className="text-4xl font-black leading-none tracking-tighter text-white md:text-5xl">
-                      {match.score.split(':')[1]}
-                    </span>
-                  </div>
+                  <span className="text-4xl font-black leading-none tracking-tighter text-white md:text-5xl">
+                    {match.score.replace(':', '-')}
+                  </span>
                 </div>
               </div>
             </div>
