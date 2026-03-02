@@ -26,7 +26,13 @@ export default function Modal<P extends ModalProps>(props: P) {
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 flex items-center overflow-y-auto p-10">
-      <div ref={containerRef} className="relative rounded-2xl my-auto w-full max-w-[560px] mx-auto">
+      <div
+        ref={containerRef}
+        className="relative rounded-2xl my-auto w-full max-w-[560px] mx-auto"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal
+      >
         <Content {...props} />
       </div>
     </div>,

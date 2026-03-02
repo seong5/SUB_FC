@@ -8,9 +8,13 @@ import type { MatchListItem, UIMatchSummary } from '@/entities/match'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-async function fetchTeamStats(origin: string, cookie: string): Promise<TeamStats | null> {
+async function fetchTeamStatsByYear(
+  origin: string,
+  cookie: string,
+  year: number
+): Promise<TeamStats | null> {
   try {
-    const res = await fetch(`${origin}/api/teams/stats`, {
+    const res = await fetch(`${origin}/api/teams/stats?year=${year}`, {
       cache: 'no-store',
       headers: { cookie },
     })
@@ -43,7 +47,7 @@ export default async function HomePage() {
   const cookie = h.get('cookie') ?? ''
 
   const [teamStats, matches] = await Promise.all([
-    fetchTeamStats(origin, cookie),
+    fetchTeamStatsByYear(origin, cookie, 2026),
     fetchMatches(origin, cookie),
   ])
 

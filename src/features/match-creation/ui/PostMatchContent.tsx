@@ -27,7 +27,7 @@ export function PostMatchContent({ mode = 'create', initial, onClose, onSubmit }
       score: initial?.score ?? '',
       opponent: initial?.opponent ?? '',
     }),
-    [initial]
+    [initial],
   )
 
   const parsed = useMemo(() => parseScore(safe.score), [safe.score])

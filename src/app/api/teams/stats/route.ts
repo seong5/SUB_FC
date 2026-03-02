@@ -15,11 +15,24 @@ export async function GET(request: NextRequest) {
 
   const { supabase, cookieResponse } = createServerClientForRoute(request)
 
-  // 모든 경기 데이터 가져오기 (score가 null이 아닌 것만)
-  const { data: matches, error } = await supabase
+  const { searchParams } = new URL(request.url)
+  const yearParam = searchParams.get('year')
+  const year = yearParam ? parseInt(yearParam, 10) : null
+  const isYearFilter = year != null && Number.isFinite(year)
+
+  // 경기 데이터 가져오기 (score가 null이 아닌 것만, year 필터 시 해당 연도만)
+  let matchesQuery = supabase
     .from('matches')
-    .select('score')
+    .select('score, date')
     .not('score', 'is', null)
+
+  if (isYearFilter && year != null) {
+    const yearStart = `${year}-01-01`
+    const yearEnd = `${year + 1}-01-01`
+    matchesQuery = matchesQuery.gte('date', yearStart).lt('date', yearEnd)
+  }
+
+  const { data: matches, error } = await matchesQuery
 
   if (error) {
     const json = NextResponse.json({ error: error.message }, { status: 500 })

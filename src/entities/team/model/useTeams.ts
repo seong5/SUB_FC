@@ -2,16 +2,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   getTeamStats,
+  getTeamStatsByYear,
   getScheduleEvents,
   createScheduleEvent,
   deleteScheduleEvent,
 } from './api'
 import type { TeamStats, ScheduleEvent, CreateScheduleEventDto } from './types'
 
-export function useTeamStatsQuery() {
+export function useTeamStatsQuery(year?: number) {
   return useQuery<TeamStats>({
-    queryKey: ['teams', 'stats'],
-    queryFn: () => getTeamStats(),
+    queryKey: ['teams', 'stats', year ?? 'all'],
+    queryFn: () => (year != null ? getTeamStatsByYear(year) : getTeamStats()),
   })
 }
 
