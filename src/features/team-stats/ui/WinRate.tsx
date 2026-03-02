@@ -9,8 +9,10 @@ type WinRateProps = {
   initialStats?: TeamStats | null
 }
 
+const TEAM_STATS_YEAR = 2026
+
 export default function WinRate({ initialStats }: WinRateProps) {
-  const { data: statsData, isPending, error } = useTeamStatsQuery()
+  const { data: statsData, isPending, error } = useTeamStatsQuery(TEAM_STATS_YEAR)
 
   const resolved: {
     totalMatches: number

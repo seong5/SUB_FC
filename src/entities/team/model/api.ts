@@ -6,6 +6,11 @@ export async function getTeamStats(): Promise<TeamStats> {
   return data
 }
 
+export async function getTeamStatsByYear(year: number): Promise<TeamStats> {
+  const { data } = await api.get<TeamStats>(`/teams/stats?year=${year}`)
+  return data
+}
+
 export async function getScheduleEvents(): Promise<ScheduleEvent[]> {
   const { data } = await api.get<ScheduleEvent[]>('/teams/schedule')
   return data
