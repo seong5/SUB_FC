@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ChevronRight, ChevronLeft, Crown, CheckCircle2, Users, Star, Zap } from 'lucide-react'
 import { Button } from '@/shared'
 
-const EXCLUDED_PLAYERS = ['제갈진석', '차우현', '윤동관', '유동엽', '현신우', 'Guest']
+const EXCLUDED_PLAYERS = ['Guest']
 
 export interface PostMomContentProps {
   onBack: () => void
@@ -35,7 +35,7 @@ export default function PostMomContent({
 
   const filteredPlayers = useMemo(
     () => eligiblePlayers.filter((player) => !EXCLUDED_PLAYERS.includes(player.name)),
-    [eligiblePlayers]
+    [eligiblePlayers],
   )
 
   const togglePlayer = (playerId: string) => {
@@ -43,7 +43,7 @@ export default function PostMomContent({
       if (prev.includes(playerId)) {
         return prev.filter((id) => id !== playerId)
       }
-      if (prev.length >= 2) return prev
+      if (prev.length >= 3) return prev
       return [...prev, playerId]
     })
   }
@@ -108,10 +108,10 @@ export default function PostMomContent({
                   0{selectedMomIds.length}
                 </span>
                 <span className="text-lg font-black text-slate-800 mb-1">/</span>
-                <span className="text-lg font-black text-slate-800 mb-1 italic">02</span>
+                <span className="text-lg font-black text-slate-800 mb-1 italic">03</span>
               </div>
               <p className="text-[10px] text-slate-500 mt-2 font-medium">
-                오늘 최고의 활약을 펼친 선수 2명을 선택하세요.
+                오늘 최고의 활약을 펼친 선수 3명을 선택하세요.
               </p>
             </div>
 

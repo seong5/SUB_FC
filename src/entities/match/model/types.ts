@@ -32,7 +32,7 @@ export interface CreateMatchPayload {
   match: PostMatchData
   roster: RosterData
   quarters: QuarterData[]
-  mom_player_ids?: string[] // MOM 선정 선수 배열 (최대 2명)
+  mom_player_ids?: string[] // MOM 선정 선수 배열 (최대 3명)
 }
 
 export type MatchCreatedResponse = {
