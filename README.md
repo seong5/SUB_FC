@@ -42,34 +42,64 @@
 
 ## 📂 폴더 구조
 
-```bash
+```
 project-root/
 ├── node_modules/
-├── public/                   # 정적 파일들이 위치하는 폴더
-│   └── images/               # 이미지 파일 폴더
+├── public/                      # 정적 파일 (파비콘, 공개 이미지 등)
 ├── src/
-│   ├── app/
-│   │   ├── api/              # API 엔드포인드 관리 폴더
-│   │   ├── auth/             # OAuth 관리 폴더
-│   │   ├── login/            # 로그인 페이지
-│   │   ├── matches/          # 경기기록 페이지
-│   │   │   └── [matchId]/    # 경기 상세 페이지   
-│   │   ├── mypage/           # 프로필 페이지
-│   │   ├── palyers/          # 선수관리 페이지
-│   │   ├── provider/         # 쿼리 프로바이더
-│   │   ├── signup/           # 회원가입 페이지
-│   │   ├── teams/            # 팀 관리 페이지
-│   │   ├── globals.css
-│   │   ├── layout.tsx
-│   │   └── page.tsx          # 메인 페이지
-│   ├── assets/               # svg 폴더
-│   ├── components/           # 컴포넌트 폴더
-│   ├── constants/            # 상수 관리 폴더
-│   ├── lib/                  # api 함수
-│   ├── types/                # 타입 지정
-│   ├── utils/                # 유틸 함수
-│   ├── hooks/                # 커스텀 훅
-│   └── stores/               # zustand 상태 관리 폴더
+│ ├── app/                       # Next.js App Router 페이지, 서버 라우트
+│ │ ├── api/                     # 서버 API 엔드포인트
+│ │ ├── auth/                    # OAuth 콜백 라우트
+│ │ ├── login/                   # 로그인 페이지
+│ │ ├── signup/                  # 회원가입 페이지
+│ │ ├── mypage/                  # 마이페이지(프로필)
+│ │ ├── players/                 # 선수 목록 + 명예의 전당 페이지
+│ │ ├── teams/                   # 팀 통계/일정 페이지
+│ │ ├── matches/                 # 경기 목록 페이지
+│ │ │ └── [matchId]/             # 개별 경기 상세 페이지
+│ │ ├── provider/                # React Query, 알림 등 글로벌 Provider
+│ │ ├── globals.css              # 전역 스타일
+│ │ ├── layout.tsx               # 앱 공통 레이아웃
+│ │ └── page.tsx                 # 메인 홈 페이지
+│ │
+│ ├── assets/                    # SVG 등 정적 에셋 파일
+│ │ └── .svg
+│ │
+│ ├── entities/                  # 도메인 단위
+│ │ ├── match/                   # 경기 도메인
+│ │ ├── player/                  # 선수 도메인
+│ │ ├── team/                    # 팀 도메인
+│ │ └── index.ts
+│ │
+│ ├── features/                  # 특정 기능 단위 UI/로직
+│ │ ├── auth/                    # 로그인/회원가입 폼 + 검증
+│ │ ├── match-creation/          # 경기 등록 플로우 (결과/명단/쿼터/득점/MOM)
+│ │ ├── match-detail/            # 경기 상세(포메이션, 쿼터별 기록, 지도 등)
+│ │ ├── player-stats/            # 명예의 전당(득점·도움·참석률·MOM 1위)
+│ │ ├── team-stats/              # 팀 승률/승무패 카드
+│ │ ├── team-schedule/           # 팀 일정 캘린더 UI
+│ │ └── match-search/            # 경기 검색 바 기능
+│ │
+│ ├── widgets/ # 여러 feature/entity를 조합한 페이지용 블록
+│ │ ├── home/                    # 홈 페이지 클라이언트
+│ │ ├── match-list/              # 경기 목록 + 검색/정렬/페이지네이션
+│ │ ├── match-detail/            # 경기 상세 페이지 클라이언트 래퍼
+│ │ ├── player-roster/           # 포지션별 선수 로스터
+│ │ ├── team-schedule/           # 팀 일정 위젯 래퍼
+│ │ └── layout/ 
+│ │
+│ ├── shared/                    # 전역 공통 UI/유틸/설정/스토어
+│ │ ├── ui/ 
+│ │ ├── api/ 
+│ │ ├── config/ 
+│ │ ├── hooks/ 
+│ │ ├── lib/ 
+│ │ ├── utils/ 
+│ │ ├── types/ 
+│ │ └── index.ts
+│ │
+│ └── widgets/index.ts, features/index.ts, entities/index.ts
+│
 ├── .gitignore
 ├── eslint.config.mjs
 ├── jest.config.ts
