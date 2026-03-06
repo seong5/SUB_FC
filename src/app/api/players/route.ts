@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return NextResponse.json(
       { error: 'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 
@@ -89,12 +89,7 @@ export async function GET(request: NextRequest) {
         Array.isArray(arr) ? arr.map(String) : []
 
       rosters.forEach((r) => {
-        const allIds = [
-          ...flatten(r.gk),
-          ...flatten(r.df),
-          ...flatten(r.mf),
-          ...flatten(r.fw),
-        ]
+        const allIds = [...flatten(r.gk), ...flatten(r.df), ...flatten(r.mf), ...flatten(r.fw)]
         const unique = new Set(allIds)
         unique.forEach((pid) => {
           playerMatchCount.set(pid, (playerMatchCount.get(pid) ?? 0) + 1)
