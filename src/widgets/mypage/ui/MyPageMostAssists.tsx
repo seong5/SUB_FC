@@ -1,4 +1,4 @@
-import { BarChart3 } from 'lucide-react'
+import { Handshake } from 'lucide-react'
 import type { UserData } from './types'
 
 type StatsSectionProps = {
@@ -13,7 +13,7 @@ export function MyPageMostAssists({ user }: StatsSectionProps) {
       <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         <div className="flex justify-between items-center mb-6 sm:mb-8 relative z-10">
           <h2 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-3">
-            <BarChart3 className="text-cyan-500" /> 가장많은 도움
+            <Handshake className="text-cyan-500" /> 내가/나에게 가장 많은 도움을 준 선수
           </h2>
         </div>
 

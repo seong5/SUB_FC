@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react'
+import { BarChart3 } from 'lucide-react'
 import type { ActivityLog } from './types'
 
 type ActivitySectionProps = {
@@ -10,7 +10,7 @@ export function MyPageAttendWinDrawLose({ logs }: ActivitySectionProps) {
     <div className="lg:col-span-5 space-y-6">
       <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 sm:p-8 h-full">
         <h2 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-3 mb-6">
-          <Clock className="text-cyan-500" /> 참석했을 경우 승/무/패
+          <BarChart3 className="text-cyan-500" /> 내가 참여한 경기의 승/무/패
         </h2>
 
         <div className="space-y-4">
