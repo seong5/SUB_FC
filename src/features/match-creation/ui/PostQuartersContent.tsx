@@ -168,7 +168,7 @@ export default function PostQuartersContent({
               disabled={!isValid}
               className="flex-[1.5] !bg-emerald-500 hover:!bg-emerald-400 disabled:!opacity-50 !text-slate-950 font-black rounded-2xl shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-95 flex items-center justify-center gap-2 tracking-[0.1em] text-sm"
             >
-              {mode === 'edit' ? '다음 단계' : '경기 기록 완료'}
+              {mode === 'edit' ? '다음 단계' : '다음'}
               <ChevronRight size={18} />
             </Button>
           </div>
