@@ -60,15 +60,15 @@ export default function ScheduleContent({ onClose, onSubmit }: ScheduleContentPr
                     key={t}
                     type="button"
                     onClick={() => setType(t)}
-                    className={`px-8 py-3 rounded-full text-sm font-semibold transition-colors ${
-                      type === t
-                        ? t === '매치'
-                          ? 'bg-orange-400 text-slate-950'
-                          : t === '회식'
-                            ? 'bg-purple-400 text-slate-950'
-                            : 'bg-slate-200 text-slate-950'
-                        : 'bg-slate-800 text-slate-200 hover:bg-slate-700'
-                    }`}
+                className={`px-8 py-3 rounded-full text-sm font-semibold transition-colors border ${
+                  type === t
+                    ? t === '매치'
+                      ? 'bg-orange-400/10 border-orange-400/30 text-orange-300 shadow-orange-400/30 shadow-[0_0_24px_rgba(251,146,60,0.35)]'
+                      : t === '회식'
+                        ? 'bg-purple-400/10 border-purple-400/30 text-purple-300 shadow-purple-400/30 shadow-[0_0_24px_rgba(192,132,252,0.35)]'
+                        : 'bg-slate-400/10 border-slate-400/30 text-slate-200 shadow-slate-400/30 shadow-[0_0_24px_rgba(148,163,184,0.35)]'
+                    : 'bg-slate-900/40 border-white/5 text-slate-300 hover:bg-slate-800/80'
+                }`}
                   >
                     {t}
                   </button>
