@@ -1,16 +1,31 @@
 'use client'
 
-import type { ActivityLog, UserData } from './types'
+import type { UserData } from './types'
 import { MyPageHeader } from './MyPageHeader'
 import { MyPageMostAssists } from './MyPageMostAssists'
 import { MyPageAttendWinDrawLose } from './MyPageAttendWinDrawLose'
+import { useAttendMatchesForPlayer } from '@/entities/match'
+import { usePlayersQuery } from '@/entities/player'
+import { useAuthUser } from '@/shared/lib/store'
 
 export function MyPage() {
+  const authUser = useAuthUser()
+  const { data: players } = usePlayersQuery()
+
+  const fullName = (authUser?.user_metadata?.full_name as string | undefined) ?? undefined
+  const displayName = fullName ?? authUser?.email ?? '게스트'
+
+  const me =
+    players?.find((p) => p.name === displayName) ??
+    (players?.length === 1 ? players[0] : undefined)
+
+  const myPlayerId = me ? String(me.id) : 'UNKNOWN'
+
   const userData: UserData = {
-    name: 'KIM DASH',
-    id: 'U-0429-X',
+    name: me?.name ?? displayName,
+    id: me?.back_number != null ? String(me.back_number) : 'UNKNOWN',
     rank: 'ELITE',
-    position: 'Forward',
+    position: me?.position ?? 'UNKNOWN',
     stats: {
       pace: 92,
       shooting: 88,
@@ -20,11 +35,10 @@ export function MyPage() {
     },
   }
 
-  const activityLogs: ActivityLog[] = [
-    { date: '2024.05.20', type: 'MATCH', desc: 'vs FC NEXUS - 1 Goal', status: 'COMPLETED' },
-    { date: '2024.05.18', type: 'TRAINING', desc: 'Physical Conditioning', status: 'VALIDATED' },
-    { date: '2024.05.15', type: 'MATCH', desc: 'vs TITANS FC - 1 Assist', status: 'COMPLETED' },
-  ]
+  const { data: matchesForAttendWdl = [] } = useAttendMatchesForPlayer({
+    year: 2026,
+    playerId: myPlayerId,
+  })
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-cyan-500/30 overflow-x-hidden relative">
@@ -37,7 +51,7 @@ export function MyPage() {
       <main className="relative z-10 w-full max-w-5xl mx-auto p-20">
         <MyPageHeader user={userData} />
         <section className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <MyPageAttendWinDrawLose logs={activityLogs} />
+          <MyPageAttendWinDrawLose myPlayerId={myPlayerId} matches={matchesForAttendWdl} />
           <MyPageMostAssists user={userData} />
         </section>
       </main>

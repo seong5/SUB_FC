@@ -24,10 +24,10 @@ export function MyPageHeader({ user }: HeaderProps) {
             </h1>
           </div>
           <p className="text-slate-500 font-mono text-xs sm:text-sm tracking-widest uppercase">
-            ID:{user.id}
+            Back Number:{user.id}
           </p>
           <p className="text-slate-500 font-mono text-xs sm:text-sm tracking-widest uppercase">
-            {user.position}
+            Position:{user.position}
           </p>
         </div>
       </div>

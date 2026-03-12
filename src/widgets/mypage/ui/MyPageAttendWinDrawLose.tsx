@@ -1,11 +1,15 @@
 import { BarChart3 } from 'lucide-react'
-import type { ActivityLog } from './types'
+import type { MatchForAttendWdl } from '@/entities/match'
+import { calcAttendWdlForPlayer } from '@/entities/match'
 
-type ActivitySectionProps = {
-  logs: ActivityLog[]
+type MyPageAttendWinDrawLoseProps = {
+  myPlayerId: string
+  matches: MatchForAttendWdl[]
 }
 
-export function MyPageAttendWinDrawLose({ logs }: ActivitySectionProps) {
+export function MyPageAttendWinDrawLose({ myPlayerId, matches }: MyPageAttendWinDrawLoseProps) {
+  const summary = calcAttendWdlForPlayer(myPlayerId, matches)
+
   return (
     <div className="lg:col-span-5 space-y-6">
       <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 sm:p-8 h-full">
@@ -13,27 +17,64 @@ export function MyPageAttendWinDrawLose({ logs }: ActivitySectionProps) {
           <BarChart3 className="text-cyan-500" /> 내가 참여한 경기의 승/무/패
         </h2>
 
-        <div className="space-y-4">
-          {logs.map((log) => (
-            <div key={`${log.date}-${log.desc}`} className="relative pl-6 pb-6 last:pb-0">
-              <div className="absolute left-[7px] top-6 bottom-0 w-[1px] bg-slate-800" />
-              <div className="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-slate-950 border-2 border-slate-800 z-10 shadow-[0_0_10px_rgba(0,0,0,1)]" />
-
-              <div className="bg-slate-950/40 border border-slate-800 rounded-2xl p-4">
-                <div className="flex justify-between items-start mb-1 gap-3">
-                  <span className="text-[10px] font-bold text-slate-600 font-mono tracking-tighter">
-                    {log.date}
-                  </span>
-                  <span className="text-[9px] font-black text-cyan-500 uppercase px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">
-                    {log.status}
-                  </span>
-                </div>
-                <p className="text-xs font-bold text-slate-300">{log.desc}</p>
-              </div>
-            </div>
-          ))}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <Stat label="참석" value={summary.attended} tone="neutral" />
+          <Stat
+            label="승"
+            value={summary.win}
+            percent={summary.winRate}
+            tone="win"
+          />
+          <Stat
+            label="무"
+            value={summary.draw}
+            percent={summary.drawRate}
+            tone="draw"
+          />
+          <Stat
+            label="패"
+            value={summary.lose}
+            percent={summary.loseRate}
+            tone="lose"
+          />
         </div>
+
+        {summary.unknown > 0 && (
+          <p className="mt-4 text-[11px] text-slate-500">
+            스코어 형식이 불명확한 경기 {summary.unknown}건은 승/무/패 집계에서 제외됐어요.
+          </p>
+        )}
       </div>
+    </div>
+  )
+}
+
+type StatProps = {
+  label: string
+  value: number
+  percent?: number
+  tone: 'neutral' | 'win' | 'draw' | 'lose'
+}
+
+function Stat({ label, value, tone, percent }: StatProps) {
+  const toneClass =
+    tone === 'win'
+      ? 'text-emerald-300 border-emerald-500/20 bg-emerald-500/5'
+      : tone === 'draw'
+        ? 'text-amber-300 border-amber-500/20 bg-amber-500/5'
+        : tone === 'lose'
+          ? 'text-rose-300 border-rose-500/20 bg-rose-500/5'
+          : 'text-slate-200 border-white/10 bg-slate-950/30'
+
+  return (
+    <div className={`rounded-2xl border p-4 ${toneClass}`}>
+      <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">{label}</div>
+      <div className="mt-1 text-2xl font-black tracking-tight">{value}</div>
+      {tone !== 'neutral' && (
+        <div className="mt-0.5 text-[11px] text-slate-300">
+          {(percent ?? 0).toString()}%
+        </div>
+      )}
     </div>
   )
 }

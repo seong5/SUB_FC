@@ -3,7 +3,7 @@ import { createServerClientForRoute } from '@/shared/api/supabase'
 import type { PostMatchData, RosterData, QuarterData, PlayerLite } from '@/entities/match'
 
 type MatchRow = { date: string; opponent: string; place: string; score: string }
-type RosterRow = { formation: string; GK: string[]; DF: string[]; MF: string[]; FW: string[] }
+type RosterRow = { formation: string; gk: string[] | null; df: string[] | null; mf: string[] | null; fw: string[] | null }
 type QuarterRow = { quarter: 1 | 2 | 3 | 4; conceded: number; score_after: string }
 type GoalRow = {
   quarter: 1 | 2 | 3 | 4
@@ -32,31 +32,38 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ matchId: st
     score: m.score,
   }
 
-  // 2) roster
-  const { data: r, error: rErr } = await supabase
+  // 2) roster (없을 수도 있으니 500 대신 빈 값으로 처리)
+  const { data: r } = await supabase
     .from('match_roster')
-    .select('formation, GK, DF, MF, FW')
+    .select('formation, gk, df, mf, fw')
     .eq('match_id', id)
     .single<RosterRow>()
-  if (rErr || !r) return NextResponse.json({ error: rErr.message }, { status: 500 })
-  const roster: RosterData = {
-    formation: r.formation as RosterData['formation'],
-    GK: r.GK,
-    DF: r.DF,
-    MF: r.MF,
-    FW: r.FW,
-  }
+  const roster: RosterData = r
+    ? {
+        formation: r.formation as RosterData['formation'],
+        GK: r.gk ?? [],
+        DF: r.df ?? [],
+        MF: r.mf ?? [],
+        FW: r.fw ?? [],
+      }
+    : {
+        formation: '4-2-3-1',
+        GK: [],
+        DF: [],
+        MF: [],
+        FW: [],
+      }
 
-  // 3) quarters
+  // 3) quarters (없으면 빈 배열)
   const { data: qs, error: qErr } = await supabase
     .from('match_quarters')
     .select('quarter, conceded, score_after')
     .eq('match_id', id)
     .order('quarter', { ascending: true })
     .returns<QuarterRow[]>()
-  if (qErr || !qs) return NextResponse.json({ error: qErr.message }, { status: 500 })
+  const quarterRows: QuarterRow[] = !qErr && qs ? qs : []
 
-  // 4) goals
+  // 4) goals (없으면 빈 배열)
   const { data: gs, error: gErr } = await supabase
     .from('match_goals')
     .select('quarter, minute, scorer_id, assist_id')
@@ -64,15 +71,15 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ matchId: st
     .order('quarter', { ascending: true })
     .order('minute', { ascending: true, nullsFirst: true })
     .returns<GoalRow[]>()
-  if (gErr || !gs) return NextResponse.json({ error: gErr.message }, { status: 500 })
+  const goalRows: GoalRow[] = !gErr && gs ? gs : []
 
-  const quarters: QuarterData[] = qs.map((q) => ({
+  const quarters: QuarterData[] = quarterRows.map((q) => ({
     quarter: q.quarter,
     goals: [],
     conceded: q.conceded,
     scoreAfter: q.score_after,
   }))
-  for (const g of gs) {
+  for (const g of goalRows) {
     const slot = quarters.find((q) => q.quarter === g.quarter)
     if (!slot) continue
     slot.goals.push({
