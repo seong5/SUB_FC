@@ -3,6 +3,7 @@
 import type { UserData } from './types'
 import { MyPageHeader } from './MyPageHeader'
 import { MyPageMostAssists } from './MyPageMostAssists'
+import { MyPageMostGoalsFromMyAssist } from './MyPageMostGoalsFromMyAssist'
 import { MyPageAttendWinDrawLose } from './MyPageAttendWinDrawLose'
 import { useAttendMatchesForPlayer } from '@/entities/match'
 import { usePlayersQuery } from '@/entities/player'
@@ -46,6 +47,7 @@ export function MyPage() {
         <section className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
           <MyPageAttendWinDrawLose myPlayerId={myPlayerId} matches={matchesForAttendWdl} />
           <MyPageMostAssists user={userData} />
+          <MyPageMostGoalsFromMyAssist user={userData} />
         </section>
       </main>
     </div>

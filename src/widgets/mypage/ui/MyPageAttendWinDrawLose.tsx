@@ -11,70 +11,59 @@ export function MyPageAttendWinDrawLose({ myPlayerId, matches }: MyPageAttendWin
   const summary = calcAttendWdlForPlayer(myPlayerId, matches)
 
   return (
-    <div className="lg:col-span-5 space-y-6">
-      <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-3xl p-6 sm:p-8 h-full">
-        <h2 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-3 mb-6">
-          <BarChart3 className="text-cyan-500" /> 내가 참여한 경기의 승/무/패
-        </h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Stat label="참석" value={summary.attended} tone="neutral" />
-          <Stat
-            label="승"
-            value={summary.win}
-            percent={summary.winRate}
-            tone="win"
-          />
-          <Stat
-            label="무"
-            value={summary.draw}
-            percent={summary.drawRate}
-            tone="draw"
-          />
-          <Stat
-            label="패"
-            value={summary.lose}
-            percent={summary.loseRate}
-            tone="lose"
-          />
+    <div className="lg:col-span-5 group">
+      <div className="h-full bg-slate-900/40 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-8 relative overflow-hidden transition-all duration-300 hover:border-white/10">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-bold flex items-center gap-3">
+            <div className="p-2 bg-cyan-500/10 rounded-xl">
+              <BarChart3 size={20} className="text-cyan-500" />
+            </div>
+            참석 시 전적 리포트
+          </h2>
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+            Total {summary.attended} Games
+          </span>
         </div>
 
-        {summary.unknown > 0 && (
-          <p className="mt-4 text-[11px] text-slate-500">
-            스코어 형식이 불명확한 경기 {summary.unknown}건은 승/무/패 집계에서 제외됐어요.
-          </p>
-        )}
+        <div className="grid grid-cols-2 gap-4">
+          <StatBox label="Total" value={summary.attended} percent={100} color="slate" />
+          <StatBox label="Win" value={summary.win} percent={summary.winRate} color="emerald" />
+          <StatBox label="Draw" value={summary.draw} percent={summary.drawRate} color="amber" />
+          <StatBox label="Lose" value={summary.lose} percent={summary.loseRate} color="rose" />
+        </div>
       </div>
     </div>
   )
 }
 
-type StatProps = {
+type StatBoxProps = {
   label: string
   value: number
-  percent?: number
-  tone: 'neutral' | 'win' | 'draw' | 'lose'
+  percent: number
+  color: 'emerald' | 'amber' | 'rose' | 'slate'
 }
 
-function Stat({ label, value, tone, percent }: StatProps) {
-  const toneClass =
-    tone === 'win'
-      ? 'text-emerald-300 border-emerald-500/20 bg-emerald-500/5'
-      : tone === 'draw'
-        ? 'text-amber-300 border-amber-500/20 bg-amber-500/5'
-        : tone === 'lose'
-          ? 'text-rose-300 border-rose-500/20 bg-rose-500/5'
-          : 'text-slate-200 border-white/10 bg-slate-950/30'
+function StatBox({ label, value, percent, color }: StatBoxProps) {
+  const colorMap: Record<StatBoxProps['color'], string> = {
+    emerald: 'text-emerald-300 bg-emerald-500/10 border-emerald-500/30',
+    amber: 'text-amber-300 bg-amber-500/10 border-amber-500/30',
+    rose: 'text-rose-300 bg-rose-500/10 border-rose-500/30',
+    slate: 'text-slate-200 bg-slate-800/40 border-white/10',
+  }
 
   return (
-    <div className={`rounded-2xl border p-4 ${toneClass}`}>
-      <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">{label}</div>
-      <div className="mt-1 text-2xl font-black tracking-tight">{value}</div>
-      {tone !== 'neutral' && (
-        <div className="mt-0.5 text-[11px] text-slate-300">
-          {(percent ?? 0).toString()}%
+    <div
+      className={`flex flex-col items-center justify-center px-6 py-4 rounded-3xl border text-center ${colorMap[color]}`}
+    >
+      <div className="space-y-1">
+        <span className="text-[10px] font-bold uppercase tracking-widest opacity-80 block">
+          {label}
+        </span>
+        <div className="flex items-baseline justify-center gap-1">
+          <span className="text-2xl font-black">{value}</span>
+          <span className="text-[11px] font-semibold text-slate-300">({percent}%)</span>
         </div>
-      )}
+      </div>
     </div>
   )
 }

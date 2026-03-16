@@ -1,6 +1,12 @@
 "use client"
 import { useQuery } from "@tanstack/react-query"
-import { getPlayers, getTopAssistToMe, type TopAssistToMe } from "./api"
+import {
+  getPlayers,
+  getTopAssistToMe,
+  getTopAssistedByMe,
+  type TopAssistToMe,
+  type TopAssistedByMe,
+} from "./api"
 import type { Player } from "./types"
 
 export function usePlayersQuery() {
@@ -15,5 +21,13 @@ export function useTopAssistToMeQuery(playerId: number, year?: number) {
     queryKey: ["players", "topAssistToMe", playerId, year],
     enabled: !!playerId && playerId !== -1,
     queryFn: () => getTopAssistToMe(playerId, year),
+  })
+}
+
+export function useTopAssistedByMeQuery(playerId: number, year?: number) {
+  return useQuery<TopAssistedByMe[]>({
+    queryKey: ["players", "topAssistedByMe", playerId, year],
+    enabled: !!playerId && playerId !== -1,
+    queryFn: () => getTopAssistedByMe(playerId, year),
   })
 }
