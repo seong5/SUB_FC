@@ -1,4 +1,4 @@
-import { Settings, Power, User } from 'lucide-react'
+import { Settings, User } from 'lucide-react'
 import type { UserData } from './types'
 
 type HeaderProps = {
@@ -35,9 +35,6 @@ export function MyPageHeader({ user }: HeaderProps) {
       <div className="flex flex-wrap gap-6">
         <button className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-[11px] sm:text-xs font-bold flex items-center gap-2">
           <Settings className="w-10 h-10" /> 내 정보 수정
-        </button>
-        <button className="px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500/20 text-[11px] sm:text-xs font-bold flex items-center gap-2">
-          <Power className="w-10 h-10" /> 로그아웃
         </button>
       </div>
     </section>
