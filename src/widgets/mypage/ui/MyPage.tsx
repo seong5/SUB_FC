@@ -26,13 +26,6 @@ export function MyPage() {
     id: me?.back_number != null ? String(me.back_number) : 'UNKNOWN',
     rank: 'ELITE',
     position: me?.position ?? 'UNKNOWN',
-    stats: {
-      pace: 92,
-      shooting: 88,
-      passing: 75,
-      defense: 42,
-      physical: 80,
-    },
   }
 
   const { data: matchesForAttendWdl = [] } = useAttendMatchesForPlayer({

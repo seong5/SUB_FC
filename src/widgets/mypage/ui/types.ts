@@ -3,13 +3,6 @@ export type UserData = {
   id: string
   rank: string
   position: string
-  stats: {
-    pace: number
-    shooting: number
-    passing: number
-    defense: number
-    physical: number
-  }
 }
 
 export type ActivityLog = {
