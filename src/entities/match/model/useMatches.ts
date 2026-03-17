@@ -1,14 +1,49 @@
-'use client'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createMatch, deleteMatch, getMatches } from './api'
-import type { CreateMatchPayload, MatchCreatedResponse, UIMatchSummary } from './types'
+"use client"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { createMatch, deleteMatch, getMatchEditSeed, getMatchesRaw } from "./api"
+import type { CreateMatchPayload, MatchCreatedResponse, MatchListItem, UIMatchSummary } from "./types"
+import type { MatchForAttendWdl } from "../lib"
 
 export function useMatchesQuery() {
   return useQuery<UIMatchSummary[]>({
     queryKey: ['matches'],
-    queryFn: () => getMatches(),
+    queryFn: async () => {
+      const raw = await getMatchesRaw()
+      return (raw ?? []).map((m) => ({
+        id: m.id,
+        date: m.date,
+        opponent: m.opponent,
+        place: m.place,
+        score: m.score,
+      }))
+    },
     refetchOnMount: true, // 컴포넌트 마운트 시 항상 리페치
     staleTime: 0, // 데이터를 즉시 stale로 처리
+  })
+}
+
+type AttendMatchesParams = {
+  year: number
+  playerId: string
+}
+
+export function useAttendMatchesForPlayer({ year, playerId }: AttendMatchesParams) {
+  return useQuery<MatchForAttendWdl[]>({
+    queryKey: ["matches", "attendWdl", year, playerId],
+    enabled: !!playerId && playerId !== "UNKNOWN",
+    queryFn: async () => {
+      const all: MatchListItem[] | null = await getMatchesRaw()
+      const list = all ?? []
+      const yearPrefix = String(year)
+      const targets = list.filter((m) => m.date.startsWith(yearPrefix))
+
+      const seeds = await Promise.all(targets.map((m) => getMatchEditSeed(m.id)))
+
+      return seeds.map((seed) => ({
+        roster: seed.roster,
+        score: seed.match.score,
+      }))
+    },
   })
 }
 

@@ -52,7 +52,11 @@ export default function Gnb() {
   return (
     <nav className="flex flex-row justify-between sticky top-0 z-50 gap-20 h-80 px-20 md:px-30 bg-slate-950/60 backdrop-blur-xl border-b border-white/5">
       <div className="flex gap-15 md:gap-25 items-center">
-        <Link href="/" className="md:mr-10 relative w-[50px] h-[50px] group">
+        <Link
+          href="/"
+          className="md:mr-10 relative w-[50px] h-[50px] group"
+          aria-label="홈으로 이동"
+        >
           <div className="absolute -inset-2 bg-blue-600/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
           <Image
             src="/subfc.png"
@@ -121,7 +125,12 @@ export default function Gnb() {
               </button>
               {isNotificationOpen && <Notification />}
             </div>
-            <div className="flex items-center gap-3 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+            <button
+              type="button"
+              onClick={() => router.push('/mypage')}
+              className="flex items-center gap-3 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 hover:border-cyan-400/60 transition-colors"
+              aria-label="마이페이지로 이동"
+            >
               {avatar ? (
                 <Image
                   src={avatar}
@@ -138,7 +147,7 @@ export default function Gnb() {
               <span className="text-[11px] font-bold text-slate-300 hidden md:block uppercase tracking-tight truncate max-w-[100px]">
                 {displayName}
               </span>
-            </div>
+            </button>
             <button
               onClick={async () => {
                 const supabase = createClient()
