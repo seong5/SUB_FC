@@ -5,13 +5,17 @@ import { MyPageHeader } from './MyPageHeader'
 import { MyPageMostAssists } from './MyPageMostAssists'
 import { MyPageMostGoalsFromMyAssist } from './MyPageMostGoalsFromMyAssist'
 import { MyPageAttendWinDrawLose } from './MyPageAttendWinDrawLose'
+import { MyPageGoalsAssists } from './MyPageGoalsAssists'
 import { useAttendMatchesForPlayer } from '@/entities/match'
-import { usePlayersQuery } from '@/entities/player'
+import { usePlayersQuery, usePlayersByYearQuery } from '@/entities/player'
 import { useAuthUser } from '@/shared/lib/store'
+
+const MYPAGE_YEAR = 2026
 
 export function MyPage() {
   const authUser = useAuthUser()
   const { data: players } = usePlayersQuery()
+  const { data: players2026 } = usePlayersByYearQuery(MYPAGE_YEAR)
 
   const fullName = (authUser?.user_metadata?.full_name as string | undefined) ?? undefined
   const displayName = fullName ?? authUser?.email ?? '게스트'
@@ -19,6 +23,10 @@ export function MyPage() {
   const me =
     players?.find((p) => p.name === displayName) ??
     (players?.length === 1 ? players[0] : undefined)
+
+  const me2026 =
+    players2026?.find((p) => p.name === displayName) ??
+    (players2026?.length === 1 ? players2026[0] : undefined)
 
   const myPlayerId = me ? String(me.id) : 'UNKNOWN'
 
@@ -30,7 +38,7 @@ export function MyPage() {
   }
 
   const { data: matchesForAttendWdl = [] } = useAttendMatchesForPlayer({
-    year: 2026,
+    year: MYPAGE_YEAR,
     playerId: myPlayerId,
   })
 
@@ -45,7 +53,14 @@ export function MyPage() {
       <main className="relative z-10 w-full max-w-5xl mx-auto p-20">
         <MyPageHeader user={userData} />
         <section className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <MyPageAttendWinDrawLose myPlayerId={myPlayerId} matches={matchesForAttendWdl} />
+          <MyPageAttendWinDrawLose
+            myPlayerId={myPlayerId}
+            matches={matchesForAttendWdl}
+          />
+          <MyPageGoalsAssists
+            goals={me2026?.goals ?? 0}
+            assists={me2026?.assists ?? 0}
+          />
           <MyPageMostAssists user={userData} />
           <MyPageMostGoalsFromMyAssist user={userData} />
         </section>

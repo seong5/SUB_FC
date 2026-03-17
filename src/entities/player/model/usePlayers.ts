@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query"
 import {
   getPlayers,
+  getPlayersByYear,
   getTopAssistToMe,
   getTopAssistedByMe,
   type TopAssistToMe,
@@ -13,6 +14,13 @@ export function usePlayersQuery() {
   return useQuery<Player[]>({
     queryKey: ['players'],
     queryFn: getPlayers,
+  })
+}
+
+export function usePlayersByYearQuery(year: number) {
+  return useQuery<Player[]>({
+    queryKey: ['players', year],
+    queryFn: () => getPlayersByYear(year),
   })
 }
 
