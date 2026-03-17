@@ -33,9 +33,14 @@ export function MyPageHeader({ user }: HeaderProps) {
       </div>
 
       <div className="flex flex-wrap gap-6">
-        <button className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-[11px] sm:text-xs font-bold flex items-center gap-2">
-          <Settings className="w-10 h-10" /> 내 정보 수정
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed text-[11px] sm:text-xs font-bold flex items-center gap-2"
+          >
+            <Settings className="w-10 h-10" />내 정보 수정
+          </button>
+        </div>
       </div>
     </section>
   )
